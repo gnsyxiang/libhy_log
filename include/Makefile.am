@@ -29,11 +29,18 @@ install_includedir      = $(includedir)/@project_name@
 # ---------------------
 # add necessary content
 # ---------------------
-_no_install_headers_com +=
+_no_install_headers_com += \
+                           dynamic_array.h          \
+                           format_cb.h              \
+                           log_fifo.h               \
+                           log_private.h            \
+                           process_handle_data.h    \
+                           process_single.h         \
+                           thread_specific_data.h
 
 _install_headers_com    += \
-                           hy_calc.h    \
-                           hy_module.h
+						   hy_log.h \
+						   hy_printf.h
 
 # ------------------
 # make install files

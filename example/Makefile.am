@@ -56,13 +56,13 @@ _ldflags_com    +=
 
 _ldadd_com      += \
                    $(top_builddir)/src/lib@project_name@.la \
-                   $(ldadd_com)
+                   $(ldadd_com) -lpthread
 
-bin_PROGRAMS            += hy_calc_demo
-hy_calc_demo_SOURCES    = $(_sources_com) hy_calc_demo.c
-hy_calc_demo_CPPFLAGS   = $(_cppflags_com)
-hy_calc_demo_CFLAGS     = $(_cflags_com)
-hy_calc_demo_CXXFLAGS   = $(_cxxflags_com)
-hy_calc_demo_LDFLAGS    = $(_ldflags_com)
-hy_calc_demo_LDADD      = $(_ldadd_com)
+bin_PROGRAMS            += hy_log_demo
+hy_log_demo_SOURCES    = $(_sources_com) hy_log_demo.c
+hy_log_demo_CPPFLAGS   = $(_cppflags_com)
+hy_log_demo_CFLAGS     = $(_cflags_com)
+hy_log_demo_CXXFLAGS   = $(_cxxflags_com)
+hy_log_demo_LDFLAGS    = $(_ldflags_com)
+hy_log_demo_LDADD      = $(_ldadd_com)
 

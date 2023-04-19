@@ -41,9 +41,7 @@ _define_com     +=
 
 _include_com    += -I$(top_srcdir)/include
 
-_sources_com    += \
-                   hy_calc_test.c   \
-                   hy_module_test.c
+_sources_com    +=
 
 _cppflags_com   += \
                    $(_no_error_com) \
