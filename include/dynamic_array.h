@@ -25,6 +25,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include <stdarg.h>
 
 /**
  * @brief 动态数组

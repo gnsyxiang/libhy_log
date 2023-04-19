@@ -18,7 +18,6 @@
  *     last modified: 22/04 2022 09:06
  */
 #include <stdio.h>
-#include <stdarg.h>
 
 #include "log_private.h"
 
