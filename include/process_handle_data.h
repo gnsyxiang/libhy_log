@@ -25,13 +25,14 @@ extern "C" {
 #endif
 
 #include <pthread.h>
+#include <stdint.h>
 
 #include "log_fifo.h"
 
-typedef void (*process_handle_data_cb_t)(void *buf, hy_u32_t len, void *args);
+typedef void (*process_handle_data_cb_t)(void *buf, uint32_t len, void *args);
 
 typedef struct {
-    hy_s32_t                    is_exit;
+    int32_t                    is_exit;
     pthread_t                   id;
 
     log_fifo_context_s          *fifo;
@@ -43,11 +44,11 @@ typedef struct {
 } process_handle_data_s;
 
 process_handle_data_s *process_handle_data_create(const char *name,
-        hy_u32_t fifo_len, process_handle_data_cb_t cb, void *args);
+        uint32_t fifo_len, process_handle_data_cb_t cb, void *args);
 void process_handle_data_destroy(process_handle_data_s **context_pp);
 
-hy_s32_t process_handle_data_write(process_handle_data_s *context,
-        const void *buf, hy_u32_t len);
+int32_t process_handle_data_write(process_handle_data_s *context,
+        const void *buf, uint32_t len);
 
 #ifdef __cplusplus
 }

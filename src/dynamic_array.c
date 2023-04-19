@@ -28,8 +28,8 @@
 #define HY_MEM_ALIGN4(len)          HY_MEM_ALIGN(len, 4)
 #define HY_MEM_ALIGN4_UP(len)       (HY_MEM_ALIGN(len, 4) + HY_MEM_ALIGN4(1))
 
-hy_s32_t dynamic_array_read(dynamic_array_s *context,
-        void *buf, hy_u32_t len)
+int32_t dynamic_array_read(dynamic_array_s *context,
+        void *buf, uint32_t len)
 {
     assert(context);
     assert(buf);
@@ -45,12 +45,12 @@ hy_s32_t dynamic_array_read(dynamic_array_s *context,
     return len;
 }
 
-static hy_s32_t _dynamic_array_extend(dynamic_array_s *context,
-        hy_u32_t increment)
+static int32_t _dynamic_array_extend(dynamic_array_s *context,
+        uint32_t increment)
 {
     assert(context);
-    hy_u32_t extend_len = 0;
-    hy_s32_t ret = 0;
+    uint32_t extend_len = 0;
+    int32_t ret = 0;
     void *ptr = NULL;
 
     if (context->len >= context->max_len) {
@@ -80,7 +80,7 @@ static hy_s32_t _dynamic_array_extend(dynamic_array_s *context,
     return ret;
 }
 
-hy_s32_t dynamic_array_write_vprintf(dynamic_array_s *context,
+int32_t dynamic_array_write_vprintf(dynamic_array_s *context,
         const char *format, va_list *args)
 {
     assert(context);
@@ -94,8 +94,8 @@ hy_s32_t dynamic_array_write_vprintf(dynamic_array_s *context,
         } while (0)
 
     va_list ap;
-    hy_s32_t free_len;
-    hy_s32_t ret;
+    int32_t free_len;
+    int32_t ret;
     char *ptr = NULL;
 
     _get_dynamic_info();
@@ -126,8 +126,8 @@ hy_s32_t dynamic_array_write_vprintf(dynamic_array_s *context,
     return ret;
 }
 
-hy_s32_t dynamic_array_write(dynamic_array_s *context,
-        const void *buf, hy_u32_t len)
+int32_t dynamic_array_write(dynamic_array_s *context,
+        const void *buf, uint32_t len)
 {
     #define _write_data_com(_buf, _len)                 \
         do {                                            \
@@ -140,7 +140,7 @@ hy_s32_t dynamic_array_write(dynamic_array_s *context,
 
     assert(context);
     assert(buf);
-    hy_s32_t ret = 0;
+    int32_t ret = 0;
 
     if (context->len - context->cur_len > len) {
         _write_data_com(buf, len);
@@ -182,7 +182,7 @@ void dynamic_array_destroy(dynamic_array_s **context_pp)
     *context_pp = NULL;
 }
 
-dynamic_array_s *dynamic_array_create(hy_u32_t min_len, hy_u32_t max_len)
+dynamic_array_s *dynamic_array_create(uint32_t min_len, uint32_t max_len)
 {
     if (min_len == 0 || max_len == 0 || min_len > max_len) {
         log_error("the param is error \n");

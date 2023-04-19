@@ -64,16 +64,16 @@
  */
 #define USE_MB
 
-static void _hex(const void *_buf, hy_u32_t len, hy_s32_t flag)
+static void _hex(const void *_buf, uint32_t len, int32_t flag)
 {
-    hy_u8_t cnt = 0;
+    int32_t cnt = 0;
     const unsigned char *buf = (const unsigned char *)_buf;
 
     if (len <= 0) {
         return;
     }
 
-    for (hy_u32_t i = 0; i < len; i++) {
+    for (uint32_t i = 0; i < len; i++) {
         if (flag == 1) {
             if (buf[i] == 0x0d || buf[i] == 0x0a || buf[i] < 32 || buf[i] >= 127) {
                 printf("%02x[ ]  ", buf[i]);
@@ -96,7 +96,7 @@ static void _hex(const void *_buf, hy_u32_t len, hy_s32_t flag)
 static void _dump_content(log_fifo_context_s *context)
 {
     assert(context);
-    hy_u32_t len_tmp;
+    uint32_t len_tmp;
 
     len_tmp = context->len - LOG_FIFO_READ_POS(context);
     len_tmp = HY_UTILS_MIN(len_tmp, LOG_FIFO_USED_LEN(context));
@@ -126,9 +126,9 @@ void fifo_dump(log_fifo_context_s *context, log_fifo_dump_type_e type)
 
 }
 
-static hy_s32_t _fifo_read_com(log_fifo_context_s *context, void *buf, hy_u32_t len)
+static int32_t _fifo_read_com(log_fifo_context_s *context, void *buf, uint32_t len)
 {
-    hy_u32_t len_tmp = 0;
+    uint32_t len_tmp = 0;
 
     if (LOG_FIFO_IS_EMPTY(context)) {
         return 0;
@@ -154,7 +154,7 @@ static hy_s32_t _fifo_read_com(log_fifo_context_s *context, void *buf, hy_u32_t 
     return len;
 }
 
-hy_s32_t log_fifo_read(log_fifo_context_s *context, void *buf, hy_u32_t len)
+int32_t log_fifo_read(log_fifo_context_s *context, void *buf, uint32_t len)
 {
     assert(context);
     assert(buf);
@@ -165,7 +165,7 @@ hy_s32_t log_fifo_read(log_fifo_context_s *context, void *buf, hy_u32_t len)
     return len;
 }
 
-hy_s32_t log_fifo_read_peek(log_fifo_context_s *context, void *buf, hy_u32_t len)
+int32_t log_fifo_read_peek(log_fifo_context_s *context, void *buf, uint32_t len)
 {
     assert(context);
     assert(buf);
@@ -173,12 +173,12 @@ hy_s32_t log_fifo_read_peek(log_fifo_context_s *context, void *buf, hy_u32_t len
     return _fifo_read_com(context, buf, len);
 }
 
-hy_s32_t log_fifo_write(log_fifo_context_s *context, const void *buf, hy_u32_t len)
+int32_t log_fifo_write(log_fifo_context_s *context, const void *buf, uint32_t len)
 {
     assert(context);
     assert(buf);
 
-    hy_u32_t len_tmp = 0;
+    uint32_t len_tmp = 0;
 
     if (len > LOG_FIFO_FREE_LEN(context)) {
         log_error("write failed, len: %u, free_len: %u \n",
@@ -206,10 +206,10 @@ hy_s32_t log_fifo_write(log_fifo_context_s *context, const void *buf, hy_u32_t l
     return len;
 }
 
-static hy_u32_t _num_to_2n(hy_u32_t num)
+static uint32_t _num_to_2n(uint32_t num)
 {
-    hy_u32_t i = 1;
-    hy_u32_t num_tmp = num;
+    uint32_t i = 1;
+    uint32_t num_tmp = num;
 
     while (num >>= 1) {
         i <<= 1;
@@ -234,7 +234,7 @@ void log_fifo_destroy(log_fifo_context_s **context_pp)
     *context_pp = NULL;
 }
 
-log_fifo_context_s *log_fifo_create(hy_u32_t len)
+log_fifo_context_s *log_fifo_create(uint32_t len)
 {
     if (len == 0) {
         log_error("the param is error \n");

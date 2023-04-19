@@ -40,13 +40,13 @@ typedef struct {
     HyLogSaveConfig_s   save_c;
 
     format_cb_t         *format_cb;
-    hy_u32_t            format_cb_cnt;
+    uint32_t            format_cb_cnt;
 
     void                *write_h;
 } _log_context_s;
 
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
-static hy_s32_t _is_init = 0;
+static int32_t _is_init = 0;
 static _log_context_s _context;
 
 HyLogLevel_e HyLogLevelGet(void)
@@ -121,7 +121,7 @@ void HyLogDeInit(void)
     free(context->format_cb);
 }
 
-hy_s32_t HyLogInit(HyLogConfig_s *log_c)
+int32_t HyLogInit(HyLogConfig_s *log_c)
 {
     if (!log_c) {
         log_error("the param is error \n");

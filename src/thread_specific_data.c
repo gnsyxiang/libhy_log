@@ -25,7 +25,7 @@
 
 static thread_specific_data_s context;
 
-static hy_s32_t _thread_specific_data_set(void *handle)
+static int32_t _thread_specific_data_set(void *handle)
 {
     if (!handle) {
         log_error("the param is error \n");
@@ -94,7 +94,7 @@ void thread_specific_data_destroy(void)
     }
 }
 
-hy_s32_t thread_specific_data_create(
+int32_t thread_specific_data_create(
         thread_specific_data_create_cb_t create_cb,
         thread_specific_data_destroy_cb_t destroy_cb,
         thread_specific_data_reset_cb_t reset_cb)

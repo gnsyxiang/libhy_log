@@ -35,7 +35,7 @@ void process_single_write(void *handle, log_write_info_s *log_write_info)
     HyLogAddiInfo_s *addi_info = log_write_info->addi_info;
     dynamic_array_s *dynamic_array = log_write_info->dynamic_array;
 
-    for (hy_u32_t i = 0; i < log_write_info->format_cb_cnt; ++i) {
+    for (uint32_t i = 0; i < log_write_info->format_cb_cnt; ++i) {
         if (log_write_info->format_cb[i][0]) {
             log_write_info->format_cb[i][0](dynamic_array, addi_info);
         }
@@ -45,7 +45,7 @@ void process_single_write(void *handle, log_write_info_s *log_write_info)
             dynamic_array->buf, dynamic_array->cur_len);
 }
 
-static void _terminal_process_handle_data_cb(void *buf, hy_u32_t len, void *args)
+static void _terminal_process_handle_data_cb(void *buf, uint32_t len, void *args)
 {
     printf("%s", (char *)buf);
 }
@@ -61,7 +61,7 @@ void process_single_destroy(void **handle)
     *handle = NULL;
 }
 
-void *process_single_create(hy_u32_t fifo_len)
+void *process_single_create(uint32_t fifo_len)
 {
     if (fifo_len <= 0) {
         log_error("the param is error \n");

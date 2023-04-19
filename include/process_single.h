@@ -24,11 +24,11 @@
 extern "C" {
 #endif
 
-#include "hy_type.h"
+#include <stdint.h>
 
 struct log_write_info_tag;
 
-void *process_single_create(hy_u32_t fifo_len);
+void *process_single_create(uint32_t fifo_len);
 void process_single_destroy(void **handle);
 
 void process_single_write(void *handle, struct log_write_info_tag *log_write_info);

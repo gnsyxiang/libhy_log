@@ -24,12 +24,12 @@
 
 #include "process_handle_data.h"
 
-hy_s32_t process_handle_data_write(process_handle_data_s *context,
-                                   const void *buf, hy_u32_t len)
+int32_t process_handle_data_write(process_handle_data_s *context,
+                                   const void *buf, uint32_t len)
 {
     assert(context);
     assert(buf);
-    hy_s32_t ret = 0;
+    int32_t ret = 0;
 
     pthread_mutex_lock(&context->mutex);
     ret = log_fifo_write(context->fifo, buf, len);
@@ -44,7 +44,7 @@ static void *_thread_cb(void *args)
 {
 #define _ITEM_LEN_MAX   (4 * 1024)
     process_handle_data_s *context = args;
-    hy_s32_t ret = 0;
+    int32_t ret = 0;
 
     char *buf = calloc(1, _ITEM_LEN_MAX);
     if (!buf) {
@@ -102,7 +102,7 @@ void process_handle_data_destroy(process_handle_data_s **context_pp)
 }
 
 process_handle_data_s *process_handle_data_create(const char *name,
-                                                  hy_u32_t fifo_len, process_handle_data_cb_t cb, void *args)
+                                                  uint32_t fifo_len, process_handle_data_cb_t cb, void *args)
 {
     if (!name || fifo_len <= 0 || !cb) {
         log_error("the param is NULL \n");

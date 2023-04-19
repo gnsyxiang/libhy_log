@@ -26,12 +26,12 @@
 
 #include "format_cb.h"
 
-static hy_s32_t _format_log_color_cb(dynamic_array_s *dynamic_array,
+static int32_t _format_log_color_cb(dynamic_array_s *dynamic_array,
                                      HyLogAddiInfo_s *addi_info)
 {
     char buf[16] = {0};
-    hy_s32_t ret = 0;
-    hy_char_t *color[][2] = {
+    int32_t ret = 0;
+    char *color[][2] = {
         {"F", PRINT_FONT_RED},
         {"E", PRINT_FONT_RED},
         {"W", PRINT_FONT_YEL},
@@ -45,12 +45,12 @@ static hy_s32_t _format_log_color_cb(dynamic_array_s *dynamic_array,
     return dynamic_array_write(dynamic_array, buf, ret);
 }
 
-static hy_s32_t _format_log_level_info_cb(dynamic_array_s *dynamic_array,
+static int32_t _format_log_level_info_cb(dynamic_array_s *dynamic_array,
                                           HyLogAddiInfo_s *addi_info)
 {
     char buf[4] = {0};
-    hy_s32_t ret = 0;
-    hy_char_t *color[][2] = {
+    int32_t ret = 0;
+    char *color[][2] = {
         {"F", PRINT_FONT_RED},
         {"E", PRINT_FONT_RED},
         {"W", PRINT_FONT_YEL},
@@ -64,21 +64,21 @@ static hy_s32_t _format_log_level_info_cb(dynamic_array_s *dynamic_array,
     return dynamic_array_write(dynamic_array, buf, ret);
 }
 
-static hy_s32_t _format_log_time_cb(dynamic_array_s *dynamic_array,
+static int32_t _format_log_time_cb(dynamic_array_s *dynamic_array,
                                     HyLogAddiInfo_s *addi_info)
 {
     char buf[32] = {0};
-    hy_u32_t ret = 0;
+    uint32_t ret = 0;
 
     ret = log_time(buf, sizeof(buf));
     return dynamic_array_write(dynamic_array, buf, ret);
 }
 
-static hy_s32_t _format_log_pid_id_cb(dynamic_array_s *dynamic_array,
+static int32_t _format_log_pid_id_cb(dynamic_array_s *dynamic_array,
                                       HyLogAddiInfo_s *addi_info)
 {
     char buf[64] = {0};
-    hy_s32_t ret = 0;
+    int32_t ret = 0;
     char name[16] = {0};
 
     pthread_getname_np(addi_info->tid, name, sizeof(name));
@@ -89,11 +89,11 @@ static hy_s32_t _format_log_pid_id_cb(dynamic_array_s *dynamic_array,
     return dynamic_array_write(dynamic_array, buf, ret);
 }
 
-static hy_s32_t _format_log_func_line_cb(dynamic_array_s *dynamic_array,
+static int32_t _format_log_func_line_cb(dynamic_array_s *dynamic_array,
                                          HyLogAddiInfo_s *addi_info)
 {
     char buf[128] = {0};
-    hy_s32_t ret = 0;
+    int32_t ret = 0;
 
     if (addi_info->err_str) {
         ret += snprintf(buf + ret, sizeof(buf) - ret,
@@ -108,21 +108,21 @@ static hy_s32_t _format_log_func_line_cb(dynamic_array_s *dynamic_array,
     return dynamic_array_write(dynamic_array, buf, ret);
 }
 
-static hy_s32_t _format_log_usr_msg_cb(dynamic_array_s *dynamic_array,
+static int32_t _format_log_usr_msg_cb(dynamic_array_s *dynamic_array,
                                        HyLogAddiInfo_s *addi_info)
 {
     return dynamic_array_write_vprintf(dynamic_array,
                                        addi_info->fmt, addi_info->str_args);
 }
 
-static hy_s32_t _format_log_color_reset_cb(dynamic_array_s *dynamic_array,
+static int32_t _format_log_color_reset_cb(dynamic_array_s *dynamic_array,
                                            HyLogAddiInfo_s *addi_info)
 {
     return dynamic_array_write(dynamic_array,
                                PRINT_ATTR_RESET, strlen(PRINT_ATTR_RESET));
 }
 
-void format_cb_register(format_cb_t **format_cb_pp, hy_u32_t *format_cb_cnt, hy_u32_t format)
+void format_cb_register(format_cb_t **format_cb_pp, uint32_t *format_cb_cnt, uint32_t format)
 {
     if (!format_cb_pp || *format_cb_cnt) {
         log_error("the param is NULL \n");
@@ -141,14 +141,14 @@ void format_cb_register(format_cb_t **format_cb_pp, hy_u32_t *format_cb_cnt, hy_
         {HY_LOG_OUTPUT_FORMAT_USR_MSG,      {_format_log_usr_msg_cb,        _format_log_usr_msg_cb,     }},
         {HY_LOG_OUTPUT_FORMAT_COLOR_RESET,  {_format_log_color_reset_cb,    NULL,                       }},
     };
-    hy_u32_t cnt = LOG_ARRAY_CNT(log_format_cb);
+    uint32_t cnt = LOG_ARRAY_CNT(log_format_cb);
     format_cb_t *format_cb = calloc(cnt, sizeof(format_cb_t));
     if (!format_cb) {
         log_error("calloc failed \n");
         return;
     }
 
-    for (hy_u32_t i = 0; i < cnt; ++i) {
+    for (uint32_t i = 0; i < cnt; ++i) {
         if (log_format_cb[i].format == (format & 0x1 << i)) {
             memcpy(format_cb[i], log_format_cb[i].format_log_cb,
                    sizeof(log_format_cb[i].format_log_cb));

@@ -24,7 +24,7 @@
 extern "C" {
 #endif
 
-#include "hy_type.h"
+#include <stdint.h>
 
 /**
  * @brief 打印FIFO相关信息
@@ -40,11 +40,11 @@ typedef enum {
  * @brief fifo上下文
  */
 typedef struct {
-    hy_u32_t    len;                    ///< FIFO长度
+    uint32_t    len;                    ///< FIFO长度
     char        *buf;                   ///< FIFO数据
 
-    hy_u32_t    read_pos;               ///< 读位置
-    hy_u32_t    write_pos;              ///< 写位置
+    uint32_t    read_pos;               ///< 读位置
+    uint32_t    write_pos;              ///< 写位置
 } log_fifo_context_s;
 
 /**
@@ -54,7 +54,7 @@ typedef struct {
  *
  * @return 成功返回句柄，失败返回NULL
  */
-log_fifo_context_s *log_fifo_create(hy_u32_t len);
+log_fifo_context_s *log_fifo_create(uint32_t len);
 
 /**
  * @brief 销毁fifo模块
@@ -72,8 +72,8 @@ void log_fifo_destroy(log_fifo_context_s **context_pp);
  *
  * @return 成功返回写入的长度，失败返回-1
  */
-hy_s32_t log_fifo_write(log_fifo_context_s *context,
-        const void *buf, hy_u32_t len);
+int32_t log_fifo_write(log_fifo_context_s *context,
+        const void *buf, uint32_t len);
 
 /**
  * @brief 从fifo中读取数据
@@ -84,7 +84,7 @@ hy_s32_t log_fifo_write(log_fifo_context_s *context,
  *
  * @return 成功返回读取的长度，失败返回-1
  */
-hy_s32_t log_fifo_read(log_fifo_context_s *context, void *buf, hy_u32_t len);
+int32_t log_fifo_read(log_fifo_context_s *context, void *buf, uint32_t len);
 
 /**
  * @brief 从fifo中读取数据
@@ -97,7 +97,7 @@ hy_s32_t log_fifo_read(log_fifo_context_s *context, void *buf, hy_u32_t len);
  *
  * @note 该操作不会删除数据
  */
-hy_s32_t log_fifo_read_peek(log_fifo_context_s *context, void *buf, hy_u32_t len);
+int32_t log_fifo_read_peek(log_fifo_context_s *context, void *buf, uint32_t len);
 
 /**
  * @brief 打印fifo中的数据

@@ -25,8 +25,7 @@ extern "C" {
 #endif
 
 #include <pthread.h>
-
-#include "hy_type.h"
+#include <stdint.h>
 
 typedef void * (*thread_specific_data_create_cb_t)(void);
 typedef void (*thread_specific_data_destroy_cb_t)(void *handle);
@@ -41,7 +40,7 @@ typedef struct {
     thread_specific_data_reset_cb_t     reset_cb;
 } thread_specific_data_s;
 
-hy_s32_t thread_specific_data_create(
+int32_t thread_specific_data_create(
         thread_specific_data_create_cb_t create_cb,
         thread_specific_data_destroy_cb_t destroy_cb,
         thread_specific_data_reset_cb_t reset_cb);

@@ -33,7 +33,7 @@ extern "C" {
 
 // #define HY_LOG_DEBUG
 
-#define LOG_ARRAY_CNT(array)                (hy_u32_t)(sizeof((array)) / sizeof((array)[0]))
+#define LOG_ARRAY_CNT(array)                (uint32_t)(sizeof((array)) / sizeof((array)[0]))
 
 #define log_time(_buf, _buf_len)                                                \
     ({                                                                          \
@@ -45,7 +45,7 @@ extern "C" {
         gettimeofday(&tv, NULL);                                                \
         snprintf(_buf, _buf_len, "[%04d-%02d-%02d_%02d:%02d:%02d.%03d]",        \
                 tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,                   \
-                tm.tm_hour, tm.tm_min, tm.tm_sec, (hy_u32_t)tv.tv_usec / 1000); \
+                tm.tm_hour, tm.tm_min, tm.tm_sec, (uint32_t)tv.tv_usec / 1000); \
      })
 
 #ifdef HY_LOG_DEBUG
