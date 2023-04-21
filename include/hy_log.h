@@ -24,13 +24,11 @@
 extern "C" {
 #endif
 
-#include <string.h>
 #include <stdint.h>
 #include <errno.h>
-#include <unistd.h>
-#include <stdarg.h>
 #include <pthread.h>
 
+#include <unistd.h>
 #include <sys/syscall.h>      /* Definition of SYS_* constants */
 
 /**
