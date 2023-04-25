@@ -48,14 +48,19 @@ AC_PROG_MAKE_SET
 CHECK_LIBCUNIT
 
 # Checks for libraries.
+# FIXME: Replace `main' with a function in `-lpthread':
+AC_CHECK_LIB([pthread], [pthread_create])
 
 # Checks for header files.
-AC_CHECK_HEADERS([stdlib.h])
+AC_CHECK_HEADERS([inttypes.h stdint.h stdlib.h string.h sys/time.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
+AC_TYPE_INT32_T
+AC_TYPE_UINT32_T
 
 # Checks for library functions.
-AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_CHECK_FUNCS([atexit gettimeofday localtime_r memset strerror])
 
 AC_CONFIG_FILES([Makefile
                  $project_name.pc
@@ -66,6 +71,8 @@ AC_CONFIG_FILES([Makefile
                  build-script/eeasytech/SV823/Makefile
                  build-script/fullhan/MC6810E/Makefile
                  build-script/fullhan/Makefile
+                 build-script/nxp/Makefile
+                 build-script/nxp/mx6ull/Makefile
                  build-script/pc/Makefile
                  build-script/pc/pc-chip/Makefile
                  build-script/rock-chips/Makefile
