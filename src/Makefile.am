@@ -18,9 +18,13 @@
 #     last modified: 05/03 2021 10:35
 # ===============================================================
 
-SUBDIRS = hy_log
+SUBDIRS =
 
 lib_LTLIBRARIES = lib@project_name@.la
+
+if COMPILE_SELECT_LOG_TYPE_HY_LOG
+SUBDIRS += hy_log
+endif
 
 # ------------------
 # defining variables
@@ -46,8 +50,15 @@ _include_com    += \
 				   -I$(top_srcdir)/include/hy_log \
 				   -I$(top_srcdir)/include
 
-_sources_com    += \
-				   hy_log.c
+_sources_com    +=
+
+if COMPILE_SELECT_LOG_TYPE_HY_LOG
+_sources_com    += hy_log.c
+endif
+
+if COMPILE_SELECT_LOG_TYPE_LOG4CPLUS
+_sources_com    += hy_log4cplus.cpp
+endif
 
 _cppflags_com   += \
                    $(_no_error_com) \
@@ -64,9 +75,11 @@ if !COMPILE_DEBUG_INFO
 _ldflags_com    += -export-symbols-regex 'Hy*'
 endif
 
-_ldadd_com      += \
-				   $(top_builddir)/src/hy_log/libhy_loger.la \
-				   $(ldadd_com)
+_ldadd_com      += $(ldadd_com)
+
+if COMPILE_SELECT_LOG_TYPE_HY_LOG
+_ldadd_com      += $(top_builddir)/src/hy_log/libhy_loger.la
+endif
 
 lib@project_name@_la_SOURCES    = $(_sources_com)
 lib@project_name@_la_CPPFLAGS   = $(_cppflags_com)

@@ -56,7 +56,11 @@ _ldflags_com    +=
 
 _ldadd_com      += \
                    $(top_builddir)/src/lib@project_name@.la \
-                   $(ldadd_com) -lpthread
+                   $(ldadd_com)
+
+if COMPILE_LIBLOG4CPLUS
+_ldadd_com      += $(LOG4CPLUS_LIBS)
+endif
 
 bin_PROGRAMS            += hy_log_demo
 hy_log_demo_SOURCES    = $(_sources_com) hy_log_demo.c

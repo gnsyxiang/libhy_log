@@ -29,6 +29,7 @@ SELECT_VENDER
 SELECT_CHIP
 # SELECT_PRODUCT
 # SELECT_LANGUAGE
+SELECT_LOG_TYPE
 
 AC_ARG_ENABLE([debug_info],
               [AS_HELP_STRING([--enable-debug_info], [enable support for output debug info])],
@@ -46,6 +47,7 @@ AC_PROG_MAKE_SET
 # AC_PROG_RANLIB
 
 CHECK_LIBCUNIT
+CHECK_LIBLOG4CPLUS
 
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lpthread':

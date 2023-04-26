@@ -18,6 +18,12 @@
 #     last modified: 05/03 2021 10:35
 # ===============================================================
 
+SUBDIRS =
+
+if COMPILE_SELECT_LOG_TYPE_HY_LOG
+SUBDIRS += hy_log
+endif
+
 # ------------------
 # defining variables
 # ------------------
