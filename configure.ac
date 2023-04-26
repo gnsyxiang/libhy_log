@@ -80,11 +80,13 @@ AC_CONFIG_FILES([Makefile
                  doc/Makefile
                  example/Makefile
                  include/Makefile
+                 include/hy_log/Makefile
                  res/Makefile
                  res/voice/Makefile
                  res/voice/cn/Makefile
                  res/voice/en/Makefile
                  src/Makefile
+                 src/hy_log/Makefile
                  test/Makefile])
 AC_OUTPUT
 

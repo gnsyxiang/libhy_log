@@ -5,7 +5,7 @@
 # @file    Makefile.am
 # @brief   
 # @author  gnsyxiang <gnsyxiang@163.com>
-# @date    05/03 2021 10:35
+# @date    26/04 2023 14:16
 # @version v0.0.1
 # 
 # @since    note
@@ -13,21 +13,19 @@
 # 
 #     change log:
 #     NO.     Author              Date            Modified
-#     00      zhenquan.qiu        05/03 2021      create the file
+#     00      zhenquan.qiu        26/04 2023      create the file
 # 
-#     last modified: 05/03 2021 10:35
+#     last modified: 26/04 2023 14:16
 # ===============================================================
 
-SUBDIRS = hy_log
-
-lib_LTLIBRARIES = lib@project_name@.la
+noinst_LTLIBRARIES = libhy_loger.la
 
 # ------------------
 # defining variables
 # ------------------
 _no_error_com   =
 _define_com     =
-_include_com    = $(include_com)
+_include_com    = $(INCLUDE_COM)
 _sources_com    =
 _cppflags_com   =
 _cflags_com     =
@@ -43,11 +41,16 @@ _no_error_com   +=
 _define_com     += -D_GNU_SOURCE
 
 _include_com    += \
-				   -I$(top_srcdir)/include/hy_log \
-				   -I$(top_srcdir)/include
+                   -I$(top_srcdir)/include/hy_log \
+                   -I$(top_srcdir)/include
 
 _sources_com    += \
-				   hy_log.c
+				   dynamic_array.c          \
+				   format_cb.c              \
+				   log_fifo.c               \
+				   process_handle_data.c    \
+				   process_single.c         \
+				   thread_specific_data.c
 
 _cppflags_com   += \
                    $(_no_error_com) \
@@ -58,20 +61,14 @@ _cflags_com     +=
 
 _cxxflags_com   +=
 
-_ldflags_com    += -version-info @current@:@revision@:@age@
+_ldflags_com    +=
 
-if !COMPILE_DEBUG_INFO
-_ldflags_com    += -export-symbols-regex 'Hy*'
-endif
+_ldadd_com      += $(ldadd_com)
 
-_ldadd_com      += \
-				   $(top_builddir)/src/hy_log/libhy_loger.la \
-				   $(ldadd_com)
-
-lib@project_name@_la_SOURCES    = $(_sources_com)
-lib@project_name@_la_CPPFLAGS   = $(_cppflags_com)
-lib@project_name@_la_CFLAGS     = $(_cflags_com)
-lib@project_name@_la_CXXFLAGS   = $(_cxxflags_com)
-lib@project_name@_la_LDFLAGS    = $(_ldflags_com)
-lib@project_name@_la_LIBADD     = $(_ldadd_com)
+libhy_loger_la_SOURCES      = $(_sources_com)
+libhy_loger_la_CPPFLAGS     = $(_cppflags_com)
+libhy_loger_la_CFLAGS       = $(_cflags_com)
+libhy_loger_la_CXXFLAGS     = $(_cxxflags_com)
+libhy_loger_la_LDFLAGS      = $(_ldflags_com)
+libhy_loger_la_LIBADD       = $(_ldadd_com)
 

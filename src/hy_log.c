@@ -18,7 +18,6 @@
  *     last modified: 29/10 2021 20:30
  */
 #include <stdio.h>
-#include <stdarg.h>
 
 #include "format_cb.h"
 #include "log_private.h"

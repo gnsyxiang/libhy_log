@@ -17,8 +17,8 @@
  * 
  *     last modified: 28/04 2022 10:21
  */
-#include <pthread.h>
 #include <stdio.h>
+#include <pthread.h>
 #include <inttypes.h>
 
 #include "hy_printf.h"

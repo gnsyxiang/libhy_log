@@ -28,7 +28,7 @@ extern "C" {
 #include <errno.h>
 #include <pthread.h>
 #include <string.h>
-
+#include <stdarg.h>
 #include <unistd.h>
 #include <sys/syscall.h>      /* Definition of SYS_* constants */
 
