@@ -48,6 +48,7 @@ AC_PROG_MAKE_SET
 
 CHECK_LIBCUNIT
 CHECK_LIBLOG4CPLUS
+CHECK_ZLOG
 
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lpthread':
@@ -88,6 +89,7 @@ AC_CONFIG_FILES([Makefile
                  include/Makefile
                  include/hy_log/Makefile
                  include/log4cplus/Makefile
+                 include/zlog/Makefile
                  res/Makefile
                  res/voice/Makefile
                  res/voice/cn/Makefile
@@ -95,6 +97,7 @@ AC_CONFIG_FILES([Makefile
                  src/Makefile
                  src/hy_log/Makefile
                  src/log4cplus/Makefile
+                 src/zlog/Makefile
                  test/Makefile])
 AC_OUTPUT
 

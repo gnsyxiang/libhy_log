@@ -30,6 +30,10 @@ if COMPILE_SELECT_LOG_TYPE_LOG4CPLUS
 SUBDIRS += log4cplus
 endif
 
+if COMPILE_SELECT_LOG_TYPE_ZLOG
+SUBDIRS += zlog
+endif
+
 # ------------------
 # defining variables
 # ------------------
@@ -77,6 +81,10 @@ endif
 
 if COMPILE_SELECT_LOG_TYPE_LOG4CPLUS
 _ldadd_com      += $(top_builddir)/src/log4cplus/libhy_log4cplus.la
+endif
+
+if COMPILE_SELECT_LOG_TYPE_ZLOG
+_ldadd_com      += $(top_builddir)/src/zlog/libhy_zlog.la
 endif
 
 lib@project_name@_la_SOURCES    = $(_sources_com)

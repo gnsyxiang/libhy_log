@@ -49,6 +49,10 @@ if COMPILE_SELECT_LOG_TYPE_LOG4CPLUS
 _include_com    += -I$(top_srcdir)/include/log4cplus
 endif
 
+if COMPILE_SELECT_LOG_TYPE_ZLOG
+_include_com    += -I$(top_srcdir)/include/zlog
+endif
+
 _sources_com    +=
 
 _cppflags_com   += \
@@ -68,6 +72,10 @@ _ldadd_com      += \
 
 if COMPILE_LIBLOG4CPLUS
 _ldadd_com      += $(LOG4CPLUS_LIBS)
+endif
+
+if COMPILE_SELECT_LOG_TYPE_ZLOG
+_ldadd_com      += $(ZLOG_LIBS)
 endif
 
 bin_PROGRAMS            += hy_log_demo

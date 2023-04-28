@@ -27,7 +27,7 @@ AC_DEFUN([SELECT_LOG_TYPE],
         log_type=""
 
         AC_ARG_WITH([log_type],
-            [AS_HELP_STRING([--with-log_type=@<:@hy_log|log4cplus@:>@], [select log_type about @<:@hy_log|log4cplus@:>@ @<:@default=hy_log@:>@])],
+            [AS_HELP_STRING([--with-log_type=@<:@hy_log|zlog|log4cplus@:>@], [select log_type about @<:@hy_log|zlog|log4cplus@:>@ @<:@default=hy_log@:>@])],
             [],
             [with_log_type=hy_log])
 
@@ -36,18 +36,23 @@ AC_DEFUN([SELECT_LOG_TYPE],
                 AC_DEFINE(HAVE_SELECT_LOG_TYPE_HY_LOG,  1, [select hy_log log_type])
                 log_type="hy_log"
             ;;
+            zlog)
+                AC_DEFINE(HAVE_SELECT_LOG_TYPE_ZLOG,  1, [select zlog log_type])
+                log_type="zlog"
+            ;;
             log4cplus)
                 AC_DEFINE(HAVE_SELECT_LOG_TYPE_LOG4CPLUS,  1, [select log4cplus log_type])
                 log_type="log4cplus"
             ;;
             *)
-                AC_MSG_ERROR([bad value ${with_log_type} for --with-log_type=@<:@hy_log|log4cplus@:>@])
+                AC_MSG_ERROR([bad value ${with_log_type} for --with-log_type=@<:@hy_log|zlog|log4cplus@:>@])
             ;;
         esac
 
         AC_SUBST(log_type)
 
         AM_CONDITIONAL([COMPILE_SELECT_LOG_TYPE_HY_LOG],            [test "x$with_log_type" = "xhy_log"])
+        AM_CONDITIONAL([COMPILE_SELECT_LOG_TYPE_ZLOG],              [test "x$with_log_type" = "xzlog"])
         AM_CONDITIONAL([COMPILE_SELECT_LOG_TYPE_LOG4CPLUS],         [test "x$with_log_type" = "xlog4cplus"])
     ])
 

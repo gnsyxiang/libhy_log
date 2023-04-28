@@ -25,6 +25,17 @@ SUBDIRS = \
 # defining variables
 # ------------------
 _dist_file_com  =
+resdir          = $(prefix)/res/@project_name@
+res_DATA        =
+
+# ------------------
+# make install files
+# ------------------
+res_DATA        +=
+
+if COMPILE_SELECT_LOG_TYPE_ZLOG
+res_DATA        += zlog.conf
+endif
 
 # ---------------
 # make dist files

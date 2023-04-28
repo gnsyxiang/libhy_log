@@ -117,6 +117,7 @@ typedef struct {
     HyLogSaveConfig_s   save_c;             ///< 配置参数
 
     uint32_t            fifo_len;           ///< fifo大小，异步方式用于保存log
+    const char          *config_file;       ///< 配置文件路径
 } HyLogConfig_s;
 
 /**

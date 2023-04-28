@@ -2,10 +2,10 @@
  *
  * Release under GPLv-3.0.
  * 
- * @file    hy_log.h
+ * @file    hy_zlog.h
  * @brief   
  * @author  gnsyxiang <gnsyxiang@163.com>
- * @date    29/10 2021 20:29
+ * @date    28/04 2023 15:13
  * @version v0.0.1
  * 
  * @since    note
@@ -13,12 +13,12 @@
  * 
  *     change log:
  *     NO.     Author              Date            Modified
- *     00      zhenquan.qiu        29/10 2021      create the file
+ *     00      zhenquan.qiu        28/04 2023      create the file
  * 
- *     last modified: 29/10 2021 20:29
+ *     last modified: 28/04 2023 15:13
  */
-#ifndef __LIBHY_UTILS_INCLUDE_HY_LOG_H_
-#define __LIBHY_UTILS_INCLUDE_HY_LOG_H_
+#ifndef __LIBHY_LOG_INCLUDE_HY_ZLOG_H_
+#define __LIBHY_LOG_INCLUDE_HY_ZLOG_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,6 +31,10 @@ extern "C" {
 #include <stdarg.h>
 #include <unistd.h>
 #include <sys/syscall.h>      /* Definition of SYS_* constants */
+
+#include <zlog.h>
+
+extern zlog_category_t *c;
 
 /**
  * @brief 打印等级定义
@@ -47,22 +51,6 @@ typedef enum {
 
     HY_LOG_LEVEL_MAX = 0xffffffff,
 } HyLogLevel_e;
-
-/**
- * @brief log相关信息
- */
-typedef struct {
-    HyLogLevel_e        level;              ///< 打印等级
-    char                *err_str;           ///< 错误信息，由strerror(errno)提供
-    const char          *file;              ///< 文件名，去掉了路径
-    const char          *func;              ///< 函数名
-    uint32_t            line;               ///< 行号
-    pthread_t           tid;                ///< 线程id
-    long                pid;                ///< 进程id
-
-    const char          *fmt;               ///< 用户格式
-    va_list             *str_args;          ///< 用户信息
-} HyLogAddiInfo_s;
 
 /**
  * @brief 配置log输出的格式
@@ -156,75 +144,22 @@ int32_t HyLogInit(HyLogConfig_s *log_c);
  */
 void HyLogDeInit(void);
 
-/**
- * @brief 获取打印等级
- *
- * @return 当前的打印等级
- */
-HyLogLevel_e HyLogLevelGet(void);
-
-/**
- * @brief 设置打印等级
- *
- * @param level 新的打印等级
- */
-void HyLogLevelSet(HyLogLevel_e level);
-
-/**
- * @brief log函数
- *
- * @param level 打印等级
- * @param file 所在的文件
- * @param func 所在的函数
- * @param line 所在的行号
- * @param fmt 格式
- * @param ... 参数
- */
-void HyLogWrite(HyLogAddiInfo_s *addi_info, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
-
-/*
- * 1，去掉文件路径，只获取文件名
- *  1.1，使用strrchr函数，包含头文件#include <string.h>
- *      #define HY_STRRCHR_FILE (strrchr(__FILE__, '/'))
- *      #define HY_FILENAME     (HY_STRRCHR_FILE ? (HY_STRRCHR_FILE + 1) : __FILE__)
- *  1.2，使用basename函数，包含头文件#include <libgen.h>
- *      basename(__FILE__)
- */
-#define HY_STRRCHR_FILE (strrchr(__FILE__, '/'))
-#define HY_FILENAME     (HY_STRRCHR_FILE ? (HY_STRRCHR_FILE + 1) : __FILE__)
-
-#define LOG(_level, _err_str, fmt, ...)                     \
-do {                                                        \
-    if (HyLogLevelGet() >= _level) {                        \
-        HyLogAddiInfo_s addi_info;                          \
-        addi_info.level     = _level;                       \
-        addi_info.err_str   = _err_str;                     \
-        addi_info.file      = HY_FILENAME;                  \
-        addi_info.func      = __func__;                     \
-        addi_info.line      = __LINE__;                     \
-        addi_info.tid       = pthread_self();               \
-        addi_info.pid       = syscall(SYS_gettid);          \
-        HyLogWrite(&addi_info, fmt, ##__VA_ARGS__);         \
-    }                                                       \
-} while (0)
-
-
 #if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
-#   define LOGF(fmt, ...)  LOG(HY_LOG_LEVEL_FATAL, strerror(errno), fmt, ##__VA_ARGS__)
-#   define LOGES(fmt, ...) LOG(HY_LOG_LEVEL_ERROR, strerror(errno), fmt, ##__VA_ARGS__)
-#   define LOGE(fmt, ...)  LOG(HY_LOG_LEVEL_ERROR, NULL,            fmt, ##__VA_ARGS__)
-#   define LOGW(fmt, ...)  LOG(HY_LOG_LEVEL_WARN,  NULL,            fmt, ##__VA_ARGS__)
-#   define LOGI(fmt, ...)  LOG(HY_LOG_LEVEL_INFO,  NULL,            fmt, ##__VA_ARGS__)
-#   define LOGD(fmt, ...)  LOG(HY_LOG_LEVEL_DEBUG, NULL,            fmt, ##__VA_ARGS__)
-#   define LOGT(fmt, ...)  LOG(HY_LOG_LEVEL_TRACE, NULL,            fmt, ##__VA_ARGS__)
+#   define LOGF(fmt, ...)  zlog_fatal(c, fmt, ##__VA_ARGS__)
+#   define LOGES(fmt, ...) zlog_error(c, fmt, ##__VA_ARGS__)
+#   define LOGE(fmt, ...)  zlog_error(c, fmt, ##__VA_ARGS__)
+#   define LOGW(fmt, ...)  zlog_warn(c, fmt, ##__VA_ARGS__)
+#   define LOGI(fmt, ...)  zlog_notice(c, fmt, ##__VA_ARGS__)
+#   define LOGD(fmt, ...)  zlog_info(c, fmt, ##__VA_ARGS__)
+#   define LOGT(fmt, ...)  zlog_debug(c, fmt, ##__VA_ARGS__)
 #else
-#   define LOGF(fmt, args...)  LOG(HY_LOG_LEVEL_FATAL, strerror(errno), fmt, ##args)
-#   define LOGES(fmt, args...) LOG(HY_LOG_LEVEL_ERROR, strerror(errno), fmt, ##args)
-#   define LOGE(fmt, args...)  LOG(HY_LOG_LEVEL_ERROR, NULL,            fmt, ##args)
-#   define LOGW(fmt, args...)  LOG(HY_LOG_LEVEL_WARN,  NULL,            fmt, ##args)
-#   define LOGI(fmt, args...)  LOG(HY_LOG_LEVEL_INFO,  NULL,            fmt, ##args)
-#   define LOGD(fmt, args...)  LOG(HY_LOG_LEVEL_DEBUG, NULL,            fmt, ##args)
-#   define LOGT(fmt, args...)  LOG(HY_LOG_LEVEL_TRACE, NULL,            fmt, ##args)
+#   define LOGF(fmt, ...)  zlog_fatal(c, fmt, ##args)
+#   define LOGES(fmt, ...) zlog_error(c, fmt, ##args)
+#   define LOGE(fmt, ...)  zlog_error(c, fmt, ##args)
+#   define LOGW(fmt, ...)  zlog_warn(c, fmt, ##args)
+#   define LOGI(fmt, ...)  zlog_notice(c, fmt, ##args)
+#   define LOGD(fmt, ...)  zlog_info(c, fmt, ##args)
+#   define LOGT(fmt, ...)  zlog_debug(c, fmt, ##args)
 #endif
 
 #ifdef __cplusplus
