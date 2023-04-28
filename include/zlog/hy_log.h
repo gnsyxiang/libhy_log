@@ -25,16 +25,10 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include <errno.h>
-#include <pthread.h>
-#include <string.h>
-#include <stdarg.h>
-#include <unistd.h>
-#include <sys/syscall.h>      /* Definition of SYS_* constants */
 
 #include <zlog.h>
 
-extern zlog_category_t *c;
+extern zlog_category_t *g_my_category;
 
 /**
  * @brief 打印等级定义
@@ -145,21 +139,21 @@ int32_t HyLogInit(HyLogConfig_s *log_c);
 void HyLogDeInit(void);
 
 #if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
-#   define LOGF(fmt, ...)  zlog_fatal(c, fmt, ##__VA_ARGS__)
-#   define LOGES(fmt, ...) zlog_error(c, fmt, ##__VA_ARGS__)
-#   define LOGE(fmt, ...)  zlog_error(c, fmt, ##__VA_ARGS__)
-#   define LOGW(fmt, ...)  zlog_warn(c, fmt, ##__VA_ARGS__)
-#   define LOGI(fmt, ...)  zlog_notice(c, fmt, ##__VA_ARGS__)
-#   define LOGD(fmt, ...)  zlog_info(c, fmt, ##__VA_ARGS__)
-#   define LOGT(fmt, ...)  zlog_debug(c, fmt, ##__VA_ARGS__)
+#   define LOGF(fmt, ...)  zlog_fatal(g_my_category, fmt, ##__VA_ARGS__)
+#   define LOGES(fmt, ...) zlog_error(g_my_category, fmt, ##__VA_ARGS__)
+#   define LOGE(fmt, ...)  zlog_error(g_my_category, fmt, ##__VA_ARGS__)
+#   define LOGW(fmt, ...)  zlog_warn(g_my_category, fmt, ##__VA_ARGS__)
+#   define LOGI(fmt, ...)  zlog_notice(g_my_category, fmt, ##__VA_ARGS__)
+#   define LOGD(fmt, ...)  zlog_info(g_my_category, fmt, ##__VA_ARGS__)
+#   define LOGT(fmt, ...)  zlog_debug(g_my_category, fmt, ##__VA_ARGS__)
 #else
-#   define LOGF(fmt, ...)  zlog_fatal(c, fmt, ##args)
-#   define LOGES(fmt, ...) zlog_error(c, fmt, ##args)
-#   define LOGE(fmt, ...)  zlog_error(c, fmt, ##args)
-#   define LOGW(fmt, ...)  zlog_warn(c, fmt, ##args)
-#   define LOGI(fmt, ...)  zlog_notice(c, fmt, ##args)
-#   define LOGD(fmt, ...)  zlog_info(c, fmt, ##args)
-#   define LOGT(fmt, ...)  zlog_debug(c, fmt, ##args)
+#   define LOGF(fmt, ...)  zlog_fatal(g_my_category, fmt, ##args)
+#   define LOGES(fmt, ...) zlog_error(g_my_category, fmt, ##args)
+#   define LOGE(fmt, ...)  zlog_error(g_my_category, fmt, ##args)
+#   define LOGW(fmt, ...)  zlog_warn(g_my_category, fmt, ##args)
+#   define LOGI(fmt, ...)  zlog_notice(g_my_category, fmt, ##args)
+#   define LOGD(fmt, ...)  zlog_info(g_my_category, fmt, ##args)
+#   define LOGT(fmt, ...)  zlog_debug(g_my_category, fmt, ##args)
 #endif
 
 #ifdef __cplusplus

@@ -20,10 +20,9 @@
 #include <stdio.h>
 #include <stdint.h>
 
-
 #include "hy_log.h"
 
-zlog_category_t *c;
+zlog_category_t *g_my_category;
 
 void HyLogDeInit(void)
 {
@@ -45,8 +44,8 @@ int32_t HyLogInit(HyLogConfig_s *log_c)
         return -1;
     }
 
-    c = zlog_get_category("my_cat");
-    if (!c) {
+    g_my_category = zlog_get_category("g_my_category");
+    if (!g_my_category) {
         printf("get cat fail\n");
         zlog_fini();
         return -1;
