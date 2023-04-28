@@ -26,6 +26,10 @@ if COMPILE_SELECT_LOG_TYPE_HY_LOG
 SUBDIRS += hy_log
 endif
 
+if COMPILE_SELECT_LOG_TYPE_LOG4CPLUS
+SUBDIRS += log4cplus
+endif
+
 # ------------------
 # defining variables
 # ------------------
@@ -50,10 +54,6 @@ _include_com    += -I$(top_srcdir)/include
 
 _sources_com    +=
 
-if COMPILE_SELECT_LOG_TYPE_LOG4CPLUS
-_sources_com    += hy_log4cplus.cpp
-endif
-
 _cppflags_com   += \
                    $(_no_error_com) \
                    $(_include_com)  \
@@ -73,6 +73,10 @@ _ldadd_com      += $(ldadd_com)
 
 if COMPILE_SELECT_LOG_TYPE_HY_LOG
 _ldadd_com      += $(top_builddir)/src/hy_log/libhy_loger.la
+endif
+
+if COMPILE_SELECT_LOG_TYPE_LOG4CPLUS
+_ldadd_com      += $(top_builddir)/src/log4cplus/libhy_log4cplus.la
 endif
 
 lib@project_name@_la_SOURCES    = $(_sources_com)

@@ -57,8 +57,12 @@ AC_CHECK_LIB([pthread], [pthread_create])
 AC_CHECK_HEADERS([inttypes.h stdint.h stdlib.h string.h sys/time.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
+AC_CHECK_HEADER_STDBOOL
 AC_TYPE_INT32_T
+AC_TYPE_INT8_T
+AC_TYPE_SIZE_T
 AC_TYPE_UINT32_T
+AC_TYPE_UINT8_T
 
 # Checks for library functions.
 AC_FUNC_REALLOC
@@ -83,12 +87,14 @@ AC_CONFIG_FILES([Makefile
                  example/Makefile
                  include/Makefile
                  include/hy_log/Makefile
+                 include/log4cplus/Makefile
                  res/Makefile
                  res/voice/Makefile
                  res/voice/cn/Makefile
                  res/voice/en/Makefile
                  src/Makefile
                  src/hy_log/Makefile
+                 src/log4cplus/Makefile
                  test/Makefile])
 AC_OUTPUT
 
