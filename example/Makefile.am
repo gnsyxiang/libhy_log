@@ -41,6 +41,10 @@ _define_com     +=
 
 _include_com    += -I$(top_srcdir)/include
 
+if COMPILE_SELECT_LOG_TYPE_HY_LOG
+_include_com    += -I$(top_srcdir)/include/hy_log
+endif
+
 _sources_com    +=
 
 _cppflags_com   += \

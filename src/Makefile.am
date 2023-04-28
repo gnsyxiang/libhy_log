@@ -46,15 +46,9 @@ _no_error_com   +=
 
 _define_com     += -D_GNU_SOURCE
 
-_include_com    += \
-				   -I$(top_srcdir)/include/hy_log \
-				   -I$(top_srcdir)/include
+_include_com    += -I$(top_srcdir)/include
 
 _sources_com    +=
-
-if COMPILE_SELECT_LOG_TYPE_HY_LOG
-_sources_com    += hy_log.c
-endif
 
 if COMPILE_SELECT_LOG_TYPE_LOG4CPLUS
 _sources_com    += hy_log4cplus.cpp

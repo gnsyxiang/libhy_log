@@ -37,9 +37,7 @@ install_includedir      = $(includedir)/@project_name@
 # ---------------------
 _no_install_headers_com +=
 
-_install_headers_com    += \
-						   hy_log.h \
-						   hy_printf.h
+_install_headers_com    +=
 
 # ------------------
 # make install files
