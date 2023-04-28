@@ -22,7 +22,7 @@
 
 #include "hy_log.h"
 
-zlog_category_t *g_my_category;
+zlog_category_t *HyGMyCategory;
 
 void HyLogDeInit(void)
 {
@@ -44,8 +44,8 @@ int32_t HyLogInit(HyLogConfig_s *log_c)
         return -1;
     }
 
-    g_my_category = zlog_get_category("g_my_category");
-    if (!g_my_category) {
+    HyGMyCategory = zlog_get_category("HyGMyCategory");
+    if (!HyGMyCategory) {
         printf("get cat fail\n");
         zlog_fini();
         return -1;

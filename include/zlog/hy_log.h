@@ -28,7 +28,7 @@ extern "C" {
 
 #include <zlog.h>
 
-extern zlog_category_t *g_my_category;
+extern zlog_category_t *HyGMyCategory;
 
 /**
  * @brief 打印等级定义
@@ -139,21 +139,21 @@ int32_t HyLogInit(HyLogConfig_s *log_c);
 void HyLogDeInit(void);
 
 #if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
-#   define LOGF(fmt, ...)  zlog_fatal(g_my_category, fmt, ##__VA_ARGS__)
-#   define LOGES(fmt, ...) zlog_error(g_my_category, fmt, ##__VA_ARGS__)
-#   define LOGE(fmt, ...)  zlog_error(g_my_category, fmt, ##__VA_ARGS__)
-#   define LOGW(fmt, ...)  zlog_warn(g_my_category, fmt, ##__VA_ARGS__)
-#   define LOGI(fmt, ...)  zlog_notice(g_my_category, fmt, ##__VA_ARGS__)
-#   define LOGD(fmt, ...)  zlog_info(g_my_category, fmt, ##__VA_ARGS__)
-#   define LOGT(fmt, ...)  zlog_debug(g_my_category, fmt, ##__VA_ARGS__)
+#   define LOGF(fmt, ...)  zlog_fatal(HyGMyCategory, fmt, ##__VA_ARGS__)
+#   define LOGES(fmt, ...) zlog_error(HyGMyCategory, fmt, ##__VA_ARGS__)
+#   define LOGE(fmt, ...)  zlog_error(HyGMyCategory, fmt, ##__VA_ARGS__)
+#   define LOGW(fmt, ...)  zlog_warn(HyGMyCategory, fmt, ##__VA_ARGS__)
+#   define LOGI(fmt, ...)  zlog_notice(HyGMyCategory, fmt, ##__VA_ARGS__)
+#   define LOGD(fmt, ...)  zlog_info(HyGMyCategory, fmt, ##__VA_ARGS__)
+#   define LOGT(fmt, ...)  zlog_debug(HyGMyCategory, fmt, ##__VA_ARGS__)
 #else
-#   define LOGF(fmt, ...)  zlog_fatal(g_my_category, fmt, ##args)
-#   define LOGES(fmt, ...) zlog_error(g_my_category, fmt, ##args)
-#   define LOGE(fmt, ...)  zlog_error(g_my_category, fmt, ##args)
-#   define LOGW(fmt, ...)  zlog_warn(g_my_category, fmt, ##args)
-#   define LOGI(fmt, ...)  zlog_notice(g_my_category, fmt, ##args)
-#   define LOGD(fmt, ...)  zlog_info(g_my_category, fmt, ##args)
-#   define LOGT(fmt, ...)  zlog_debug(g_my_category, fmt, ##args)
+#   define LOGF(fmt, ...)  zlog_fatal(HyGMyCategory, fmt, ##args)
+#   define LOGES(fmt, ...) zlog_error(HyGMyCategory, fmt, ##args)
+#   define LOGE(fmt, ...)  zlog_error(HyGMyCategory, fmt, ##args)
+#   define LOGW(fmt, ...)  zlog_warn(HyGMyCategory, fmt, ##args)
+#   define LOGI(fmt, ...)  zlog_notice(HyGMyCategory, fmt, ##args)
+#   define LOGD(fmt, ...)  zlog_info(HyGMyCategory, fmt, ##args)
+#   define LOGT(fmt, ...)  zlog_debug(HyGMyCategory, fmt, ##args)
 #endif
 
 #ifdef __cplusplus
