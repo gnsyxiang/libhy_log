@@ -44,7 +44,7 @@ int32_t HyLogInit(HyLogConfig_s *log_c)
         return -1;
     }
 
-    HyGMyCategory = zlog_get_category("HyGMyCategory");
+    HyGMyCategory = zlog_get_category("my_cat");
     if (!HyGMyCategory) {
         printf("get cat fail\n");
         zlog_fini();
