@@ -78,6 +78,7 @@ AC_DEFUN([CHECK_ZLOG],
 
                 case "$have_zlog" in
                     yes)
+                        AC_CHECK_LIB([zlog], [zlog_init])
                         AC_DEFINE(HAVE_ZLOG, 1, [Define if the system has zlog])
                     ;;
                     *)

@@ -70,14 +70,6 @@ _ldadd_com      += \
                    $(top_builddir)/src/lib@project_name@.la \
                    $(ldadd_com)
 
-if COMPILE_LIBLOG4CPLUS
-_ldadd_com      += $(LOG4CPLUS_LIBS)
-endif
-
-if COMPILE_SELECT_LOG_TYPE_ZLOG
-_ldadd_com      += $(ZLOG_LIBS)
-endif
-
 bin_PROGRAMS            += hy_log_demo
 hy_log_demo_SOURCES    = $(_sources_com) hy_log_demo.c
 hy_log_demo_CPPFLAGS   = $(_cppflags_com)
