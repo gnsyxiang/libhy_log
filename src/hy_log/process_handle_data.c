@@ -21,6 +21,7 @@
 #include <unistd.h>
 
 #include "log_private.h"
+#include "config.h"
 
 #include "process_handle_data.h"
 
@@ -45,6 +46,10 @@ static void *_thread_cb(void *args)
 #define _ITEM_LEN_MAX   (4 * 1024)
     process_handle_data_s *context = args;
     int32_t ret = 0;
+
+#ifdef HAVE_PTHREAD_SETNAME_NP
+    pthread_setname_np(context->id, "hy_log_loop");
+#endif
 
     char *buf = calloc(1, _ITEM_LEN_MAX);
     if (!buf) {
