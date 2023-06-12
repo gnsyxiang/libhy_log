@@ -144,13 +144,6 @@ select_build_version()
         echo "error select build version !!!"
         exit
     fi
-
-    if [[ ${usr_select_build_version} = "debug" ]]; then
-        cppflag="${cppflag} -g -O0"
-        configure_param="${configure_param} --enable-debug_info"
-    else
-        cppflag="${cppflag} -O2 -DNDEBUG"
-    fi
 }
 
 get_com_config()
@@ -159,10 +152,9 @@ get_com_config()
     cppflag="${cppflag} -W -Wall -Werror"
     cppflag="${cppflag} -ffunction-sections"
     cppflag="${cppflag} -fdata-sections"
-    cppflag="${cppflag} -fstack-protector-all"
     cppflag="${cppflag} -Wno-error=unused-parameter -Wno-unused-parameter"
+    cppflag="${cppflag} -Wno-error=unused-result -Wno-unused-result"
 
-    ldflag="${ldflag} -rdynamic"
     ldflag="${ldflag} -Wl,--gc-sections"
     ldflag="${ldflag} -Wl,--as-needed"
     ldflag="${ldflag} -Wl,-rpath=../lib"
@@ -181,6 +173,8 @@ get_config()
     _cxxflag=`sed '/^cxxflag=/!d;s/cxxflag=//' $_config_file`
     _ldflag=`sed '/^ldflag=/!d;s/ldflag=//' $_config_file`
     _lib=`sed '/^lib=/!d;s/lib=//' $_config_file`
+    _debug=`sed '/^debug=/!d;s/debug=//' $_config_file`
+    _release=`sed '/^release=/!d;s/release=//' $_config_file`
 
     install_path=`sed '/^install_path=/!d;s/.*=//' $_config_file`
 
@@ -191,6 +185,13 @@ get_config()
     cxxflag="${cxxflag} ${_cxxflag}"
     ldflag="${ldflag} ${_ldflag}"
     lib="${lib} ${_lib}"
+
+    if [[ ${usr_select_build_version} = "debug" ]]; then
+        cppflag="${cppflag} ${_debug}"
+        configure_param="${configure_param} --enable-debug_info"
+    else
+        cppflag="${cppflag} ${_release}"
+    fi
 
     configure_param="${configure_param} ${_configure_param}"
 }
