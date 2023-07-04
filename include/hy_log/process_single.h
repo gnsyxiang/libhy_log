@@ -17,8 +17,8 @@
  * 
  *     last modified: 21/04 2022 14:33
  */
-#ifndef __LIBHY_UTILS_INCLUDE_PROCESS_SINGLE_H_
-#define __LIBHY_UTILS_INCLUDE_PROCESS_SINGLE_H_
+#ifndef __LIBHY_LOG_INCLUDE_PROCESS_SINGLE_H_
+#define __LIBHY_LOG_INCLUDE_PROCESS_SINGLE_H_
 
 #ifdef __cplusplus
 extern "C" {

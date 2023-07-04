@@ -17,8 +17,8 @@
  * 
  *     last modified: 22/04 2022 09:04
  */
-#ifndef __LIBHY_UTILS_INCLUDE_DYNAMIC_ARRAY_H_
-#define __LIBHY_UTILS_INCLUDE_DYNAMIC_ARRAY_H_
+#ifndef __LIBHY_LOG_INCLUDE_DYNAMIC_ARRAY_H_
+#define __LIBHY_LOG_INCLUDE_DYNAMIC_ARRAY_H_
 
 #ifdef __cplusplus
 extern "C" {

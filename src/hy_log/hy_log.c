@@ -143,7 +143,8 @@ int32_t HyLogInit(HyLogConfig_s *log_c)
         memset(context, '\0', sizeof(*context));
         memcpy(&context->save_c, &log_c->save_c, sizeof(context->save_c));
 
-        format_cb_register(&context->format_cb, &context->format_cb_cnt, save_c->output_format);
+        format_cb_register(&context->format_cb,
+                           &context->format_cb_cnt, save_c->output_format);
 
         if (0 != thread_specific_data_create(
                 _thread_specific_data_create_cb,
@@ -167,4 +168,3 @@ int32_t HyLogInit(HyLogConfig_s *log_c)
     HyLogDeInit();
     return -1;
 }
-

@@ -17,8 +17,8 @@
  * 
  *     last modified: 08/01 2022 11:28
  */
-#ifndef __LIBHY_UTILS_INCLUDE_HY_PRINTF_H_
-#define __LIBHY_UTILS_INCLUDE_HY_PRINTF_H_
+#ifndef __LIBHY_LOG_INCLUDE_HY_PRINTF_H_
+#define __LIBHY_LOG_INCLUDE_HY_PRINTF_H_
 
 #ifdef __cplusplus
 extern "C" {

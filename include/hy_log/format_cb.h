@@ -17,8 +17,8 @@
  * 
  *     last modified: 28/04 2022 10:18
  */
-#ifndef __LIBHY_UTILS_INCLUDE_FORMAT_CB_H_
-#define __LIBHY_UTILS_INCLUDE_FORMAT_CB_H_
+#ifndef __LIBHY_LOG_INCLUDE_FORMAT_CB_H_
+#define __LIBHY_LOG_INCLUDE_FORMAT_CB_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,7 +42,8 @@ typedef struct log_write_info_tag {
     HyLogAddiInfo_s     *addi_info;
 } log_write_info_s;
 
-void format_cb_register(format_cb_t **format_cb, uint32_t *format_cb_cnt, uint32_t format);
+void format_cb_register(format_cb_t **format_cb,
+                        uint32_t *format_cb_cnt, uint32_t format);
 
 #ifdef __cplusplus
 }

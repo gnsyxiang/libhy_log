@@ -52,8 +52,8 @@
 #endif
 
 #define _IS_POWER_OF_2(x)           ((x) != 0 && (((x) & ((x) - 1)) == 0))  ///< 判断x是否为2^n，是返回1，否返回0
-#define HY_UTILS_MIN(x, y)          ((x) < (y) ? (x) : (y))                 ///< 求最小值
-#define HY_UTILS_MAX(x, y)          ((x) > (y) ? (x) : (y))                 ///< 求最大值
+#define HY_LOG_MIN(x, y)          ((x) < (y) ? (x) : (y))                 ///< 求最小值
+#define HY_LOG_MAX(x, y)          ((x) > (y) ? (x) : (y))                 ///< 求最大值
 
 /**
  * @brief 内存屏障
@@ -99,7 +99,7 @@ static void _dump_content(log_fifo_context_s *context)
     uint32_t len_tmp;
 
     len_tmp = context->len - LOG_FIFO_READ_POS(context);
-    len_tmp = HY_UTILS_MIN(len_tmp, LOG_FIFO_USED_LEN(context));
+    len_tmp = HY_LOG_MIN(len_tmp, LOG_FIFO_USED_LEN(context));
 
     log_info("used len: %u, write_pos: %u, read_pos: %u \n",
             LOG_FIFO_USED_LEN(context), context->write_pos, context->read_pos);
@@ -134,14 +134,14 @@ static int32_t _fifo_read_com(log_fifo_context_s *context, void *buf, uint32_t l
         return 0;
     }
 
-    len = HY_UTILS_MIN(len, LOG_FIFO_USED_LEN(context));
+    len = HY_LOG_MIN(len, LOG_FIFO_USED_LEN(context));
 
 #ifdef USE_MB
     // 确保其他线程对read_pos的可见性
     HY_SMP_WMB();
 #endif
 
-    len_tmp = HY_UTILS_MIN(len, context->len - LOG_FIFO_READ_POS(context));
+    len_tmp = HY_LOG_MIN(len, context->len - LOG_FIFO_READ_POS(context));
 
     memcpy(buf, context->buf + LOG_FIFO_READ_POS(context), len_tmp);
     memcpy(buf + len_tmp, context->buf, len - len_tmp);
@@ -191,7 +191,7 @@ int32_t log_fifo_write(log_fifo_context_s *context, const void *buf, uint32_t le
     HY_SMP_MB();
 #endif
 
-    len_tmp = HY_UTILS_MIN(len, context->len - LOG_FIFO_WRITE_POS(context));
+    len_tmp = HY_LOG_MIN(len, context->len - LOG_FIFO_WRITE_POS(context));
 
     memcpy(context->buf + LOG_FIFO_WRITE_POS(context), buf, len_tmp);
     memcpy(context->buf, buf + len_tmp, len - len_tmp);

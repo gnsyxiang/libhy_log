@@ -122,7 +122,8 @@ static int32_t _format_log_color_reset_cb(dynamic_array_s *dynamic_array,
                                PRINT_ATTR_RESET, strlen(PRINT_ATTR_RESET));
 }
 
-void format_cb_register(format_cb_t **format_cb_pp, uint32_t *format_cb_cnt, uint32_t format)
+void format_cb_register(format_cb_t **format_cb_pp,
+                        uint32_t *format_cb_cnt, uint32_t format)
 {
     if (!format_cb_pp || *format_cb_cnt) {
         log_error("the param is NULL \n");
@@ -131,7 +132,7 @@ void format_cb_register(format_cb_t **format_cb_pp, uint32_t *format_cb_cnt, uin
 
     struct {
         HyLogOutputFormat_e     format;
-        format_cb_t         format_log_cb;
+        format_cb_t             format_log_cb;
     } log_format_cb[] = {
         {HY_LOG_OUTPUT_FORMAT_COLOR,        {_format_log_color_cb,          NULL,                       }},
         {HY_LOG_OUTPUT_FORMAT_LEVEL_INFO,   {_format_log_level_info_cb,     _format_log_level_info_cb,  }},

@@ -17,8 +17,8 @@
  * 
  *     last modified: 28/04 2022 10:38
  */
-#ifndef __LIBHY_UTILS_INCLUDE_THREAD_SPECIFIC_DATA_H_
-#define __LIBHY_UTILS_INCLUDE_THREAD_SPECIFIC_DATA_H_
+#ifndef __LIBHY_LOG_INCLUDE_THREAD_SPECIFIC_DATA_H_
+#define __LIBHY_LOG_INCLUDE_THREAD_SPECIFIC_DATA_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,10 +40,9 @@ typedef struct {
     thread_specific_data_reset_cb_t     reset_cb;
 } thread_specific_data_s;
 
-int32_t thread_specific_data_create(
-        thread_specific_data_create_cb_t create_cb,
-        thread_specific_data_destroy_cb_t destroy_cb,
-        thread_specific_data_reset_cb_t reset_cb);
+int32_t thread_specific_data_create(thread_specific_data_create_cb_t create_cb,
+                                    thread_specific_data_destroy_cb_t destroy_cb,
+                                    thread_specific_data_reset_cb_t reset_cb);
 void thread_specific_data_destroy(void);
 
 void *thread_specific_data_fetch(void);

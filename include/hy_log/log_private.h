@@ -17,8 +17,8 @@
  * 
  *     last modified: 22/04 2022 11:58
  */
-#ifndef __LIBHY_UTILS_INCLUDE_LOG_PRIVATE_H_
-#define __LIBHY_UTILS_INCLUDE_LOG_PRIVATE_H_
+#ifndef __LIBHY_LOG_INCLUDE_LOG_PRIVATE_H_
+#define __LIBHY_LOG_INCLUDE_LOG_PRIVATE_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,7 +48,6 @@ extern "C" {
                 tm.tm_hour, tm.tm_min, tm.tm_sec, (uint32_t)tv.tv_usec / 1000); \
      })
 
-#ifdef HY_LOG_DEBUG
 #define log_error(fmt, ...)                                             \
     do {                                                                \
         char buf[32] = {0};                                             \
@@ -58,6 +57,7 @@ extern "C" {
         printf(fmt, ##__VA_ARGS__);                                     \
     } while (0)
 
+#ifdef HY_LOG_DEBUG
 #define log_info(fmt, ...)                                              \
     do {                                                                \
         char buf[32] = {0};                                             \
@@ -65,9 +65,7 @@ extern "C" {
         printf("%s[%s:%d]", buf, __func__, __LINE__);                   \
         printf(fmt, ##__VA_ARGS__);                                     \
     } while (0)
-
 #else
-#define log_error(fmt, ...)
 #define log_info(fmt, ...)
 #endif
 

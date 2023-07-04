@@ -17,8 +17,8 @@
  * 
  *     last modified: 28/04 2022 08:41
  */
-#ifndef __LIBHY_UTILS_INCLUDE_PROCESS_HANDLE_DATA_H_
-#define __LIBHY_UTILS_INCLUDE_PROCESS_HANDLE_DATA_H_
+#ifndef __LIBHY_LOG_INCLUDE_PROCESS_HANDLE_DATA_H_
+#define __LIBHY_LOG_INCLUDE_PROCESS_HANDLE_DATA_H_
 
 #ifdef __cplusplus
 extern "C" {

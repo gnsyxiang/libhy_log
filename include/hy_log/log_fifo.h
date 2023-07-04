@@ -17,8 +17,8 @@
  * 
  *     last modified: 21/04 2022 15:44
  */
-#ifndef __LIBHY_UTILS_INCLUDE_LOG_FIFO_H_
-#define __LIBHY_UTILS_INCLUDE_LOG_FIFO_H_
+#ifndef __LIBHY_LOG_INCLUDE_LOG_FIFO_H_
+#define __LIBHY_LOG_INCLUDE_LOG_FIFO_H_
 
 #ifdef __cplusplus
 extern "C" {

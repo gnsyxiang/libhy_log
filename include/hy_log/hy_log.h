@@ -17,8 +17,8 @@
  * 
  *     last modified: 29/10 2021 20:29
  */
-#ifndef __LIBHY_UTILS_INCLUDE_HY_LOG_H_
-#define __LIBHY_UTILS_INCLUDE_HY_LOG_H_
+#ifndef __LIBHY_LOG_INCLUDE_HY_LOG_H_
+#define __LIBHY_LOG_INCLUDE_HY_LOG_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,8 +44,6 @@ typedef enum {
     HY_LOG_LEVEL_INFO,                      ///< 追踪，记录程序运行到哪里
     HY_LOG_LEVEL_DEBUG,                     ///< 调试程序相关打印
     HY_LOG_LEVEL_TRACE,                     ///< 程序打点调试
-
-    HY_LOG_LEVEL_MAX = 0xffffffff,
 } HyLogLevel_e;
 
 /**
@@ -73,33 +71,42 @@ typedef enum {
     HY_LOG_OUTPUT_FORMAT_TIME           = (0x1 << 2),   ///< 时间输出
     HY_LOG_OUTPUT_FORMAT_PID_ID         = (0x1 << 3),   ///< 进程线程id输出
     HY_LOG_OUTPUT_FORMAT_FUNC_LINE      = (0x1 << 4),   ///< 函数行号输出
-    HY_LOG_OUTPUT_FORMAT_USR_MSG        = (0x1 << 5),   ///< 函数行号输出
+    HY_LOG_OUTPUT_FORMAT_USR_MSG        = (0x1 << 5),   ///< 用户数据输出
     HY_LOG_OUTPUT_FORMAT_COLOR_RESET    = (0x1 << 6),   ///< 颜色输出恢复
-
-    HY_LOG_OUTPUT_FORMAT_MAX            = 0xffffffff,
 } HyLogOutputFormat_e;
 
 /**
  * @brief 默认配置，输出所有格式
  */
-#define HY_LOG_OUTFORMAT_ALL                \
-(HY_LOG_OUTPUT_FORMAT_COLOR                 \
-    | HY_LOG_OUTPUT_FORMAT_LEVEL_INFO       \
-    | HY_LOG_OUTPUT_FORMAT_TIME             \
-    | HY_LOG_OUTPUT_FORMAT_PID_ID           \
-    | HY_LOG_OUTPUT_FORMAT_FUNC_LINE        \
-    | HY_LOG_OUTPUT_FORMAT_USR_MSG          \
+#define HY_LOG_OUTFORMAT_ALL                    \
+(HY_LOG_OUTPUT_FORMAT_COLOR                     \
+    | HY_LOG_OUTPUT_FORMAT_LEVEL_INFO           \
+    | HY_LOG_OUTPUT_FORMAT_TIME                 \
+    | HY_LOG_OUTPUT_FORMAT_PID_ID               \
+    | HY_LOG_OUTPUT_FORMAT_FUNC_LINE            \
+    | HY_LOG_OUTPUT_FORMAT_USR_MSG              \
     | HY_LOG_OUTPUT_FORMAT_COLOR_RESET)
 
 /**
  * @brief 默认配置中去除颜色格式
  */
-#define HY_LOG_OUTFORMAT_NO_COLOR           \
-(HY_LOG_OUTPUT_FORMAT_LEVEL_INFO            \
-    | HY_LOG_OUTPUT_FORMAT_TIME             \
-    | HY_LOG_OUTPUT_FORMAT_PID_ID           \
-    | HY_LOG_OUTPUT_FORMAT_FUNC_LINE        \
+#define HY_LOG_OUTFORMAT_NO_COLOR               \
+(HY_LOG_OUTPUT_FORMAT_LEVEL_INFO                \
+    | HY_LOG_OUTPUT_FORMAT_TIME                 \
+    | HY_LOG_OUTPUT_FORMAT_PID_ID               \
+    | HY_LOG_OUTPUT_FORMAT_FUNC_LINE            \
     | HY_LOG_OUTPUT_FORMAT_USR_MSG)
+
+/**
+ * @brief 默认配置中去除颜色和线程进程id格式
+ */
+#define HY_LOG_OUTFORMAT_ALL_NO_COLOR_PID_ID    \
+(HY_LOG_OUTPUT_FORMAT_COLOR                     \
+    | HY_LOG_OUTPUT_FORMAT_LEVEL_INFO           \
+    | HY_LOG_OUTPUT_FORMAT_TIME                 \
+    | HY_LOG_OUTPUT_FORMAT_FUNC_LINE            \
+    | HY_LOG_OUTPUT_FORMAT_USR_MSG              \
+    | HY_LOG_OUTPUT_FORMAT_COLOR_RESET)
 
 /**
  * @brief 配置参数
@@ -130,7 +137,7 @@ typedef struct {
 int32_t HyLogInit(HyLogConfig_s *log_c);
 
 /**
- * @brief 初始化log模块
+ * @brief 初始化log模块宏
  *
  * @param _fifo_len fifo大小
  * @param _level 等级
@@ -141,14 +148,14 @@ int32_t HyLogInit(HyLogConfig_s *log_c);
  *
  * @return 成功返回0，失败返回-1
  */
-#define HyLogInit_m(_fifo_len, _mode, _level, _output_format)   \
-({                                                              \
-    HyLogConfig_s log_c;                                        \
-    HY_MEMSET(&log_c, sizeof(log_c));                           \
-    log_c.fifo_len                  = _fifo_len;                \
-    log_c.save_c.level              = _level;                   \
-    log_c.save_c.output_format      = _output_format;           \
-    HyLogInit(&log_c);                                          \
+#define HyLogInit_m(_fifo_len, _level, _output_format)      \
+({                                                          \
+    HyLogConfig_s log_c;                                    \
+    memset(&log_c, '\0', sizeof(log_c));                    \
+    log_c.fifo_len                  = _fifo_len;            \
+    log_c.save_c.level              = _level;               \
+    log_c.save_c.output_format      = _output_format;       \
+    HyLogInit(&log_c);                                      \
 })
 
 /**
@@ -173,12 +180,9 @@ void HyLogLevelSet(HyLogLevel_e level);
 /**
  * @brief log函数
  *
- * @param level 打印等级
- * @param file 所在的文件
- * @param func 所在的函数
- * @param line 所在的行号
- * @param fmt 格式
- * @param ... 参数
+ * @param addi_info log相关信息，详见HyLogAddiInfo_s
+ * @param fmt 用户输入的格式
+ * @param ... 格式对应的数据
  */
 void HyLogWrite(HyLogAddiInfo_s *addi_info, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
 
@@ -193,6 +197,14 @@ void HyLogWrite(HyLogAddiInfo_s *addi_info, const char *fmt, ...) __attribute__(
 #define HY_STRRCHR_FILE (strrchr(__FILE__, '/'))
 #define HY_FILENAME     (HY_STRRCHR_FILE ? (HY_STRRCHR_FILE + 1) : __FILE__)
 
+/**
+ * @brief log宏
+ *
+ * @param _level 该log对应的等级
+ * @param _err_str 错误对应的字符串
+ * @param fmt 用户输入的格式
+ * @param ... 格式对应的数据
+ */
 #define LOG(_level, _err_str, fmt, ...)                     \
 do {                                                        \
     if (HyLogLevelGet() >= _level) {                        \
@@ -207,7 +219,6 @@ do {                                                        \
         HyLogWrite(&addi_info, fmt, ##__VA_ARGS__);         \
     }                                                       \
 } while (0)
-
 
 #if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
 #   define LOGF(fmt, ...)  LOG(HY_LOG_LEVEL_FATAL, strerror(errno), fmt, ##__VA_ARGS__)
