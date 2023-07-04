@@ -28,7 +28,7 @@ int main(int argc, char const* argv[])
     memset(&log_c, 0, sizeof(log_c));
     log_c.fifo_len                  = 10 * 1024;
     log_c.save_c.level              = HY_LOG_LEVEL_TRACE;
-    log_c.save_c.output_format      = HY_LOG_OUTFORMAT_ALL;
+    log_c.save_c.output_format      = HY_LOG_OUTFORMAT_ALL_NO_PID_ID;
     log_c.config_file               = "../res/hy_log/zlog.conf";
 
     if (0 != HyLogInit(&log_c)) {
@@ -47,4 +47,3 @@ int main(int argc, char const* argv[])
 
     return 0;
 }
-

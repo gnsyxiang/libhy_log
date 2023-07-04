@@ -36,8 +36,8 @@ void process_single_write(void *handle, log_write_info_s *log_write_info)
     dynamic_array_s *dynamic_array = log_write_info->dynamic_array;
 
     for (uint32_t i = 0; i < log_write_info->format_cb_cnt; ++i) {
-        if (log_write_info->format_cb[i][0]) {
-            log_write_info->format_cb[i][0](dynamic_array, addi_info);
+        if (log_write_info->format_cb[i]) {
+            log_write_info->format_cb[i](dynamic_array, addi_info);
         }
     }
 
@@ -92,4 +92,3 @@ void *process_single_create(uint32_t fifo_len)
     process_single_destroy((void **)&context);
     return NULL;
 }
-

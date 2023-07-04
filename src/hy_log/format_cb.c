@@ -132,15 +132,15 @@ void format_cb_register(format_cb_t **format_cb_pp,
 
     struct {
         HyLogOutputFormat_e     format;
-        format_cb_t             format_log_cb;
+        format_cb_t             format_cb;
     } log_format_cb[] = {
-        {HY_LOG_OUTPUT_FORMAT_COLOR,        {_format_log_color_cb,          NULL,                       }},
-        {HY_LOG_OUTPUT_FORMAT_LEVEL_INFO,   {_format_log_level_info_cb,     _format_log_level_info_cb,  }},
-        {HY_LOG_OUTPUT_FORMAT_TIME,         {_format_log_time_cb,           _format_log_time_cb,        }},
-        {HY_LOG_OUTPUT_FORMAT_PID_ID,       {_format_log_pid_id_cb,         _format_log_pid_id_cb,      }},
-        {HY_LOG_OUTPUT_FORMAT_FUNC_LINE,    {_format_log_func_line_cb,      _format_log_func_line_cb,   }},
-        {HY_LOG_OUTPUT_FORMAT_USR_MSG,      {_format_log_usr_msg_cb,        _format_log_usr_msg_cb,     }},
-        {HY_LOG_OUTPUT_FORMAT_COLOR_RESET,  {_format_log_color_reset_cb,    NULL,                       }},
+        {HY_LOG_OUTPUT_FORMAT_COLOR,        _format_log_color_cb},
+        {HY_LOG_OUTPUT_FORMAT_LEVEL_INFO,   _format_log_level_info_cb},
+        {HY_LOG_OUTPUT_FORMAT_TIME,         _format_log_time_cb},
+        {HY_LOG_OUTPUT_FORMAT_PID_ID,       _format_log_pid_id_cb},
+        {HY_LOG_OUTPUT_FORMAT_FUNC_LINE,    _format_log_func_line_cb},
+        {HY_LOG_OUTPUT_FORMAT_USR_MSG,      _format_log_usr_msg_cb},
+        {HY_LOG_OUTPUT_FORMAT_COLOR_RESET,  _format_log_color_reset_cb},
     };
     uint32_t cnt = LOG_ARRAY_CNT(log_format_cb);
     format_cb_t *format_cb = calloc(cnt, sizeof(format_cb_t));
@@ -150,13 +150,11 @@ void format_cb_register(format_cb_t **format_cb_pp,
     }
 
     for (uint32_t i = 0; i < cnt; ++i) {
-        if (log_format_cb[i].format == (format & 0x1 << i)) {
-            memcpy(format_cb[i], log_format_cb[i].format_log_cb,
-                   sizeof(log_format_cb[i].format_log_cb));
+        if (log_format_cb[i].format == (format & (0x1 << i))) {
+            format_cb[i] = log_format_cb[i].format_cb;
         }
     }
 
     *format_cb_pp = format_cb;
     *format_cb_cnt = cnt;
 }
-
