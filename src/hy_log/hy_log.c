@@ -97,9 +97,8 @@ static void _thread_specific_data_destroy_cb(void *handle)
         log_error("the param is error \n");
         return ;
     }
-    dynamic_array_s *dynamic_array = handle;
 
-    dynamic_array_destroy(&dynamic_array);
+    dynamic_array_destroy((dynamic_array_s **)&handle);
 }
 
 static void *_thread_specific_data_create_cb(void)
@@ -146,10 +145,9 @@ int32_t HyLogInit(HyLogConfig_s *log_c)
         format_cb_register(&context->format_cb,
                            &context->format_cb_cnt, save_c->output_format);
 
-        if (0 != thread_specific_data_create(
-                _thread_specific_data_create_cb,
-                _thread_specific_data_destroy_cb,
-                _thread_specific_data_reset_cb)) {
+        if (0 != thread_specific_data_create(_thread_specific_data_create_cb,
+                                             _thread_specific_data_destroy_cb,
+                                             _thread_specific_data_reset_cb)) {
             log_error("thread_specific_data_create failed \n");
             break;
         }

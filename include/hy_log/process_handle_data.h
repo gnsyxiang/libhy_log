@@ -44,11 +44,13 @@ typedef struct {
 } process_handle_data_s;
 
 process_handle_data_s *process_handle_data_create(const char *name,
-        uint32_t fifo_len, process_handle_data_cb_t cb, void *args);
+                                                  uint32_t fifo_len,
+                                                  process_handle_data_cb_t cb,
+                                                  void *args);
 void process_handle_data_destroy(process_handle_data_s **context_pp);
 
 int32_t process_handle_data_write(process_handle_data_s *context,
-        const void *buf, uint32_t len);
+                                  const void *buf, uint32_t len);
 
 #ifdef __cplusplus
 }

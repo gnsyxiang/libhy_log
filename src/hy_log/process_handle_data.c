@@ -26,7 +26,7 @@
 #include "process_handle_data.h"
 
 int32_t process_handle_data_write(process_handle_data_s *context,
-                                   const void *buf, uint32_t len)
+                                  const void *buf, uint32_t len)
 {
     assert(context);
     assert(buf);
@@ -107,7 +107,9 @@ void process_handle_data_destroy(process_handle_data_s **context_pp)
 }
 
 process_handle_data_s *process_handle_data_create(const char *name,
-                                                  uint32_t fifo_len, process_handle_data_cb_t cb, void *args)
+                                                  uint32_t fifo_len,
+                                                  process_handle_data_cb_t cb,
+                                                  void *args)
 {
     if (!name || fifo_len <= 0 || !cb) {
         log_error("the param is NULL \n");
@@ -158,4 +160,3 @@ process_handle_data_s *process_handle_data_create(const char *name,
     process_handle_data_destroy(&context);
     return NULL;
 }
-

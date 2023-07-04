@@ -94,10 +94,9 @@ void thread_specific_data_destroy(void)
     }
 }
 
-int32_t thread_specific_data_create(
-        thread_specific_data_create_cb_t create_cb,
-        thread_specific_data_destroy_cb_t destroy_cb,
-        thread_specific_data_reset_cb_t reset_cb)
+int32_t thread_specific_data_create(thread_specific_data_create_cb_t create_cb,
+                                    thread_specific_data_destroy_cb_t destroy_cb,
+                                    thread_specific_data_reset_cb_t reset_cb)
 {
     assert(create_cb);
     assert(destroy_cb);
@@ -110,14 +109,14 @@ int32_t thread_specific_data_create(
         context.reset_cb   = reset_cb;
 
         if (0 != pthread_key_create(&context.thread_key,
-                    _thread_specific_data_destroy)) {
+                                    _thread_specific_data_destroy)) {
             log_error("pthread_key_create failed \n");
             break;
         }
 
+        log_info("thread_specific_data_create create, context: %p \n", context);
         return 0;
     } while (0);
 
     return -1;
 }
-
