@@ -82,24 +82,46 @@ typedef enum {
 /**
  * @brief 默认配置，输出所有格式
  */
-#define HY_LOG_OUTFORMAT_ALL                \
-(HY_LOG_OUTPUT_FORMAT_COLOR                 \
-    | HY_LOG_OUTPUT_FORMAT_LEVEL_INFO       \
-    | HY_LOG_OUTPUT_FORMAT_TIME             \
-    | HY_LOG_OUTPUT_FORMAT_PID_ID           \
-    | HY_LOG_OUTPUT_FORMAT_FUNC_LINE        \
-    | HY_LOG_OUTPUT_FORMAT_USR_MSG          \
+#define HY_LOG_OUTFORMAT_ALL                    \
+(HY_LOG_OUTPUT_FORMAT_COLOR                     \
+    | HY_LOG_OUTPUT_FORMAT_LEVEL_INFO           \
+    | HY_LOG_OUTPUT_FORMAT_TIME                 \
+    | HY_LOG_OUTPUT_FORMAT_PID_ID               \
+    | HY_LOG_OUTPUT_FORMAT_FUNC_LINE            \
+    | HY_LOG_OUTPUT_FORMAT_USR_MSG              \
+    | HY_LOG_OUTPUT_FORMAT_COLOR_RESET)
+
+/**
+ * @brief 默认配置去除线程进程id格式
+ */
+#define HY_LOG_OUTFORMAT_ALL_NO_PID_ID          \
+(HY_LOG_OUTPUT_FORMAT_COLOR                     \
+    | HY_LOG_OUTPUT_FORMAT_LEVEL_INFO           \
+    | HY_LOG_OUTPUT_FORMAT_TIME                 \
+    | HY_LOG_OUTPUT_FORMAT_FUNC_LINE            \
+    | HY_LOG_OUTPUT_FORMAT_USR_MSG              \
     | HY_LOG_OUTPUT_FORMAT_COLOR_RESET)
 
 /**
  * @brief 默认配置中去除颜色格式
  */
-#define HY_LOG_OUTFORMAT_NO_COLOR           \
-(HY_LOG_OUTPUT_FORMAT_LEVEL_INFO            \
-    | HY_LOG_OUTPUT_FORMAT_TIME             \
-    | HY_LOG_OUTPUT_FORMAT_PID_ID           \
-    | HY_LOG_OUTPUT_FORMAT_FUNC_LINE        \
+#define HY_LOG_OUTFORMAT_ALL_NO_COLOR           \
+(HY_LOG_OUTPUT_FORMAT_LEVEL_INFO                \
+    | HY_LOG_OUTPUT_FORMAT_TIME                 \
+    | HY_LOG_OUTPUT_FORMAT_PID_ID               \
+    | HY_LOG_OUTPUT_FORMAT_FUNC_LINE            \
     | HY_LOG_OUTPUT_FORMAT_USR_MSG)
+
+/**
+ * @brief 默认配置中去除颜色和线程进程id格式
+ */
+#define HY_LOG_OUTFORMAT_ALL_NO_COLOR_PID_ID    \
+(HY_LOG_OUTPUT_FORMAT_COLOR                     \
+    | HY_LOG_OUTPUT_FORMAT_LEVEL_INFO           \
+    | HY_LOG_OUTPUT_FORMAT_TIME                 \
+    | HY_LOG_OUTPUT_FORMAT_FUNC_LINE            \
+    | HY_LOG_OUTPUT_FORMAT_USR_MSG              \
+    | HY_LOG_OUTPUT_FORMAT_COLOR_RESET)
 
 /**
  * @brief 配置参数
@@ -130,7 +152,7 @@ typedef struct {
 int32_t HyLogInit(HyLogConfig_s *log_c);
 
 /**
- * @brief 初始化log模块
+ * @brief 初始化log模块宏
  *
  * @param _fifo_len fifo大小
  * @param _level 等级
@@ -141,14 +163,14 @@ int32_t HyLogInit(HyLogConfig_s *log_c);
  *
  * @return 成功返回0，失败返回-1
  */
-#define HyLogInit_m(_fifo_len, _mode, _level, _output_format)   \
-({                                                              \
-    HyLogConfig_s log_c;                                        \
-    HY_MEMSET(&log_c, sizeof(log_c));                           \
-    log_c.fifo_len                  = _fifo_len;                \
-    log_c.save_c.level              = _level;                   \
-    log_c.save_c.output_format      = _output_format;           \
-    HyLogInit(&log_c);                                          \
+#define HyLogInit_m(_fifo_len, _level, _output_format)      \
+({                                                          \
+    HyLogConfig_s log_c;                                    \
+    memset(&log_c, '\0', sizeof(log_c));                    \
+    log_c.fifo_len                  = _fifo_len;            \
+    log_c.save_c.level              = _level;               \
+    log_c.save_c.output_format      = _output_format;       \
+    HyLogInit(&log_c);                                      \
 })
 
 /**
