@@ -125,7 +125,7 @@ static int32_t _format_log_color_reset_cb(dynamic_array_s *dynamic_array,
 void format_cb_register(format_cb_t **format_cb_pp,
                         uint32_t *format_cb_cnt, uint32_t format)
 {
-    if (!format_cb_pp || *format_cb_cnt) {
+    if (!format_cb_pp || !format_cb_cnt) {
         log_error("the param is NULL \n");
         return;
     }
