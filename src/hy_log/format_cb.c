@@ -20,28 +20,27 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <inttypes.h>
+#include <string.h>
 
 #include "hy_printf.h"
 #include "log_private.h"
 
 #include "format_cb.h"
 
+static char *format_color[][2] = {
+    {"F", PRINT_FONT_RED},
+    {"E", PRINT_FONT_RED},
+    {"W", PRINT_FONT_YEL},
+    {"I", ""},
+    {"D", PRINT_FONT_GRE},
+    {"T", ""},
+};
+
 static int32_t _format_color_cb(dynamic_array_s *dynamic_array,
                                 HyLogAddiInfo_s *addi_info)
 {
-    char buf[16] = {0};
-    int32_t ret = 0;
-    char *color[][2] = {
-        {"F", PRINT_FONT_RED},
-        {"E", PRINT_FONT_RED},
-        {"W", PRINT_FONT_YEL},
-        {"I", ""},
-        {"D", PRINT_FONT_GRE},
-        {"T", ""},
-    };
-
-    ret = snprintf(buf, sizeof(buf), "%s", color[addi_info->level][1]);
-
+    char buf[8] = {0};
+    int32_t ret = snprintf(buf, sizeof(buf), "%s", format_color[addi_info->level][1]);
     return dynamic_array_write(dynamic_array, buf, ret);
 }
 
@@ -49,18 +48,7 @@ static int32_t _format_level_str_cb(dynamic_array_s *dynamic_array,
                                     HyLogAddiInfo_s *addi_info)
 {
     char buf[4] = {0};
-    int32_t ret = 0;
-    char *color[][2] = {
-        {"F", PRINT_FONT_RED},
-        {"E", PRINT_FONT_RED},
-        {"W", PRINT_FONT_YEL},
-        {"I", ""},
-        {"D", PRINT_FONT_GRE},
-        {"T", ""},
-    };
-
-    ret = snprintf(buf, sizeof(buf), "[%s]", color[addi_info->level][0]);
-
+    int32_t ret = snprintf(buf, sizeof(buf), "[%s]", format_color[addi_info->level][0]);
     return dynamic_array_write(dynamic_array, buf, ret);
 }
 
@@ -68,9 +56,7 @@ static int32_t _format_time_cb(dynamic_array_s *dynamic_array,
                                HyLogAddiInfo_s *addi_info)
 {
     char buf[32] = {0};
-    uint32_t ret = 0;
-
-    ret = log_time(buf, sizeof(buf));
+    int32_t ret = log_time(buf, sizeof(buf));
     return dynamic_array_write(dynamic_array, buf, ret);
 }
 
@@ -82,9 +68,8 @@ static int32_t _format_pid_id_cb(dynamic_array_s *dynamic_array,
     char name[16] = {0};
 
     pthread_getname_np(addi_info->tid, name, sizeof(name));
-    ret = snprintf(buf, sizeof(buf),
-                   "[%ld-0x%lx(%s)]", addi_info->pid,
-                   addi_info->tid, name);
+    ret = snprintf(buf, sizeof(buf), "[%ld-0x%lx(%s)]",
+                   addi_info->pid, addi_info->tid, name);
 
     return dynamic_array_write(dynamic_array, buf, ret);
 }
@@ -96,13 +81,13 @@ static int32_t _format_func_line_cb(dynamic_array_s *dynamic_array,
     int32_t ret = 0;
 
     if (addi_info->err_str) {
-        ret += snprintf(buf + ret, sizeof(buf) - ret,
-                       "[%s:%"PRId32"]", addi_info->func, addi_info->line);
-        ret += snprintf(buf + ret, sizeof(buf) - ret,
-                       "[errno: %d, err: %s] ", errno, addi_info->err_str);
+        ret += snprintf(buf + ret, sizeof(buf) - ret, "[%s:%"PRId32"]",
+                        addi_info->func, addi_info->line);
+        ret += snprintf(buf + ret, sizeof(buf) - ret, "[errno: %d, err: %s] ",
+                        errno, addi_info->err_str);
     } else {
-        ret += snprintf(buf + ret, sizeof(buf) - ret,
-                       "[%s:%"PRId32"] ", addi_info->func, addi_info->line);
+        ret += snprintf(buf + ret, sizeof(buf) - ret, "[%s:%"PRId32"] ",
+                        addi_info->func, addi_info->line);
     }
 
     return dynamic_array_write(dynamic_array, buf, ret);
@@ -111,15 +96,15 @@ static int32_t _format_func_line_cb(dynamic_array_s *dynamic_array,
 static int32_t _format_usr_msg_cb(dynamic_array_s *dynamic_array,
                                   HyLogAddiInfo_s *addi_info)
 {
-    return dynamic_array_write_vprintf(dynamic_array,
-                                       addi_info->fmt, addi_info->str_args);
+    return dynamic_array_write_vprintf(dynamic_array, addi_info->fmt,
+                                       addi_info->str_args);
 }
 
 static int32_t _format_color_reset_cb(dynamic_array_s *dynamic_array,
                                       HyLogAddiInfo_s *addi_info)
 {
-    return dynamic_array_write(dynamic_array,
-                               PRINT_ATTR_RESET, strlen(PRINT_ATTR_RESET));
+    return dynamic_array_write(dynamic_array, PRINT_ATTR_RESET,
+                               strlen(PRINT_ATTR_RESET));
 }
 
 void format_cb_register(format_cb_t **format_cb_pp,
