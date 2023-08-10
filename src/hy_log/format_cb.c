@@ -111,7 +111,7 @@ void format_cb_register(format_cb_t **format_cb_pp,
                         uint32_t *format_cb_cnt, uint32_t format)
 {
     if (!format_cb_pp || !format_cb_cnt) {
-        log_error("the param is NULL \n");
+        log_e("the param is NULL \n");
         return;
     }
 
@@ -134,7 +134,7 @@ void format_cb_register(format_cb_t **format_cb_pp,
 
     format_cb = calloc(cnt, sizeof(format_cb_t));
     if (!format_cb) {
-        log_error("calloc failed \n");
+        log_e("calloc failed \n");
         return;
     }
 

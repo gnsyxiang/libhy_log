@@ -53,7 +53,7 @@ static void _terminal_process_handle_data_cb(void *buf, uint32_t len, void *args
 void process_single_destroy(void **handle)
 {
     _process_single_context_s *context = *handle;
-    log_info("process single context: %p destroy \n", context);
+    log_i("process single context: %p destroy \n", context);
 
     process_handle_data_destroy(&context->terminal_handle_data);
 
@@ -64,7 +64,7 @@ void process_single_destroy(void **handle)
 void *process_single_create(uint32_t fifo_len)
 {
     if (fifo_len <= 0) {
-        log_error("the param is error \n");
+        log_e("the param is error \n");
         return NULL;
     }
 
@@ -73,22 +73,22 @@ void *process_single_create(uint32_t fifo_len)
     do {
         context = calloc(1, sizeof(*context));
         if (!context) {
-            log_error("calloc failed \n");
+            log_e("calloc failed \n");
             break;
         }
 
         context->terminal_handle_data = process_handle_data_create("HY_log_loop",
                 fifo_len, _terminal_process_handle_data_cb, context);
         if (!context->terminal_handle_data) {
-            log_error("process_handle_data_create failed \n");
+            log_e("process_handle_data_create failed \n");
             break;
         }
 
-        log_info("process single context: %p create \n", context);
+        log_i("process single context: %p create \n", context);
         return context;
     } while (0);
 
-    log_error("process single create failed \n");
+    log_e("process single create failed \n");
     process_single_destroy((void **)&context);
     return NULL;
 }

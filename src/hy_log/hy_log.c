@@ -65,13 +65,13 @@ void HyLogWrite(HyLogAddiInfo_s *addi_info, const char *fmt, ...)
     log_write_info_s log_write_info;
     va_list args;
     if (!context->write_h) {
-        log_error("the write handle is NULL \n");
+        log_e("the write handle is NULL \n");
         return;
     }
 
     dynamic_array = thread_specific_data_fetch();
     if (!dynamic_array) {
-        log_info("_thread_private_data_featch failed \n");
+        log_i("_thread_private_data_featch failed \n");
         return;
     }
 
@@ -94,7 +94,7 @@ static void _thread_specific_data_reset_cb(void *handle)
 static void _thread_specific_data_destroy_cb(void *handle)
 {
     if (!handle) {
-        log_error("the param is error \n");
+        log_e("the param is error \n");
         return ;
     }
 
@@ -110,7 +110,7 @@ void HyLogDeInit(void)
 {
     _log_context_s *context = &_context;
 
-    log_info("log context: %p destroy \n", context);
+    log_i("log context: %p destroy \n", context);
 
     process_single_destroy(&context->write_h);
 
@@ -122,13 +122,13 @@ void HyLogDeInit(void)
 int32_t HyLogInit(HyLogConfig_s *log_c)
 {
     if (!log_c) {
-        log_error("the param is error \n");
+        log_e("the param is error \n");
         return -1;
     }
 
     pthread_mutex_lock(&lock);
     if (_is_init) {
-        log_error("The logging system has been initialized \n");
+        log_e("The logging system has been initialized \n");
         pthread_mutex_unlock(&lock);
         return -1;
     }
@@ -148,21 +148,21 @@ int32_t HyLogInit(HyLogConfig_s *log_c)
         if (0 != thread_specific_data_create(_thread_specific_data_create_cb,
                                              _thread_specific_data_destroy_cb,
                                              _thread_specific_data_reset_cb)) {
-            log_error("thread_specific_data_create failed \n");
+            log_e("thread_specific_data_create failed \n");
             break;
         }
 
         context->write_h = process_single_create(log_c->fifo_len);
         if (!context->write_h) {
-            log_error("create write handle failed \n");
+            log_e("create write handle failed \n");
             break;
         }
 
-        log_info("log context: %p create \n", context);
+        log_i("log context: %p create \n", context);
         return 0;
     } while (0);
 
-    log_error("log context: %p create failed \n", context);
+    log_e("log context: %p create failed \n", context);
     HyLogDeInit();
     return -1;
 }

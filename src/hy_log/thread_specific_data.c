@@ -28,12 +28,12 @@ static thread_specific_data_s context;
 static int32_t _thread_specific_data_set(void *handle)
 {
     if (!handle) {
-        log_error("the param is error \n");
+        log_e("the param is error \n");
         return -1;
     }
 
     if (0 != pthread_setspecific(context.thread_key, handle)) {
-        log_error("pthread_setspecific fail \n");
+        log_e("pthread_setspecific fail \n");
         return -1;
     } else {
         return 0;
@@ -46,7 +46,7 @@ static void *_thread_specific_data_get(void)
 
     handle = pthread_getspecific(context.thread_key);
     if (!handle) {
-        log_info("pthread_getspecific failed \n");
+        log_i("pthread_getspecific failed \n");
         return NULL;
     } else {
         return handle;
@@ -72,7 +72,7 @@ void *thread_specific_data_fetch(void)
         if (context.destroy_cb) {
             handle = context.create_cb();
             if (!handle) {
-                log_error("context.create_cb failed \n");
+                log_e("context.create_cb failed \n");
                 return NULL;
             }
         }
@@ -90,7 +90,7 @@ void *thread_specific_data_fetch(void)
 void thread_specific_data_destroy(void)
 {
     if (0 != atexit(_main_thread_specific_data_destroy)) {
-        log_error("atexit fail \n");
+        log_e("atexit fail \n");
     }
 }
 
@@ -110,11 +110,11 @@ int32_t thread_specific_data_create(thread_specific_data_create_cb_t create_cb,
 
         if (0 != pthread_key_create(&context.thread_key,
                                     _thread_specific_data_destroy)) {
-            log_error("pthread_key_create failed \n");
+            log_e("pthread_key_create failed \n");
             break;
         }
 
-        log_info("thread_specific_data_create create, context: %p \n", context);
+        log_i("thread_specific_data_create create, context: %p \n", context);
         return 0;
     } while (0);
 

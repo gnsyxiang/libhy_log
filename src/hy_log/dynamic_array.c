@@ -53,7 +53,7 @@ static int32_t _dynamic_array_extend(dynamic_array_s *context,
     void *ptr = NULL;
 
     if (context->len >= context->max_len) {
-        log_error("can't extend size, len: %d, max_len: %d \n",
+        log_e("can't extend size, len: %d, max_len: %d \n",
                 context->len, context->max_len);
         return -1;
     }
@@ -63,13 +63,13 @@ static int32_t _dynamic_array_extend(dynamic_array_s *context,
     } else {
         extend_len = context->max_len;
         ret = 1;
-        log_error("extend to max len, len: %d, extend_len: %d \n",
+        log_e("extend to max len, len: %d, extend_len: %d \n",
                 context->len, extend_len);
     }
 
     ptr = realloc(context->buf, extend_len);
     if (!ptr) {
-        log_error("realloc failed \n");
+        log_e("realloc failed \n");
         return -1;
     }
 
@@ -100,7 +100,7 @@ int32_t dynamic_array_write_vprintf(dynamic_array_s *context,
     _get_dynamic_info();
     ret = vsnprintf(ptr, free_len, format, ap);
     if (ret < 0) {
-        log_error("vsnprintf failed \n");
+        log_e("vsnprintf failed \n");
         ret = -1;
     } else if (ret >= 0) {
         if (ret < free_len) {
@@ -110,7 +110,7 @@ int32_t dynamic_array_write_vprintf(dynamic_array_s *context,
             ret = _dynamic_array_extend(context,
                     ret - (context->len - context->cur_len));
             if (-1 == ret) {
-                log_info("_dynamic_array_extend failed \n");
+                log_i("_dynamic_array_extend failed \n");
             } else if (ret >= 0) {
                 _get_dynamic_info();
                 ret = vsnprintf(ptr, free_len, format, ap);
@@ -147,7 +147,7 @@ int32_t dynamic_array_write(dynamic_array_s *context,
         ret = _dynamic_array_extend(context,
                 len - (context->len - context->cur_len));
         if (-1 == ret) {
-            log_info("_dynamic_array_extend failed \n");
+            log_i("_dynamic_array_extend failed \n");
             len = -1;
         } else if (0 == ret) {
             _write_data_com(buf, len);
@@ -156,7 +156,7 @@ int32_t dynamic_array_write(dynamic_array_s *context,
             len = context->len - context->cur_len - 3 - 1;
             _write_data_com(buf, len);
 
-            log_info("truncated data \n");
+            log_i("truncated data \n");
             _write_data_com("...", 3);
             len += 3;
         }
@@ -170,10 +170,10 @@ void dynamic_array_destroy(dynamic_array_s **context_pp)
     dynamic_array_s *context = *context_pp;
 
     if (!context_pp || !*context_pp) {
-        log_error("the param is error \n");
+        log_e("the param is error \n");
         return;
     }
-    log_info("dynamic array context: %p destroy, buf: %p \n",
+    log_i("dynamic array context: %p destroy, buf: %p \n",
             context, context->buf);
 
     free(context->buf);
@@ -184,7 +184,7 @@ void dynamic_array_destroy(dynamic_array_s **context_pp)
 dynamic_array_s *dynamic_array_create(uint32_t min_len, uint32_t max_len)
 {
     if (min_len == 0 || max_len == 0 || min_len > max_len) {
-        log_error("the param is error \n");
+        log_e("the param is error \n");
         return NULL;
     }
 
@@ -192,13 +192,13 @@ dynamic_array_s *dynamic_array_create(uint32_t min_len, uint32_t max_len)
     do {
         context = calloc(1, sizeof(*context));
         if (!context) {
-            log_error("calloc failed \n");
+            log_e("calloc failed \n");
             break;
         }
 
         context->buf =calloc(1, min_len);
         if (!context->buf) {
-            log_error("calloc failed \n");
+            log_e("calloc failed \n");
             break;
         }
 
@@ -207,12 +207,12 @@ dynamic_array_s *dynamic_array_create(uint32_t min_len, uint32_t max_len)
         context->len        = context->min_len;
         context->write_pos  = context->read_pos = 0;
 
-        log_info("dynamic array context: %p create, buf: %p \n",
+        log_i("dynamic array context: %p create, buf: %p \n",
                 context, context->buf);
         return context;
     } while (0);
 
-    log_error("dynamic array context: %p create failed \n", context);
+    log_e("dynamic array context: %p create failed \n", context);
     dynamic_array_destroy(&context);
     return NULL;
 }

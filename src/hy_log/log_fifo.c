@@ -101,7 +101,7 @@ static void _dump_content(log_fifo_context_s *context)
     len_tmp = context->len - LOG_FIFO_READ_POS(context);
     len_tmp = HY_LOG_MIN(len_tmp, LOG_FIFO_USED_LEN(context));
 
-    log_info("used len: %u, write_pos: %u, read_pos: %u \n",
+    log_i("used len: %u, write_pos: %u, read_pos: %u \n",
             LOG_FIFO_USED_LEN(context), context->write_pos, context->read_pos);
 
     _hex(context->buf + LOG_FIFO_READ_POS(context), len_tmp, 1);
@@ -121,7 +121,7 @@ void fifo_dump(log_fifo_context_s *context, log_fifo_dump_type_e type)
             _dump_content(context);
             break;
         default:
-            log_error("error type: %d \n", type);
+            log_e("error type: %d \n", type);
     }
 
 }
@@ -181,7 +181,7 @@ int32_t log_fifo_write(log_fifo_context_s *context, const void *buf, uint32_t le
     uint32_t len_tmp = 0;
 
     if (len > LOG_FIFO_FREE_LEN(context)) {
-        log_error("write failed, len: %u, free_len: %u \n",
+        log_e("write failed, len: %u, free_len: %u \n",
                 len, LOG_FIFO_FREE_LEN(context));
         return -1;
     }
@@ -221,11 +221,11 @@ static uint32_t _num_to_2n(uint32_t num)
 void log_fifo_destroy(log_fifo_context_s **context_pp)
 {
     if (!context_pp || !*context_pp) {
-        log_error("the param is error \n");
+        log_e("the param is error \n");
         return ;
     }
     log_fifo_context_s *context = *context_pp;
-    log_info("fifo create context: %p destroy, buf: %p \n",
+    log_i("fifo create context: %p destroy, buf: %p \n",
             context, context->buf);
 
     free(context->buf);
@@ -237,39 +237,39 @@ void log_fifo_destroy(log_fifo_context_s **context_pp)
 log_fifo_context_s *log_fifo_create(uint32_t len)
 {
     if (len == 0) {
-        log_error("the param is error \n");
+        log_e("the param is error \n");
         return NULL;
     }
 
     log_fifo_context_s *context = NULL;
     do {
         if (!_IS_POWER_OF_2(len)) {
-            log_error("old len: %d \n", len);
+            log_e("old len: %d \n", len);
             len = _num_to_2n(len);
-            log_error("len must be power of 2, new len: %d \n", len);
+            log_e("len must be power of 2, new len: %d \n", len);
         }
 
         context = calloc(1, sizeof(*context));
         if (!context) {
-            log_error("calloc failed \n");
+            log_e("calloc failed \n");
             break;
         }
 
         context->buf = calloc(1, len);
         if (!context->buf) {
-            log_error("calloc failed \n");
+            log_e("calloc failed \n");
             break;
         }
 
         context->len        = len;
         context->read_pos   = context->write_pos = 0;
 
-        log_info("fifo create context: %p create, buf: %p \n",
+        log_i("fifo create context: %p create, buf: %p \n",
                 context, context->buf);
         return context;
     } while (0);
 
-    log_error("fifo create context: %p failed \n", context);
+    log_e("fifo create context: %p failed \n", context);
     return NULL;
 }
 

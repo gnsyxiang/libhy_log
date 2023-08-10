@@ -53,7 +53,7 @@ static void *_thread_cb(void *args)
 
     char *buf = calloc(1, _ITEM_LEN_MAX);
     if (!buf) {
-        log_error("calloc failed \n");
+        log_e("calloc failed \n");
         return NULL;
     }
 
@@ -82,11 +82,11 @@ static void *_thread_cb(void *args)
 void process_handle_data_destroy(process_handle_data_s **context_pp)
 {
     if (!context_pp || !*context_pp) {
-        log_error("the param is NULL \n");
+        log_e("the param is NULL \n");
         return;
     }
     process_handle_data_s *context = *context_pp;
-    log_info("process handle data context: %p destroy, fifo: %p, id: %0lx \n",
+    log_i("process handle data context: %p destroy, fifo: %p, id: %0lx \n",
              context, context->fifo, context->id);
 
     while (!LOG_FIFO_IS_EMPTY(context->fifo)) {
@@ -112,7 +112,7 @@ process_handle_data_s *process_handle_data_create(const char *name,
                                                   void *args)
 {
     if (!name || fifo_len <= 0 || !cb) {
-        log_error("the param is NULL \n");
+        log_e("the param is NULL \n");
         return NULL;
     }
 
@@ -120,30 +120,30 @@ process_handle_data_s *process_handle_data_create(const char *name,
     do {
         context = calloc(1, sizeof(*context));
         if (!context) {
-            log_error("calloc failed \n");
+            log_e("calloc failed \n");
             break;
         }
         context->cb     = cb;
         context->args   = args;
 
         if (0 != pthread_mutex_init(&context->mutex, NULL)) {
-            log_error("pthread_mutex_init failed \n");
+            log_e("pthread_mutex_init failed \n");
             break;
         }
 
         if (0 != pthread_cond_init(&context->cond, NULL)) {
-            log_error("pthread_cond_init failed \n");
+            log_e("pthread_cond_init failed \n");
             break;
         }
 
         context->fifo = log_fifo_create(fifo_len);
         if (!context->fifo) {
-            log_info("fifo_create failed \n");
+            log_i("fifo_create failed \n");
             break;
         }
 
         if (0 != pthread_create(&context->id, NULL, _thread_cb, context)) {
-            log_error("pthread_create failed \n");
+            log_e("pthread_create failed \n");
             break;
         }
 
@@ -151,12 +151,12 @@ process_handle_data_s *process_handle_data_create(const char *name,
         pthread_setname_np(context->id, name);
 #endif
 
-        log_info("process handle data context: %p create, fifo: %p, id: %0lx \n",
+        log_i("process handle data context: %p create, fifo: %p, id: %0lx \n",
                  context, context->fifo, context->id);
         return context;
     } while (0);
 
-    log_error("process handle data context: %p create failed \n", context);
+    log_e("process handle data context: %p create failed \n", context);
     process_handle_data_destroy(&context);
     return NULL;
 }

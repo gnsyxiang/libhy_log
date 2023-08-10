@@ -48,7 +48,7 @@ extern "C" {
                 tm.tm_hour, tm.tm_min, tm.tm_sec, (uint32_t)tv.tv_usec / 1000); \
      })
 
-#define log_error(fmt, ...)                                             \
+#define log_e(fmt, ...)                                                 \
     do {                                                                \
         char buf[32] = {0};                                             \
         log_time(buf, sizeof(buf));                                     \
@@ -58,7 +58,7 @@ extern "C" {
     } while (0)
 
 #ifdef HY_LOG_DEBUG
-#define log_info(fmt, ...)                                              \
+#define log_i(fmt, ...)                                                 \
     do {                                                                \
         char buf[32] = {0};                                             \
         log_time(buf, sizeof(buf));                                     \
@@ -66,7 +66,7 @@ extern "C" {
         printf(fmt, ##__VA_ARGS__);                                     \
     } while (0)
 #else
-#define log_info(fmt, ...)
+#define log_i(fmt, ...)
 #endif
 
 #ifdef __cplusplus
