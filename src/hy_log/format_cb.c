@@ -26,8 +26,8 @@
 
 #include "format_cb.h"
 
-static int32_t _format_log_color_cb(dynamic_array_s *dynamic_array,
-                                     HyLogAddiInfo_s *addi_info)
+static int32_t _format_color_cb(dynamic_array_s *dynamic_array,
+                                HyLogAddiInfo_s *addi_info)
 {
     char buf[16] = {0};
     int32_t ret = 0;
@@ -45,8 +45,8 @@ static int32_t _format_log_color_cb(dynamic_array_s *dynamic_array,
     return dynamic_array_write(dynamic_array, buf, ret);
 }
 
-static int32_t _format_log_level_info_cb(dynamic_array_s *dynamic_array,
-                                          HyLogAddiInfo_s *addi_info)
+static int32_t _format_level_str_cb(dynamic_array_s *dynamic_array,
+                                    HyLogAddiInfo_s *addi_info)
 {
     char buf[4] = {0};
     int32_t ret = 0;
@@ -64,8 +64,8 @@ static int32_t _format_log_level_info_cb(dynamic_array_s *dynamic_array,
     return dynamic_array_write(dynamic_array, buf, ret);
 }
 
-static int32_t _format_log_time_cb(dynamic_array_s *dynamic_array,
-                                    HyLogAddiInfo_s *addi_info)
+static int32_t _format_time_cb(dynamic_array_s *dynamic_array,
+                               HyLogAddiInfo_s *addi_info)
 {
     char buf[32] = {0};
     uint32_t ret = 0;
@@ -74,8 +74,8 @@ static int32_t _format_log_time_cb(dynamic_array_s *dynamic_array,
     return dynamic_array_write(dynamic_array, buf, ret);
 }
 
-static int32_t _format_log_pid_id_cb(dynamic_array_s *dynamic_array,
-                                      HyLogAddiInfo_s *addi_info)
+static int32_t _format_pid_id_cb(dynamic_array_s *dynamic_array,
+                                 HyLogAddiInfo_s *addi_info)
 {
     char buf[64] = {0};
     int32_t ret = 0;
@@ -89,8 +89,8 @@ static int32_t _format_log_pid_id_cb(dynamic_array_s *dynamic_array,
     return dynamic_array_write(dynamic_array, buf, ret);
 }
 
-static int32_t _format_log_func_line_cb(dynamic_array_s *dynamic_array,
-                                         HyLogAddiInfo_s *addi_info)
+static int32_t _format_func_line_cb(dynamic_array_s *dynamic_array,
+                                    HyLogAddiInfo_s *addi_info)
 {
     char buf[128] = {0};
     int32_t ret = 0;
@@ -108,15 +108,15 @@ static int32_t _format_log_func_line_cb(dynamic_array_s *dynamic_array,
     return dynamic_array_write(dynamic_array, buf, ret);
 }
 
-static int32_t _format_log_usr_msg_cb(dynamic_array_s *dynamic_array,
-                                       HyLogAddiInfo_s *addi_info)
+static int32_t _format_usr_msg_cb(dynamic_array_s *dynamic_array,
+                                  HyLogAddiInfo_s *addi_info)
 {
     return dynamic_array_write_vprintf(dynamic_array,
                                        addi_info->fmt, addi_info->str_args);
 }
 
-static int32_t _format_log_color_reset_cb(dynamic_array_s *dynamic_array,
-                                           HyLogAddiInfo_s *addi_info)
+static int32_t _format_color_reset_cb(dynamic_array_s *dynamic_array,
+                                      HyLogAddiInfo_s *addi_info)
 {
     return dynamic_array_write(dynamic_array,
                                PRINT_ATTR_RESET, strlen(PRINT_ATTR_RESET));
@@ -130,31 +130,35 @@ void format_cb_register(format_cb_t **format_cb_pp,
         return;
     }
 
+    uint32_t cnt;
+    format_cb_t *format_cb;
     struct {
         HyLogOutputFormat_e     format;
         format_cb_t             format_cb;
-    } log_format_cb[] = {
-        {HY_LOG_OUTPUT_FORMAT_COLOR,        _format_log_color_cb},
-        {HY_LOG_OUTPUT_FORMAT_LEVEL_INFO,   _format_log_level_info_cb},
-        {HY_LOG_OUTPUT_FORMAT_TIME,         _format_log_time_cb},
-        {HY_LOG_OUTPUT_FORMAT_PID_ID,       _format_log_pid_id_cb},
-        {HY_LOG_OUTPUT_FORMAT_FUNC_LINE,    _format_log_func_line_cb},
-        {HY_LOG_OUTPUT_FORMAT_USR_MSG,      _format_log_usr_msg_cb},
-        {HY_LOG_OUTPUT_FORMAT_COLOR_RESET,  _format_log_color_reset_cb},
+    } _format_cb_array[] = {
+        {HY_LOG_OUTPUT_FORMAT_COLOR,            _format_color_cb},
+        {HY_LOG_OUTPUT_FORMAT_LEVEL_INFO,       _format_level_str_cb},
+        {HY_LOG_OUTPUT_FORMAT_TIME,             _format_time_cb},
+        {HY_LOG_OUTPUT_FORMAT_PID_ID,           _format_pid_id_cb},
+        {HY_LOG_OUTPUT_FORMAT_FUNC_LINE,        _format_func_line_cb},
+        {HY_LOG_OUTPUT_FORMAT_USR_MSG,          _format_usr_msg_cb},
+        {HY_LOG_OUTPUT_FORMAT_COLOR_RESET,      _format_color_reset_cb},
     };
-    uint32_t cnt = LOG_ARRAY_CNT(log_format_cb);
-    format_cb_t *format_cb = calloc(cnt, sizeof(format_cb_t));
+
+    cnt = LOG_ARRAY_CNT(_format_cb_array);
+
+    format_cb = calloc(cnt, sizeof(format_cb_t));
     if (!format_cb) {
         log_error("calloc failed \n");
         return;
     }
 
-    for (uint32_t i = 0; i < cnt; ++i) {
-        if (log_format_cb[i].format == (format & (0x1 << i))) {
-            format_cb[i] = log_format_cb[i].format_cb;
+    for (size_t i = 0; i < cnt; i++) {
+        if (_format_cb_array[i].format == (format & (0x1U << i))) {
+            format_cb[i] = _format_cb_array[i].format_cb;
         }
     }
 
-    *format_cb_pp = format_cb;
-    *format_cb_cnt = cnt;
+    *format_cb_pp   = format_cb;
+    *format_cb_cnt  = cnt;
 }
