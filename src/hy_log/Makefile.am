@@ -45,13 +45,13 @@ _include_com    += \
                    -I$(top_srcdir)/include
 
 _sources_com    += \
-				   hy_log.c 				\
-				   dynamic_array.c          \
-				   format_cb.c              \
-				   log_fifo.c               \
-				   process_handle_data.c    \
-				   process_single.c         \
-				   thread_specific_data.c
+                   hy_log.c                 \
+                   dynamic_array.c          \
+                   format_cb.c              \
+                   log_fifo.c               \
+                   process_handle_data.c    \
+                   process_single.c         \
+                   thread_specific_data.c
 
 _cppflags_com   += \
                    $(_no_error_com) \

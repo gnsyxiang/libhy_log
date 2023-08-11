@@ -39,8 +39,8 @@ _no_install_headers_com += \
                            thread_specific_data.h
 
 _install_headers_com    += \
-						   hy_log.h 				\
-						   hy_printf.h
+                           hy_log.h     \
+                           hy_printf.h
 
 # ------------------
 # make install files
