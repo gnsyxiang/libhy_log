@@ -72,8 +72,16 @@ static void *_process_handle_data_thread_cb(void *args)
 
     while (!handle->is_exit) {
         pthread_mutex_lock(&handle->mutex);
-        if (LOG_FIFO_IS_EMPTY(handle->fifo)) {
+
+        while (LOG_FIFO_IS_EMPTY(handle->fifo)) {
             pthread_cond_wait(&handle->cond, &handle->mutex);
+
+            if (handle->is_exit) {
+                log_i("the thread is exit \n");
+                pthread_mutex_unlock(&handle->mutex);
+
+                goto _ERR_PROCESS_HANDLE_DATA_EXIT; 
+            }
         }
 
         memset(buf, '\0', _ITEM_LEN_MAX);
@@ -85,6 +93,8 @@ static void *_process_handle_data_thread_cb(void *args)
             handle->cb(buf, ret, handle->args);
         }
     }
+
+_ERR_PROCESS_HANDLE_DATA_EXIT:
 
     if (buf) {
         free(buf);
