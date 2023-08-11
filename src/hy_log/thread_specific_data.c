@@ -23,7 +23,7 @@
 
 #include "thread_specific_data.h"
 
-static thread_specific_data_s context;
+static thread_specific_data_s _TSD_ctx;
 
 static int32_t _thread_specific_data_set(void *handle)
 {
@@ -32,7 +32,7 @@ static int32_t _thread_specific_data_set(void *handle)
         return -1;
     }
 
-    if (0 != pthread_setspecific(context.thread_key, handle)) {
+    if (0 != pthread_setspecific(_TSD_ctx.thread_key, handle)) {
         log_e("pthread_setspecific fail \n");
         return -1;
     } else {
@@ -44,7 +44,7 @@ static void *_thread_specific_data_get(void)
 {
     void *handle = NULL;
 
-    handle = pthread_getspecific(context.thread_key);
+    handle = pthread_getspecific(_TSD_ctx.thread_key);
     if (!handle) {
         log_i("pthread_getspecific failed \n");
         return NULL;
@@ -55,8 +55,8 @@ static void *_thread_specific_data_get(void)
 
 static void _thread_specific_data_destroy(void *args)
 {
-    if (context.destroy_cb) {
-        context.destroy_cb(args);
+    if (_TSD_ctx.destroy_cb) {
+        _TSD_ctx.destroy_cb(args);
     }
 }
 
@@ -69,8 +69,8 @@ void *thread_specific_data_fetch(void)
 {
     void *handle = _thread_specific_data_get();
     if (!handle) {
-        if (context.destroy_cb) {
-            handle = context.create_cb();
+        if (_TSD_ctx.destroy_cb) {
+            handle = _TSD_ctx.create_cb();
             if (!handle) {
                 log_e("context.create_cb failed \n");
                 return NULL;
@@ -79,8 +79,8 @@ void *thread_specific_data_fetch(void)
 
         _thread_specific_data_set(handle);
     } else {
-        if (context.reset_cb) {
-            context.reset_cb(handle);
+        if (_TSD_ctx.reset_cb) {
+            _TSD_ctx.reset_cb(handle);
         }
     }
 
@@ -102,13 +102,13 @@ int32_t thread_specific_data_create(thread_specific_data_create_cb_t create_cb,
     assert(destroy_cb);
 
     do {
-        memset(&context, '\0', sizeof(context));
+        memset(&_TSD_ctx, '\0', sizeof(_TSD_ctx));
 
-        context.create_cb  = create_cb;
-        context.destroy_cb = destroy_cb;
-        context.reset_cb   = reset_cb;
+        _TSD_ctx.create_cb  = create_cb;
+        _TSD_ctx.destroy_cb = destroy_cb;
+        _TSD_ctx.reset_cb   = reset_cb;
 
-        if (0 != pthread_key_create(&context.thread_key,
+        if (0 != pthread_key_create(&_TSD_ctx.thread_key,
                                     _thread_specific_data_destroy)) {
             log_e("pthread_key_create failed \n");
             break;

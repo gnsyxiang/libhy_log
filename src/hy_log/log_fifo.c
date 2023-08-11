@@ -51,9 +51,9 @@
 #endif
 #endif
 
-#define _IS_POWER_OF_2(x)           ((x) != 0 && (((x) & ((x) - 1)) == 0))  ///< 判断x是否为2^n，是返回1，否返回0
-#define HY_LOG_MIN(x, y)          ((x) < (y) ? (x) : (y))                 ///< 求最小值
-#define HY_LOG_MAX(x, y)          ((x) > (y) ? (x) : (y))                 ///< 求最大值
+#define _IS_POWER_OF_2(x)       ((x) != 0 && (((x) & ((x) - 1)) == 0))  ///< 判断x是否为2^n，是返回1，否返回0
+#define HY_LOG_MIN(x, y)        ((x) < (y) ? (x) : (y))                 ///< 求最小值
+#define HY_LOG_MAX(x, y)        ((x) > (y) ? (x) : (y))                 ///< 求最大值
 
 /**
  * @brief 内存屏障
@@ -93,58 +93,58 @@ static void _hex(const void *_buf, uint32_t len, int32_t flag)
     printf("\r\n");
 }
 
-static void _dump_content(log_fifo_context_s *context)
+static void _dump_content(log_fifo_s *handle)
 {
-    assert(context);
+    assert(handle);
+
     uint32_t len_tmp;
 
-    len_tmp = context->len - LOG_FIFO_READ_POS(context);
-    len_tmp = HY_LOG_MIN(len_tmp, LOG_FIFO_USED_LEN(context));
+    len_tmp = handle->len - LOG_FIFO_READ_POS(handle);
+    len_tmp = HY_LOG_MIN(len_tmp, LOG_FIFO_USED_LEN(handle));
 
     log_i("used len: %u, write_pos: %u, read_pos: %u \n",
-            LOG_FIFO_USED_LEN(context), context->write_pos, context->read_pos);
+            LOG_FIFO_USED_LEN(handle), handle->write_pos, handle->read_pos);
 
-    _hex(context->buf + LOG_FIFO_READ_POS(context), len_tmp, 1);
-    _hex(context->buf, LOG_FIFO_USED_LEN(context) - len_tmp, 1);
+    _hex(handle->buf + LOG_FIFO_READ_POS(handle), len_tmp, 1);
+    _hex(handle->buf, LOG_FIFO_USED_LEN(handle) - len_tmp, 1);
 }
 
-void fifo_dump(log_fifo_context_s *context, log_fifo_dump_type_e type)
+void fifo_dump(log_fifo_s *handle, log_fifo_dump_type_e type)
 {
-    assert(context);
+    assert(handle);
 
     switch (type) {
         case LOG_FIFO_DUMP_TYPE_ALL:
-            printf("[%s:%d] len: %d \n", __func__, __LINE__, context->len);
-            _hex(context->buf, context->len, 1);
+            printf("[%s:%d] len: %d \n", __func__, __LINE__, handle->len);
+            _hex(handle->buf, handle->len, 1);
             break;
         case LOG_FIFO_DUMP_TYPE_CONTENT:
-            _dump_content(context);
+            _dump_content(handle);
             break;
         default:
             log_e("error type: %d \n", type);
     }
-
 }
 
-static int32_t _fifo_read_com(log_fifo_context_s *context, void *buf, uint32_t len)
+static int32_t _fifo_read_com(log_fifo_s *handle, void *buf, uint32_t len)
 {
     uint32_t len_tmp = 0;
 
-    if (LOG_FIFO_IS_EMPTY(context)) {
+    if (LOG_FIFO_IS_EMPTY(handle)) {
         return 0;
     }
 
-    len = HY_LOG_MIN(len, LOG_FIFO_USED_LEN(context));
+    len = HY_LOG_MIN(len, LOG_FIFO_USED_LEN(handle));
 
 #ifdef USE_MB
     // 确保其他线程对read_pos的可见性
     HY_SMP_WMB();
 #endif
 
-    len_tmp = HY_LOG_MIN(len, context->len - LOG_FIFO_READ_POS(context));
+    len_tmp = HY_LOG_MIN(len, handle->len - LOG_FIFO_READ_POS(handle));
 
-    memcpy(buf, context->buf + LOG_FIFO_READ_POS(context), len_tmp);
-    memcpy(buf + len_tmp, context->buf, len - len_tmp);
+    memcpy(buf, handle->buf + LOG_FIFO_READ_POS(handle), len_tmp);
+    memcpy(buf + len_tmp, handle->buf, len - len_tmp);
 
 #ifdef USE_MB
     // 确保read_pos不会优化到上面去
@@ -154,35 +154,35 @@ static int32_t _fifo_read_com(log_fifo_context_s *context, void *buf, uint32_t l
     return len;
 }
 
-int32_t log_fifo_read(log_fifo_context_s *context, void *buf, uint32_t len)
+int32_t log_fifo_read(log_fifo_s *handle, void *buf, uint32_t len)
 {
-    assert(context);
+    assert(handle);
     assert(buf);
 
-    len = _fifo_read_com(context, buf, len);
-    context->read_pos += len;
+    len = _fifo_read_com(handle, buf, len);
+    handle->read_pos += len;
 
     return len;
 }
 
-int32_t log_fifo_read_peek(log_fifo_context_s *context, void *buf, uint32_t len)
+int32_t log_fifo_read_peek(log_fifo_s *handle, void *buf, uint32_t len)
 {
-    assert(context);
+    assert(handle);
     assert(buf);
 
-    return _fifo_read_com(context, buf, len);
+    return _fifo_read_com(handle, buf, len);
 }
 
-int32_t log_fifo_write(log_fifo_context_s *context, const void *buf, uint32_t len)
+int32_t log_fifo_write(log_fifo_s *handle, const void *buf, uint32_t len)
 {
-    assert(context);
+    assert(handle);
     assert(buf);
 
     uint32_t len_tmp = 0;
 
-    if (len > LOG_FIFO_FREE_LEN(context)) {
+    if (len > LOG_FIFO_FREE_LEN(handle)) {
         log_e("write failed, len: %u, free_len: %u \n",
-                len, LOG_FIFO_FREE_LEN(context));
+              len, LOG_FIFO_FREE_LEN(handle));
         return -1;
     }
 
@@ -191,17 +191,17 @@ int32_t log_fifo_write(log_fifo_context_s *context, const void *buf, uint32_t le
     HY_SMP_MB();
 #endif
 
-    len_tmp = HY_LOG_MIN(len, context->len - LOG_FIFO_WRITE_POS(context));
+    len_tmp = HY_LOG_MIN(len, handle->len - LOG_FIFO_WRITE_POS(handle));
 
-    memcpy(context->buf + LOG_FIFO_WRITE_POS(context), buf, len_tmp);
-    memcpy(context->buf, buf + len_tmp, len - len_tmp);
+    memcpy(handle->buf + LOG_FIFO_WRITE_POS(handle), buf, len_tmp);
+    memcpy(handle->buf, buf + len_tmp, len - len_tmp);
 
 #ifdef USE_MB
     // 确保write_pos不会优化到上面去
     HY_SMP_WMB();
 #endif
 
-    context->write_pos += len;
+    handle->write_pos += len;
 
     return len;
 }
@@ -218,30 +218,30 @@ static uint32_t _num_to_2n(uint32_t num)
     return (i < num_tmp) ? i << 1U : i;
 }
 
-void log_fifo_destroy(log_fifo_context_s **context_pp)
+void log_fifo_destroy(log_fifo_s **handle_pp)
 {
-    if (!context_pp || !*context_pp) {
+    if (!handle_pp || !*handle_pp) {
         log_e("the param is error \n");
         return ;
     }
-    log_fifo_context_s *context = *context_pp;
-    log_i("fifo create context: %p destroy, buf: %p \n",
-            context, context->buf);
+    log_fifo_s *handle = *handle_pp;
+    log_i("fifo create handle: %p destroy, buf: %p \n",
+            handle, handle->buf);
 
-    free(context->buf);
+    free(handle->buf);
 
-    free(context);
-    *context_pp = NULL;
+    free(handle);
+    *handle_pp = NULL;
 }
 
-log_fifo_context_s *log_fifo_create(uint32_t len)
+log_fifo_s *log_fifo_create(uint32_t len)
 {
     if (len == 0) {
         log_e("the param is error \n");
         return NULL;
     }
 
-    log_fifo_context_s *context = NULL;
+    log_fifo_s *handle = NULL;
     do {
         if (!_IS_POWER_OF_2(len)) {
             log_e("old len: %d \n", len);
@@ -249,27 +249,26 @@ log_fifo_context_s *log_fifo_create(uint32_t len)
             log_e("len must be power of 2, new len: %d \n", len);
         }
 
-        context = calloc(1, sizeof(*context));
-        if (!context) {
+        handle = calloc(1, sizeof(*handle));
+        if (!handle) {
             log_e("calloc failed \n");
             break;
         }
 
-        context->buf = calloc(1, len);
-        if (!context->buf) {
+        handle->buf = calloc(1, len);
+        if (!handle->buf) {
             log_e("calloc failed \n");
             break;
         }
 
-        context->len        = len;
-        context->read_pos   = context->write_pos = 0;
+        handle->len        = len;
+        handle->read_pos   = handle->write_pos = 0;
 
-        log_i("fifo create context: %p create, buf: %p \n",
-                context, context->buf);
-        return context;
+        log_i("fifo create handle: %p create, buf: %p \n",
+                handle, handle->buf);
+        return handle;
     } while (0);
 
-    log_e("fifo create context: %p failed \n", context);
+    log_e("fifo create handle: %p failed \n", handle);
     return NULL;
 }
-

@@ -132,7 +132,7 @@ typedef struct {
  * @brief 配置参数
  */
 typedef struct {
-    HyLogSaveConfig_s   save_c;             ///< 配置参数
+    HyLogSaveConfig_s   save_c;             ///< 配置参数，详见HyLogSaveConfig_s
 
     uint32_t            fifo_len;           ///< fifo大小，异步方式用于保存log
     const char          *config_file;       ///< 配置文件路径
@@ -141,7 +141,7 @@ typedef struct {
 /**
  * @brief 初始化log模块
  *
- * @param log_c 配置参数
+ * @param log_c 配置参数，详见HyLogConfig_s
  *
  * @return 成功返回0，失败返回-1
  */
@@ -152,21 +152,18 @@ int32_t HyLogInit(HyLogConfig_s *log_c);
  *
  * @param _fifo_len fifo大小
  * @param _level 等级
- * @param _enable_color 是否颜色输出
- * @param _enable_time 是否时间输出
- * @param _enable_pid_id 是否进程线程id输出
- * @param _enable_func_line 是否函数行号输出
+ * @param _output_format log输出格式
  *
  * @return 成功返回0，失败返回-1
  */
-#define HyLogInit_m(_fifo_len, _level, _output_format)      \
-({                                                          \
-    HyLogConfig_s log_c;                                    \
-    memset(&log_c, '\0', sizeof(log_c));                    \
-    log_c.fifo_len                  = _fifo_len;            \
-    log_c.save_c.level              = _level;               \
-    log_c.save_c.output_format      = _output_format;       \
-    HyLogInit(&log_c);                                      \
+#define HyLogInit_m(_fifo_len, _level, _output_format)  \
+({                                                      \
+    HyLogConfig_s log_c;                                \
+    memset(&log_c, '\0', sizeof(log_c));                \
+    log_c.fifo_len              = _fifo_len;            \
+    log_c.save_c.level          = _level;               \
+    log_c.save_c.output_format  = _output_format;       \
+    HyLogInit(&log_c);                                  \
 })
 
 /**

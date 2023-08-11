@@ -25,13 +25,12 @@
 
 #include "process_single.h"
 
-typedef struct {
+struct process_single_s {
     process_handle_data_s   *terminal_handle_data;
-} _process_single_context_s;
+};
 
-void process_single_write(void *handle, log_write_info_s *log_write_info)
+void process_single_write(process_single_s *handle, log_write_info_s *log_write_info)
 {
-    _process_single_context_s *context = handle;
     HyLogAddiInfo_s *addi_info = log_write_info->addi_info;
     dynamic_array_s *dynamic_array = log_write_info->dynamic_array;
 
@@ -41,54 +40,54 @@ void process_single_write(void *handle, log_write_info_s *log_write_info)
         }
     }
 
-    process_handle_data_write(context->terminal_handle_data,
-            dynamic_array->buf, dynamic_array->cur_len);
+    process_handle_data_write(handle->terminal_handle_data,
+                              dynamic_array->buf, dynamic_array->cur_len);
 }
 
-static void _terminal_process_handle_data_cb(void *buf, uint32_t len, void *args)
+static void _process_handle_data_terminal_cb(void *buf, uint32_t len, void *args)
 {
     printf("%s", (char *)buf);
 }
 
-void process_single_destroy(void **handle)
+void process_single_destroy(process_single_s **handle_pp)
 {
-    _process_single_context_s *context = *handle;
-    log_i("process single context: %p destroy \n", context);
+    process_single_s *handle = *handle_pp;
 
-    process_handle_data_destroy(&context->terminal_handle_data);
+    process_handle_data_destroy(&handle->terminal_handle_data);
 
-    free(context);
-    *handle = NULL;
+    log_i("process single handle: %p destroy \n", handle);
+    free(handle);
+    *handle_pp = NULL;
 }
 
-void *process_single_create(uint32_t fifo_len)
+process_single_s *process_single_create(uint32_t fifo_len)
 {
     if (fifo_len <= 0) {
         log_e("the param is error \n");
         return NULL;
     }
 
-    _process_single_context_s *context = NULL;
+    process_single_s *handle = NULL;
 
     do {
-        context = calloc(1, sizeof(*context));
-        if (!context) {
+        handle = calloc(1, sizeof(*handle));
+        if (!handle) {
             log_e("calloc failed \n");
             break;
         }
 
-        context->terminal_handle_data = process_handle_data_create("HY_log_loop",
-                fifo_len, _terminal_process_handle_data_cb, context);
-        if (!context->terminal_handle_data) {
+        handle->terminal_handle_data = process_handle_data_create("HY_log_loop",
+                fifo_len, _process_handle_data_terminal_cb, handle);
+        if (!handle->terminal_handle_data) {
             log_e("process_handle_data_create failed \n");
             break;
         }
 
-        log_i("process single context: %p create \n", context);
-        return context;
+        log_i("process single handle: %p create \n", handle);
+        return handle;
     } while (0);
 
     log_e("process single create failed \n");
-    process_single_destroy((void **)&context);
-    return NULL;
+    process_single_destroy(&handle);
+    return handle;
 }

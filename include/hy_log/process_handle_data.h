@@ -31,17 +31,7 @@ extern "C" {
 
 typedef void (*process_handle_data_cb_t)(void *buf, uint32_t len, void *args);
 
-typedef struct {
-    int32_t                    is_exit;
-    pthread_t                   id;
-
-    log_fifo_context_s          *fifo;
-    pthread_mutex_t             mutex;
-    pthread_cond_t              cond;
-
-    process_handle_data_cb_t    cb;
-    void                        *args;
-} process_handle_data_s;
+typedef struct process_handle_data_s process_handle_data_s;
 
 process_handle_data_s *process_handle_data_create(const char *name,
                                                   uint32_t fifo_len,
