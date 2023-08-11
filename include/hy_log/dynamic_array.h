@@ -81,8 +81,7 @@ int32_t dynamic_array_read(dynamic_array_s *context, void *buf, uint32_t len);
  *
  * @return 成功返回写入的长度，失败返回-1
  */
-int32_t dynamic_array_write(dynamic_array_s *context,
-        const void *buf, uint32_t len);
+int32_t dynamic_array_write(dynamic_array_s *context, const void *buf, uint32_t len);
 
 /**
  * @brief 向动态数组中写入
@@ -94,7 +93,7 @@ int32_t dynamic_array_write(dynamic_array_s *context,
  * @return 成功返回写入的长度，失败返回-1
  */
 int32_t dynamic_array_write_vprintf(dynamic_array_s *context,
-        const char *format, va_list *args);
+                                    const char *format, va_list *args);
 
 /**
  * @brief 复位动态数组，清空里面的数据

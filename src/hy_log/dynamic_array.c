@@ -18,8 +18,10 @@
  *     last modified: 22/04 2022 09:06
  */
 #include <stdio.h>
+#include <string.h>
 
 #include "log_private.h"
+#include "hy_printf.h"
 
 #include "dynamic_array.h"
 
@@ -37,12 +39,14 @@ static int32_t _dynamic_array_extend(dynamic_array_s *handle, uint32_t increment
 
     if (handle->len >= handle->max_len) {
         log_e("can't extend, len: %d, max_len: %d \n", handle->len, handle->max_len);
-        return -1;
+        return -1; // 最大分配的空间已经有数据，无需插入了
     }
 
     if (handle->len + increment < handle->max_len) {
         extend_len = HY_MEM_ALIGN4_UP(handle->len + increment + 1);
-    } else {
+    }
+
+    if (extend_len > handle->max_len) {
         extend_len = handle->max_len;
         ret = 1; // 已经达到分配空间最大值，给被调用函数做截断处理提供条件
         log_e("extend to max len, len: %d, extend_len: %d \n", handle->len, extend_len);
@@ -60,18 +64,74 @@ static int32_t _dynamic_array_extend(dynamic_array_s *handle, uint32_t increment
     return ret;
 }
 
-int32_t dynamic_array_read(dynamic_array_s *handle, void *buf, uint32_t len)
+static inline uint32_t _write_data(dynamic_array_s *handle,
+                                   const void *buf, uint32_t len)
+{
+    memcpy(handle->buf + handle->write_pos, buf, len);
+    handle->write_pos += len;
+    handle->cur_len   += len;
+
+    return len;
+}
+
+// 3 for "...", 2 for "\n\0", 1数组从0开始
+#define _trunc_len(_handle) (_handle->len - 3 - 2 - 1)
+
+int32_t dynamic_array_write(dynamic_array_s *handle, const void *buf, uint32_t len)
 {
     assert(handle);
     assert(buf);
 
-    if (len > handle->cur_len) {
-        len = handle->cur_len;
-    }
+    char *ptr = NULL;
+    int32_t ret = 0;
+    int32_t free_len;
 
-    memcpy(buf, handle->buf + handle->read_pos, len);
-    handle->read_pos += len;
-    handle->cur_len  -= len;
+    do {
+        ptr = handle->buf + handle->write_pos;
+        free_len = handle->len - handle->cur_len;
+
+        // 直接写入数据
+        ret = snprintf(ptr, free_len - 1, "%s", (char *)buf); // -1数组从0开始
+        if (ret < free_len - 1) {
+            handle->cur_len   += ret;
+            handle->write_pos += ret;
+            break;
+        } else {
+            ret = _dynamic_array_extend(handle, ret - free_len);
+            if (-1 == ret) {
+                // 确保颜色复位插入
+                if (len == strlen(PRINT_ATTR_RESET)) {
+                    if (free_len > (int32_t)strlen(PRINT_ATTR_RESET)) {
+                        _write_data(handle, buf, len);
+                        ret = len;
+                    } else {
+                        handle->write_pos = _trunc_len(handle) - len;
+                        handle->cur_len   = _trunc_len(handle) - len;
+                        ret = 0;
+
+                        log_e("truncated data \n");
+                        ret += _write_data(handle, "...", 3);
+                        ret += _write_data(handle, buf, len);
+                        ret += _write_data(handle, "\n\0", 2);
+                    }
+                }
+                break;
+            } else if (1 == ret) {
+                free_len = _trunc_len(handle) - handle->cur_len;
+                ret = 0;
+
+                ret = snprintf(ptr, free_len, "%s", (char *)buf);
+                ret = (ret < free_len) ? ret : free_len;
+                handle->write_pos += ret;
+                handle->cur_len   += ret;
+
+                log_e("truncated data \n");
+                ret += _write_data(handle, "...", 3);
+                ret += _write_data(handle, "\n\0", 2);
+                break;
+            }
+        }
+    } while(1);
 
     return len;
 }
@@ -84,76 +144,64 @@ int32_t dynamic_array_write_vprintf(dynamic_array_s *handle,
     assert(args);
 
     int32_t free_len;
-    int32_t ret;
+    int32_t ret = 0;
     char *ptr = NULL;
 
-    ptr = handle->buf + handle->write_pos;
+    do {
+        ptr = handle->buf + handle->write_pos;
+        free_len = handle->len - handle->cur_len;
 
-    free_len = handle->len - handle->cur_len - 1; // -1为'\0'保留
-
-    ret = vsnprintf(ptr, free_len, format, *args);
-    if (ret < 0) {
-        log_e("vsnprintf failed \n");
-        ret = -1;
-    } else if (ret >= 0) {
-        if (ret < free_len) {
-            handle->cur_len   += ret;
-            handle->write_pos += ret;
+        // 直接写入数据
+        ret = vsnprintf(ptr, free_len - 1, format, *args); // -1数组从0开始
+        if (ret < 0) {
+            log_e("vsnprintf failed \n");
+            ret = -1;
+            break;
         } else {
-            ret = _dynamic_array_extend(handle, ret - (handle->len - handle->cur_len));
-            if (-1 == ret) {
-                log_i("_dynamic_array_extend failed \n");
-            } else if (ret >= 0) {
-                // 扩大内存后，重新计算空闲空间
-                free_len = handle->len - handle->cur_len - 1; // -1为'\0'保留
-
-                ret = vsnprintf(ptr, free_len, format, *args);
-                handle->cur_len += ret;
+            // 写入数据成功
+            if (ret < free_len - 1) {
+                handle->cur_len   += ret;
                 handle->write_pos += ret;
+                break;
+            } else {
+                // 数据不够，扩大空间
+                ret = _dynamic_array_extend(handle, ret - free_len);
+                if (-1 == ret) {
+                    break;
+                } else if (1 == ret) {
+                    free_len = _trunc_len(handle) - handle->cur_len;
+                    ret = 0;
 
-                /* @fixme: <22-04-23, uos> 做进一步判断 */
+                    ret = vsnprintf(ptr, free_len, format, *args);
+                    ret = (ret < free_len) ? ret : free_len;
+                    handle->write_pos += ret;
+                    handle->cur_len   += ret;
+
+                    log_e("truncated data \n");
+                    ret += _write_data(handle, "...", 3);
+                    ret += _write_data(handle, "\n\0", 2);
+
+                    break;
+                }
             }
         }
-    }
+    } while(1);
 
     return ret;
 }
 
-int32_t dynamic_array_write(dynamic_array_s *handle, const void *buf, uint32_t len)
+int32_t dynamic_array_read(dynamic_array_s *handle, void *buf, uint32_t len)
 {
-    #define _write_data_com(_buf, _len)                 \
-        do {                                            \
-            char *ptr = NULL;                           \
-            ptr = handle->buf + handle->write_pos;      \
-            memcpy(ptr, _buf, _len);                    \
-            handle->cur_len      += _len;               \
-            handle->write_pos    += _len;               \
-        } while (0)
-
     assert(handle);
     assert(buf);
 
-    int32_t ret = 0;
-
-    if (handle->len > handle->cur_len && handle->len - handle->cur_len > len) {
-        _write_data_com(buf, len);
-    } else {
-        ret = _dynamic_array_extend(handle, len - (handle->len - handle->cur_len));
-        if (-1 == ret) {
-            log_i("_dynamic_array_extend failed \n");
-            len = -1;
-        } else if (0 == ret) {
-            _write_data_com(buf, len);
-        } else {
-            // 3 for "..." 1 for "\0"
-            len = handle->len - handle->cur_len - 3 - 1;
-            _write_data_com(buf, len);
-
-            log_e("truncated data \n");
-            _write_data_com("...", 3);
-            len += 3;
-        }
+    if (len > handle->cur_len) {
+        len = handle->cur_len;
     }
+
+    memcpy(buf, handle->buf + handle->read_pos, len);
+    handle->read_pos += len;
+    handle->cur_len  -= len;
 
     return len;
 }

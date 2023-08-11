@@ -27,11 +27,6 @@
 
 #include "hy_log.h"
 
-/* @fixme: <22-04-23, uos>
- * 两者大小不能相隔太近，
- * 否则出现内存申请错误(malloc(): unsorted double linked list corrupted)，
- * 测试条件: min_len = 60, max_len = 87
- */
 #define _DYNAMIC_ARRAY_MIN_LEN  (256)
 #define _DYNAMIC_ARRAY_MAX_LEN  (4 * 1024)
 
