@@ -40,7 +40,7 @@ static int32_t _dynamic_array_extend(dynamic_array_s *handle, uint32_t increment
         return -1;
     }
 
-    if (handle->len + increment <= handle->max_len) {
+    if (handle->len + increment < handle->max_len) {
         extend_len = HY_MEM_ALIGN4_UP(handle->len + increment + 1);
     } else {
         extend_len = handle->max_len;
