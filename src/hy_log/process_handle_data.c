@@ -71,9 +71,13 @@ static void *_process_handle_data_thread_cb(void *args)
     }
 
     while (!handle->is_exit) {
+        memset(buf, '\0', _ITEM_LEN_MAX);
+
         pthread_mutex_lock(&handle->mutex);
 
         while (LOG_FIFO_IS_EMPTY(handle->fifo)) {
+
+            // pthread_cond_wait可能会出现假唤醒，唤醒之后需要再次判断条件
             pthread_cond_wait(&handle->cond, &handle->mutex);
 
             if (handle->is_exit) {
@@ -84,7 +88,6 @@ static void *_process_handle_data_thread_cb(void *args)
             }
         }
 
-        memset(buf, '\0', _ITEM_LEN_MAX);
         ret = log_fifo_read(handle->fifo, buf, _ITEM_LEN_MAX);
 
         pthread_mutex_unlock(&handle->mutex);
@@ -115,8 +118,10 @@ void process_handle_data_destroy(process_handle_data_s **handle_pp)
         usleep(10 * 1000);
     }
     handle->is_exit = 1;
+
+    usleep(10 * 1000); // 在发送信号之前，确保pthread_cond_wait已经进入等待
     pthread_cond_signal(&handle->cond);
-    usleep(10 * 1000);
+
     pthread_join(handle->id, NULL);
 
     pthread_mutex_destroy(&handle->mutex);
