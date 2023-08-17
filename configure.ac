@@ -60,6 +60,7 @@ AC_CHECK_HEADERS([inttypes.h stdint.h stdlib.h string.h sys/time.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
+AC_C_INLINE
 AC_TYPE_INT32_T
 AC_TYPE_INT8_T
 AC_TYPE_SIZE_T
@@ -68,7 +69,7 @@ AC_TYPE_UINT8_T
 
 # Checks for library functions.
 AC_FUNC_REALLOC
-AC_CHECK_FUNCS([atexit gettimeofday localtime_r memset strerror])
+AC_CHECK_FUNCS([atexit gettimeofday localtime_r memset strerror strrchr])
 
 AC_CONFIG_FILES([Makefile
                  $project_name.pc
@@ -77,6 +78,8 @@ AC_CONFIG_FILES([Makefile
                  build-script/arterytek/at32f4xx/Makefile
                  build-script/eeasytech/Makefile
                  build-script/eeasytech/SV823/Makefile
+                 build-script/esp32/Makefile
+                 build-script/esp32/esp32/Makefile
                  build-script/fullhan/MC6810E/Makefile
                  build-script/fullhan/Makefile
                  build-script/nxp/Makefile
@@ -85,20 +88,26 @@ AC_CONFIG_FILES([Makefile
                  build-script/pc/pc-chip/Makefile
                  build-script/rock-chips/Makefile
                  build-script/rock-chips/rk3568/Makefile
+                 build-script/stm32/Makefile
+                 build-script/stm32/stm32h7xx/Makefile
                  doc/Makefile
                  example/Makefile
                  include/Makefile
-                 include/hy_log/Makefile
-                 include/log4cplus/Makefile
-                 include/zlog/Makefile
+                 include/linux/Makefile
+                 include/linux/hy_log/Makefile
+                 include/linux/log4cplus/Makefile
+                 include/linux/zlog/Makefile
+                 include/mcu/Makefile
                  res/Makefile
                  res/voice/Makefile
                  res/voice/cn/Makefile
                  res/voice/en/Makefile
                  src/Makefile
-                 src/hy_log/Makefile
-                 src/log4cplus/Makefile
-                 src/zlog/Makefile
+                 src/linux/Makefile
+                 src/linux/hy_log/Makefile
+                 src/linux/log4cplus/Makefile
+                 src/linux/zlog/Makefile
+                 src/mcu/Makefile
                  test/Makefile])
 AC_OUTPUT
 

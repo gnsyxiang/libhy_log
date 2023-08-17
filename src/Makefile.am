@@ -5,7 +5,7 @@
 # @file    Makefile.am
 # @brief   
 # @author  gnsyxiang <gnsyxiang@163.com>
-# @date    05/03 2021 10:35
+# @date    17/08 2023 11:53
 # @version v0.0.1
 # 
 # @since    note
@@ -13,26 +13,14 @@
 # 
 #     change log:
 #     NO.     Author              Date            Modified
-#     00      zhenquan.qiu        05/03 2021      create the file
+#     00      zhenquan.qiu        17/08 2023      create the file
 # 
-#     last modified: 05/03 2021 10:35
+#     last modified: 17/08 2023 11:53
 # ===============================================================
 
-SUBDIRS =
+SUBDIRS = $(run_os)
 
 lib_LTLIBRARIES = lib@project_name@.la
-
-if COMPILE_SELECT_LOG_TYPE_HY_LOG
-SUBDIRS += hy_log
-endif
-
-if COMPILE_SELECT_LOG_TYPE_LOG4CPLUS
-SUBDIRS += log4cplus
-endif
-
-if COMPILE_SELECT_LOG_TYPE_ZLOG
-SUBDIRS += zlog
-endif
 
 # ------------------
 # defining variables
@@ -75,17 +63,7 @@ endif
 
 _ldadd_com      += $(ldadd_com)
 
-if COMPILE_SELECT_LOG_TYPE_HY_LOG
-_ldadd_com      += $(top_builddir)/src/hy_log/libhy_loger.la
-endif
-
-if COMPILE_SELECT_LOG_TYPE_LOG4CPLUS
-_ldadd_com      += $(top_builddir)/src/log4cplus/libhy_log4cplus.la
-endif
-
-if COMPILE_SELECT_LOG_TYPE_ZLOG
-_ldadd_com      += $(top_builddir)/src/zlog/libhy_zlog.la
-endif
+_ldadd_com      += $(top_builddir)/src/$(run_os)/libhy_log_$(run_os).la
 
 lib@project_name@_la_SOURCES    = $(_sources_com)
 lib@project_name@_la_CPPFLAGS   = $(_cppflags_com)
@@ -93,4 +71,3 @@ lib@project_name@_la_CFLAGS     = $(_cflags_com)
 lib@project_name@_la_CXXFLAGS   = $(_cxxflags_com)
 lib@project_name@_la_LDFLAGS    = $(_ldflags_com)
 lib@project_name@_la_LIBADD     = $(_ldadd_com)
-
