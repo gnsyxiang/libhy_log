@@ -28,8 +28,8 @@ AC_DEFUN([SELECT_VENDER],
         run_os=""
 
         AC_ARG_WITH([vender],
-                    [AS_HELP_STRING([--with-vender=@<:@pc|nxp|rock-chips|fullhan|eeasytech|arterytek|hdhc@:>@],
-                                    [select vender about @<:@pc|nxp|rock-chips|fullhan|eeasytech|arterytek|hdhc@:>@ @<:@default=pc@:>@])],
+                    [AS_HELP_STRING([--with-vender=@<:@pc|nxp|rock-chips|esp32|stm32|fullhan|eeasytech|arterytek|hdhc@:>@],
+                                    [select vender about @<:@pc|nxp|esp32|stm32|rock-chips|fullhan|eeasytech|arterytek|hdhc@:>@ @<:@default=pc@:>@])],
                     [],
                     [with_vender=pc])
 
@@ -47,6 +47,7 @@ AC_DEFUN([SELECT_VENDER],
             fullhan)
                 AC_DEFINE(HAVE_SELECT_VENDER_FULLHAN,  1, [select fullhan vender])
                 vender="fullhan"
+                run_os="linux"
             ;;
             rock-chips)
                 AC_DEFINE(HAVE_SELECT_VENDER_ROCK_CHIPS,  1, [select rock-chips vender])
@@ -57,6 +58,16 @@ AC_DEFUN([SELECT_VENDER],
                 AC_DEFINE(HAVE_SELECT_VENDER_NXP,  1, [select nxp vender])
                 vender="nxp"
                 run_os="linux"
+            ;;
+            stm32)
+                AC_DEFINE(HAVE_SELECT_VENDER_STM32,  1, [select stm32 vender])
+                vender="stm32"
+                run_os="mcu"
+            ;;
+            esp32)
+                AC_DEFINE(HAVE_SELECT_VENDER_ESP32,  1, [select esp32 vender])
+                vender="esp32"
+                run_os="mcu"
             ;;
             arterytek)
                 AC_DEFINE(HAVE_SELECT_VENDER_ARTERYTEK,  1, [select arterytek vender])
@@ -69,7 +80,7 @@ AC_DEFUN([SELECT_VENDER],
                 run_os="mcu"
             ;;
             *)
-                AC_MSG_ERROR([bad value ${with_vender} for --with-vender=@<:@pc|nxp|rock-chips|fullhan|eeasytech|arterytek|hdhc@:>@])
+                AC_MSG_ERROR([bad value ${with_vender} for --with-vender=@<:@pc|nxp|esp32|stm32|rock-chips|fullhan|eeasytech|arterytek|hdhc@:>@])
             ;;
         esac
 
@@ -81,6 +92,8 @@ AC_DEFUN([SELECT_VENDER],
         AM_CONDITIONAL([COMPILE_SELECT_VENDER_FULLHAN],     [test "x$with_vender" = "xfullhan"])
         AM_CONDITIONAL([COMPILE_SELECT_VENDER_ROCK_CHIPS],  [test "x$with_vender" = "xrock-chips"])
         AM_CONDITIONAL([COMPILE_SELECT_VENDER_NXP],         [test "x$with_vender" = "xnxp"])
+        AM_CONDITIONAL([COMPILE_SELECT_VENDER_STM32],       [test "x$with_vender" = "xstm32"])
+        AM_CONDITIONAL([COMPILE_SELECT_VENDER_ESP32],       [test "x$with_vender" = "xesp32"])
         AM_CONDITIONAL([COMPILE_SELECT_VENDER_ARTERYTEK],   [test "x$with_vender" = "xarterytek"])
         AM_CONDITIONAL([COMPILE_SELECT_VENDER_HDHC],        [test "x$with_vender" = "xhdhc"])
     ])
