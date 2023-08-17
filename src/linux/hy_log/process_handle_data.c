@@ -88,7 +88,8 @@ static void *_process_handle_data_thread_cb(void *args)
             }
         }
 
-        ret = log_fifo_read(handle->fifo, buf, _ITEM_LEN_MAX);
+        ret = log_fifo_read(handle->fifo, buf, _ITEM_LEN_MAX - 1);
+        buf[ret] = '\0';
 
         pthread_mutex_unlock(&handle->mutex);
 

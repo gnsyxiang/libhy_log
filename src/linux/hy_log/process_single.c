@@ -44,9 +44,10 @@ void process_single_write(process_single_s *handle, log_write_info_s *log_write_
                               dynamic_array->buf, dynamic_array->cur_len);
 }
 
-static void _process_handle_data_terminal_cb(void *buf, uint32_t len, void *args)
+static void _process_handle_data_terminal_cb(char *buf, uint32_t len, void *args)
 {
-    printf("%s", (char *)buf);
+    // printf("%s", buf);
+    dprintf(1, "%s", buf);
 }
 
 void process_single_destroy(process_single_s **handle_pp)

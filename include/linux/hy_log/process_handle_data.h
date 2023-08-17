@@ -29,7 +29,7 @@ extern "C" {
 
 #include "log_fifo.h"
 
-typedef void (*process_handle_data_cb_t)(void *buf, uint32_t len, void *args);
+typedef void (*process_handle_data_cb_t)(char *buf, uint32_t len, void *args);
 
 typedef struct process_handle_data_s process_handle_data_s;
 
