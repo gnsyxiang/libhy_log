@@ -213,7 +213,7 @@ void HyLogWrite(HyLogAddiInfo_s *addi_info, const char *fmt, ...) __attribute__(
  * @param fmt 用户输入的格式
  * @param ... 格式对应的数据
  */
-#define LOG(_level, _err_str, fmt, ...)                     \
+#define LOG(_level, _err_str, _fmt, ...)                    \
 do {                                                        \
     if (HyLogLevelGet() >= _level) {                        \
         HyLogAddiInfo_s addi_info;                          \
@@ -224,7 +224,7 @@ do {                                                        \
         addi_info.line      = __LINE__;                     \
         addi_info.tid       = pthread_self();               \
         addi_info.pid       = syscall(SYS_gettid);          \
-        HyLogWrite(&addi_info, fmt, ##__VA_ARGS__);         \
+        HyLogWrite(&addi_info, _fmt, ##__VA_ARGS__);        \
     }                                                       \
 } while (0)
 

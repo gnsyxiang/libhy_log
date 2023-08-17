@@ -5,7 +5,7 @@
 # @file    Makefile.am
 # @brief   
 # @author  gnsyxiang <gnsyxiang@163.com>
-# @date    17/08 2023 11:51
+# @date    17/08 2023 13:51
 # @version v0.0.1
 # 
 # @since    note
@@ -15,10 +15,8 @@
 #     NO.     Author              Date            Modified
 #     00      zhenquan.qiu        17/08 2023      create the file
 # 
-#     last modified: 17/08 2023 11:51
+#     last modified: 17/08 2023 13:51
 # ===============================================================
-
-SUBDIRS = $(run_os)
 
 # ------------------
 # defining variables
@@ -34,7 +32,7 @@ install_includedir      = $(includedir)/@project_name@
 _no_install_headers_com +=
 
 _install_headers_com    += \
-                           hy_type.h
+                           hy_log.h
 
 # ------------------
 # make install files

@@ -5,7 +5,7 @@
 # @file    Makefile.am
 # @brief   
 # @author  gnsyxiang <gnsyxiang@163.com>
-# @date    05/03 2021 10:38
+# @date    17/08 2023 13:52
 # @version v0.0.1
 # 
 # @since    note
@@ -13,10 +13,12 @@
 # 
 #     change log:
 #     NO.     Author              Date            Modified
-#     00      zhenquan.qiu        05/03 2021      create the file
+#     00      zhenquan.qiu        17/08 2023      create the file
 # 
-#     last modified: 05/03 2021 10:38
+#     last modified: 17/08 2023 13:52
 # ===============================================================
+
+noinst_LTLIBRARIES = lib@project_name@_@run_os@.la
 
 # ------------------
 # defining variables
@@ -30,32 +32,20 @@ _cflags_com     =
 _cxxflags_com   =
 _ldflags_com    =
 _ldadd_com      =
-bin_PROGRAMS    =
 
 # ---------------------
 # add necessary content
 # ---------------------
 _no_error_com   +=
 
-_define_com     +=
+_define_com     += -D_GNU_SOURCE
 
 _include_com    += \
                    -I$(top_srcdir)/include/$(run_os) \
                    -I$(top_srcdir)/include
 
-if COMPILE_SELECT_LOG_TYPE_HY_LOG
-_include_com    += -I$(top_srcdir)/include/$(run_os)/hy_log
-endif
-
-if COMPILE_SELECT_LOG_TYPE_LOG4CPLUS
-_include_com    += -I$(top_srcdir)/include/$(run_os)/log4cplus
-endif
-
-if COMPILE_SELECT_LOG_TYPE_ZLOG
-_include_com    += -I$(top_srcdir)/include/$(run_os)/zlog
-endif
-
-_sources_com    +=
+_sources_com    += \
+                   hy_log.c
 
 _cppflags_com   += \
                    $(_no_error_com) \
@@ -66,17 +56,11 @@ _cflags_com     +=
 
 _cxxflags_com   +=
 
-_ldflags_com    +=
+_ldadd_com      += $(ldadd_com)
 
-_ldadd_com      += \
-                   $(top_builddir)/src/lib@project_name@.la \
-                   $(ldadd_com)
-
-bin_PROGRAMS            += hy_log_demo
-hy_log_demo_SOURCES    = $(_sources_com) hy_log_demo.c
-hy_log_demo_CPPFLAGS   = $(_cppflags_com)
-hy_log_demo_CFLAGS     = $(_cflags_com)
-hy_log_demo_CXXFLAGS   = $(_cxxflags_com)
-hy_log_demo_LDFLAGS    = $(_ldflags_com)
-hy_log_demo_LDADD      = $(_ldadd_com)
-
+lib@project_name@_@run_os@_la_SOURCES    = $(_sources_com)
+lib@project_name@_@run_os@_la_CPPFLAGS   = $(_cppflags_com)
+lib@project_name@_@run_os@_la_CFLAGS     = $(_cflags_com)
+lib@project_name@_@run_os@_la_CXXFLAGS   = $(_cxxflags_com)
+lib@project_name@_@run_os@_la_LDFLAGS    = $(_ldflags_com)
+lib@project_name@_@run_os@_la_LIBADD     = $(_ldadd_com)
