@@ -110,8 +110,13 @@ void HyLogWrite(HyLogLevel_e level, const char *file, const char *func,
 
     char *short_file = strrchr(file, '/');
 
-    ret += snprintf(context.buf + ret, sizeof(context.buf) - ret,
-                    "[%s:%d][%s] ", short_file + 1, line, func); 
+    if (short_file) {
+        ret += snprintf(context.buf + ret, sizeof(context.buf) - ret,
+                        "[%s:%d][%s] ", short_file + 1, line, func); 
+    } else {
+        ret += snprintf(context.buf + ret, sizeof(context.buf) - ret,
+                        "[%s:%d][%s] ", file, line, func); 
+    }
 
     va_list args;
     va_start(args, fmt);
