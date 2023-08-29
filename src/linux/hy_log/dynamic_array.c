@@ -151,6 +151,9 @@ int32_t dynamic_array_write_vprintf(dynamic_array_s *handle,
         ptr = handle->buf + handle->write_pos;
         free_len = handle->len - handle->cur_len;
 
+        // FIXME: vsnprintf中args参数只能使用一次，使用之后就会清空
+        // 所以这里的动态扩展一定会有问题
+
         // 直接写入数据
         ret = vsnprintf(ptr, free_len - 1, format, *args); // -1数组从0开始
         if (ret < 0) {

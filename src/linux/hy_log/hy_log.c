@@ -28,8 +28,8 @@
 
 #include "hy_log.h"
 
-#define _DYNAMIC_ARRAY_MIN_LEN  (256)
-#define _DYNAMIC_ARRAY_MAX_LEN  (4 * 1024)
+#define _DYNAMIC_ARRAY_MIN_LEN  (4 * 1024)
+#define _DYNAMIC_ARRAY_MAX_LEN  (10 * 1024)
 
 typedef struct {
     HyLogSaveConfig_s   save_c;
