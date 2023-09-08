@@ -153,17 +153,19 @@ int32_t HyLogInit(HyLogConfig_s *log_c);
  * @param _fifo_len fifo大小
  * @param _level 等级
  * @param _output_format log输出格式
+ * @param _config_file 配置文件
  *
  * @return 成功返回0，失败返回-1
  */
-#define HyLogInit_m(_fifo_len, _level, _output_format)  \
-({                                                      \
-    HyLogConfig_s log_c;                                \
-    memset(&log_c, '\0', sizeof(log_c));                \
-    log_c.fifo_len              = _fifo_len;            \
-    log_c.save_c.level          = _level;               \
-    log_c.save_c.output_format  = _output_format;       \
-    HyLogInit(&log_c);                                  \
+#define HyLogInit_m(_fifo_len, _level, _output_format, _config_file)    \
+({                                                                      \
+    HyLogConfig_s log_c;                                                \
+    memset(&log_c, '\0', sizeof(log_c));                                \
+    log_c.fifo_len                  = _fifo_len;                        \
+    log_c.config_file               = _config_file;                     \
+    log_c.save_c.level              = _level;                           \
+    log_c.save_c.output_format      = _output_format;                   \
+    HyLogInit(&log_c);                                                  \
 })
 
 /**
