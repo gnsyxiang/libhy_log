@@ -18,7 +18,8 @@
  *     last modified: 22/04 2022 09:06
  */
 #include <stdio.h>
-#include <string.h>
+#include <assert.h>
+#include <stdlib.h>
 
 #include "log.h"
 #include "hy_printf.h"
@@ -29,12 +30,12 @@
 #define HY_MEM_ALIGN4(len)          HY_MEM_ALIGN(len, 4)
 #define HY_MEM_ALIGN4_UP(len)       (HY_MEM_ALIGN(len, 4) + HY_MEM_ALIGN4(1))
 
-static int32_t _dynamic_array_extend(dynamic_array_s *handle, uint32_t increment)
+static hy_s32_t _dynamic_array_extend(dynamic_array_s *handle, hy_u32_t increment)
 {
     assert(handle);
 
-    uint32_t extend_len = 0;
-    int32_t ret = 0;
+    hy_u32_t extend_len = 0;
+    hy_s32_t ret = 0;
     void *ptr = NULL;
 
     if (handle->len >= handle->max_len) {
@@ -64,8 +65,8 @@ static int32_t _dynamic_array_extend(dynamic_array_s *handle, uint32_t increment
     return ret;
 }
 
-static inline uint32_t _write_data(dynamic_array_s *handle,
-                                   const void *buf, uint32_t len)
+static inline hy_u32_t _write_data(dynamic_array_s *handle,
+                                   const void *buf, hy_u32_t len)
 {
     memcpy(handle->buf + handle->write_pos, buf, len);
     handle->write_pos += len;
@@ -77,14 +78,14 @@ static inline uint32_t _write_data(dynamic_array_s *handle,
 // 3 for "...", 2 for "\n\0", 1数组从0开始
 #define _trunc_len(_handle) (_handle->len - 3 - 2 - 1)
 
-int32_t dynamic_array_write(dynamic_array_s *handle, const void *buf, uint32_t len)
+hy_s32_t dynamic_array_write(dynamic_array_s *handle, const void *buf, hy_u32_t len)
 {
     assert(handle);
     assert(buf);
 
     char *ptr = NULL;
-    int32_t ret = 0;
-    int32_t free_len;
+    hy_s32_t ret = 0;
+    hy_s32_t free_len;
 
     do {
         ptr = handle->buf + handle->write_pos;
@@ -101,7 +102,7 @@ int32_t dynamic_array_write(dynamic_array_s *handle, const void *buf, uint32_t l
             if (-1 == ret) {
                 // 确保颜色复位插入
                 if (len == strlen(PRINT_ATTR_RESET)) {
-                    if (free_len > (int32_t)strlen(PRINT_ATTR_RESET)) {
+                    if (free_len > (hy_s32_t)strlen(PRINT_ATTR_RESET)) {
                         _write_data(handle, buf, len);
                         ret = len;
                     } else {
@@ -136,15 +137,15 @@ int32_t dynamic_array_write(dynamic_array_s *handle, const void *buf, uint32_t l
     return len;
 }
 
-int32_t dynamic_array_write_vprintf(dynamic_array_s *handle,
+hy_s32_t dynamic_array_write_vprintf(dynamic_array_s *handle,
                                     const char *format, va_list *args)
 {
     assert(handle);
     assert(format);
     assert(args);
 
-    int32_t free_len;
-    int32_t ret = 0;
+    hy_s32_t free_len;
+    hy_s32_t ret = 0;
     char *ptr = NULL;
 
     do {
@@ -193,7 +194,7 @@ int32_t dynamic_array_write_vprintf(dynamic_array_s *handle,
     return ret;
 }
 
-int32_t dynamic_array_read(dynamic_array_s *handle, void *buf, uint32_t len)
+hy_s32_t dynamic_array_read(dynamic_array_s *handle, void *buf, hy_u32_t len)
 {
     assert(handle);
     assert(buf);
@@ -211,11 +212,12 @@ int32_t dynamic_array_read(dynamic_array_s *handle, void *buf, uint32_t len)
 
 void dynamic_array_destroy(dynamic_array_s **handle_pp)
 {
+    dynamic_array_s *handle = *handle_pp;
+
     if (!handle_pp || !*handle_pp) {
         log_e("the param is error \n");
         return;
     }
-    dynamic_array_s *handle = *handle_pp;
 
     log_i("dynamic array handle: %p destroy, buf: %p \n", handle, handle->buf);
 
@@ -224,14 +226,15 @@ void dynamic_array_destroy(dynamic_array_s **handle_pp)
     *handle_pp = NULL;
 }
 
-dynamic_array_s *dynamic_array_create(uint32_t min_len, uint32_t max_len)
+dynamic_array_s *dynamic_array_create(hy_u32_t min_len, hy_u32_t max_len)
 {
+    dynamic_array_s *handle = NULL;
+
     if (min_len == 0 || max_len == 0 || min_len > max_len) {
         log_e("the param is error \n");
         return NULL;
     }
 
-    dynamic_array_s *handle = NULL;
     do {
         handle = calloc(1, sizeof(*handle));
         if (!handle) {

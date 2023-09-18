@@ -24,7 +24,7 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
+#include "hy_type.h"
 
 /**
  * @brief 打印FIFO相关信息
@@ -32,19 +32,17 @@ extern "C" {
 typedef enum {
     LOG_FIFO_DUMP_TYPE_ALL,              ///< 打印FIFO全部信息，按照开辟的空间打印
     LOG_FIFO_DUMP_TYPE_CONTENT,          ///< 打印FIFO里面的有效内容
-
-    LOG_FIFO_DUMP_TYPE_MAX = 0xffffffff,
 } log_fifo_dump_type_e;
 
 /**
  * @brief fifo上下文
  */
 typedef struct {
-    uint32_t    len;                    ///< FIFO长度
+    hy_u32_t    len;                    ///< FIFO长度
     char        *buf;                   ///< FIFO数据
 
-    uint32_t    read_pos;               ///< 读位置
-    uint32_t    write_pos;              ///< 写位置
+    hy_u32_t    read_pos;               ///< 读位置
+    hy_u32_t    write_pos;              ///< 写位置
 } log_fifo_s;
 
 /**
@@ -54,7 +52,7 @@ typedef struct {
  *
  * @return 成功返回句柄，失败返回NULL
  */
-log_fifo_s *log_fifo_create(uint32_t len);
+log_fifo_s *log_fifo_create(hy_u32_t len);
 
 /**
  * @brief 销毁fifo模块
@@ -72,7 +70,7 @@ void log_fifo_destroy(log_fifo_s **handle_pp);
  *
  * @return 成功返回写入的长度，失败返回-1
  */
-int32_t log_fifo_write(log_fifo_s *handle, const void *buf, uint32_t len);
+hy_s32_t log_fifo_write(log_fifo_s *handle, const void *buf, hy_u32_t len);
 
 /**
  * @brief 从fifo中读取数据
@@ -83,7 +81,7 @@ int32_t log_fifo_write(log_fifo_s *handle, const void *buf, uint32_t len);
  *
  * @return 成功返回读取的长度，失败返回-1
  */
-int32_t log_fifo_read(log_fifo_s *handle, void *buf, uint32_t len);
+hy_s32_t log_fifo_read(log_fifo_s *handle, void *buf, hy_u32_t len);
 
 /**
  * @brief 从fifo中读取数据
@@ -96,7 +94,7 @@ int32_t log_fifo_read(log_fifo_s *handle, void *buf, uint32_t len);
  *
  * @note 该操作不会删除数据
  */
-int32_t log_fifo_read_peek(log_fifo_s *handle, void *buf, uint32_t len);
+hy_s32_t log_fifo_read_peek(log_fifo_s *handle, void *buf, hy_u32_t len);
 
 /**
  * @brief 打印fifo中的数据

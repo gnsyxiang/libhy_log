@@ -32,6 +32,8 @@ extern "C" {
 #include <unistd.h>
 #include <sys/syscall.h>      /* Definition of SYS_* constants */
 
+#include "hy_type.h"
+
 /**
  * @brief 打印等级定义
  *
@@ -54,7 +56,7 @@ typedef struct {
     char                *err_str;           ///< 错误信息，由strerror(errno)提供
     const char          *file;              ///< 文件名，去掉了路径
     const char          *func;              ///< 函数名
-    uint32_t            line;               ///< 行号
+    hy_u32_t            line;               ///< 行号
     pthread_t           tid;                ///< 线程id
     long                pid;                ///< 进程id
 
@@ -125,7 +127,7 @@ typedef enum {
 typedef struct {
     HyLogLevel_e        level;              ///< 打印等级
 
-    uint32_t            output_format;      ///< log输出格式
+    hy_u32_t            output_format;      ///< log输出格式
 } HyLogSaveConfig_s;
 
 /**
@@ -134,7 +136,7 @@ typedef struct {
 typedef struct {
     HyLogSaveConfig_s   save_c;             ///< 配置参数，详见HyLogSaveConfig_s
 
-    uint32_t            fifo_len;           ///< fifo大小，异步方式用于保存log
+    hy_u32_t            fifo_len;           ///< fifo大小，异步方式用于保存log
     const char          *config_file;       ///< 配置文件路径
 } HyLogConfig_s;
 
@@ -145,7 +147,7 @@ typedef struct {
  *
  * @return 成功返回0，失败返回-1
  */
-int32_t HyLogInit(HyLogConfig_s *log_c);
+hy_s32_t HyLogInit(HyLogConfig_s *log_c);
 
 /**
  * @brief 初始化log模块宏

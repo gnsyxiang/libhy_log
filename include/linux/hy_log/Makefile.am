@@ -30,13 +30,12 @@ install_includedir      = $(includedir)/@project_name@
 # add necessary content
 # ---------------------
 _no_install_headers_com += \
-                           dynamic_array.h          \
-                           format_cb.h              \
-                           log_fifo.h               \
-                           log.h                    \
-                           process_handle_data.h    \
-                           process_single.h         \
-                           thread_specific_data.h
+                           dynamic_array.h \
+                           format_cb.h \
+                           log.h \
+                           log_fifo.h \
+                           thread_specific.h \
+                           uart.h
 
 _install_headers_com    += \
                            hy_log.h
@@ -46,4 +45,3 @@ _install_headers_com    += \
 # ------------------
 noinst_HEADERS          = $(_no_install_headers_com)
 install_include_HEADERS = $(_install_headers_com)
-

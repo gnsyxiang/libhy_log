@@ -18,6 +18,8 @@
  *     last modified: 21/04 2022 15:43
  */
 #include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
 
 #include "log.h"
 
@@ -64,16 +66,16 @@
  */
 #define USE_MB
 
-static void _hex(const void *_buf, uint32_t len, int32_t flag)
+static void _hex(const void *_buf, hy_u32_t len, hy_s32_t flag)
 {
-    int32_t cnt = 0;
+    hy_s32_t cnt = 0;
     const unsigned char *buf = (const unsigned char *)_buf;
 
     if (len <= 0) {
         return;
     }
 
-    for (uint32_t i = 0; i < len; i++) {
+    for (hy_u32_t i = 0; i < len; i++) {
         if (flag == 1) {
             if (buf[i] == 0x0d || buf[i] == 0x0a || buf[i] < 32 || buf[i] >= 127) {
                 printf("%02x[ ]  ", buf[i]);
@@ -97,7 +99,7 @@ static void _dump_content(log_fifo_s *handle)
 {
     assert(handle);
 
-    uint32_t len_tmp;
+    hy_u32_t len_tmp;
 
     len_tmp = handle->len - LOG_FIFO_READ_POS(handle);
     len_tmp = HY_LOG_MIN(len_tmp, LOG_FIFO_USED_LEN(handle));
@@ -126,9 +128,9 @@ void fifo_dump(log_fifo_s *handle, log_fifo_dump_type_e type)
     }
 }
 
-static int32_t _fifo_read_com(log_fifo_s *handle, void *buf, uint32_t len)
+static hy_s32_t _fifo_read_com(log_fifo_s *handle, void *buf, hy_u32_t len)
 {
-    uint32_t len_tmp = 0;
+    hy_u32_t len_tmp = 0;
 
     if (LOG_FIFO_IS_EMPTY(handle)) {
         return 0;
@@ -154,7 +156,7 @@ static int32_t _fifo_read_com(log_fifo_s *handle, void *buf, uint32_t len)
     return len;
 }
 
-int32_t log_fifo_read(log_fifo_s *handle, void *buf, uint32_t len)
+hy_s32_t log_fifo_read(log_fifo_s *handle, void *buf, hy_u32_t len)
 {
     assert(handle);
     assert(buf);
@@ -165,7 +167,7 @@ int32_t log_fifo_read(log_fifo_s *handle, void *buf, uint32_t len)
     return len;
 }
 
-int32_t log_fifo_read_peek(log_fifo_s *handle, void *buf, uint32_t len)
+hy_s32_t log_fifo_read_peek(log_fifo_s *handle, void *buf, hy_u32_t len)
 {
     assert(handle);
     assert(buf);
@@ -173,12 +175,12 @@ int32_t log_fifo_read_peek(log_fifo_s *handle, void *buf, uint32_t len)
     return _fifo_read_com(handle, buf, len);
 }
 
-int32_t log_fifo_write(log_fifo_s *handle, const void *buf, uint32_t len)
+hy_s32_t log_fifo_write(log_fifo_s *handle, const void *buf, hy_u32_t len)
 {
     assert(handle);
     assert(buf);
 
-    uint32_t len_tmp = 0;
+    hy_u32_t len_tmp = 0;
 
     if (len > LOG_FIFO_FREE_LEN(handle)) {
         log_e("write failed, len: %u, free_len: %u \n",
@@ -206,10 +208,10 @@ int32_t log_fifo_write(log_fifo_s *handle, const void *buf, uint32_t len)
     return len;
 }
 
-static uint32_t _num_to_2n(uint32_t num)
+static hy_u32_t _num_to_2n(hy_u32_t num)
 {
-    uint32_t i = 1;
-    uint32_t num_tmp = num;
+    hy_u32_t i = 1;
+    hy_u32_t num_tmp = num;
 
     while (num >>= 1) {
         i <<= 1;
@@ -234,7 +236,7 @@ void log_fifo_destroy(log_fifo_s **handle_pp)
     *handle_pp = NULL;
 }
 
-log_fifo_s *log_fifo_create(uint32_t len)
+log_fifo_s *log_fifo_create(hy_u32_t len)
 {
     if (len == 0) {
         log_e("the param is error \n");
@@ -244,9 +246,9 @@ log_fifo_s *log_fifo_create(uint32_t len)
     log_fifo_s *handle = NULL;
     do {
         if (!_IS_POWER_OF_2(len)) {
-            log_e("old len: %d \n", len);
+            log_i("old len: %d \n", len);
             len = _num_to_2n(len);
-            log_e("len must be power of 2, new len: %d \n", len);
+            log_i("len must be power of 2, new len: %d \n", len);
         }
 
         handle = calloc(1, sizeof(*handle));
