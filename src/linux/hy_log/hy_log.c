@@ -21,7 +21,7 @@
 #include <stdio.h>
 
 #include "format_cb.h"
-#include "log_private.h"
+#include "log.h"
 #include "dynamic_array.h"
 #include "process_single.h"
 #include "thread_specific_data.h"

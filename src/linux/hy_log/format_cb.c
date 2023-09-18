@@ -23,7 +23,7 @@
 #include <string.h>
 
 #include "hy_printf.h"
-#include "log_private.h"
+#include "log.h"
 
 #include "format_cb.h"
 

@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "log_private.h"
+#include "log.h"
 #include "config.h"
 
 #include "process_handle_data.h"

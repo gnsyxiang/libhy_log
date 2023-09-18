@@ -33,7 +33,7 @@ _no_install_headers_com += \
                            dynamic_array.h          \
                            format_cb.h              \
                            log_fifo.h               \
-                           log_private.h            \
+                           log.h                    \
                            process_handle_data.h    \
                            process_single.h         \
                            thread_specific_data.h

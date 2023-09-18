@@ -19,7 +19,7 @@
  */
 #include <stdio.h>
 
-#include "log_private.h"
+#include "log.h"
 
 #include "log_fifo.h"
 

@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "log_private.h"
+#include "log.h"
 #include "hy_printf.h"
 
 #include "dynamic_array.h"

@@ -20,7 +20,7 @@
 #include <stdio.h>
 
 #include "format_cb.h"
-#include "log_private.h"
+#include "log.h"
 #include "process_handle_data.h"
 
 #include "process_single.h"
