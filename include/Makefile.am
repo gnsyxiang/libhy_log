@@ -31,11 +31,11 @@ install_includedir      = $(includedir)/@project_name@
 # ---------------------
 # add necessary content
 # ---------------------
-_no_install_headers_com +=
+_no_install_headers_com += \
+                           hy_printf.h
 
 _install_headers_com    += \
-                           hy_type.h \
-                           hy_printf.h
+                           hy_type.h
 
 # ------------------
 # make install files
