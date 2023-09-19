@@ -50,19 +50,19 @@ extern "C" {
 
 #define log_e(fmt, ...)                                                     \
 do {                                                                        \
-    char buf[32] = {0};                                                     \
-    log_time(buf, sizeof(buf));                                             \
+    char _buf[32] = {0};                                                    \
+    log_time(_buf, sizeof(_buf));                                           \
     printf("%s[%s:%d](errno: %d, errstr: %s)",                              \
-           buf, __func__, __LINE__, errno, strerror(errno));                \
+           _buf, __func__, __LINE__, errno, strerror(errno));               \
     printf(fmt, ##__VA_ARGS__);                                             \
 } while (0)
 
 #ifdef HY_LOG_DEBUG
 #define log_i(fmt, ...)                                                     \
 do {                                                                        \
-    char buf[32] = {0};                                                     \
-    log_time(buf, sizeof(buf));                                             \
-    printf("%s[%s:%d]", buf, __func__, __LINE__);                           \
+    char _buf[32] = {0};                                                    \
+    log_time(_buf, sizeof(_buf));                                           \
+    printf("%s[%s:%d]", _buf, __func__, __LINE__);                          \
     printf(fmt, ##__VA_ARGS__);                                             \
 } while (0)
 #else
