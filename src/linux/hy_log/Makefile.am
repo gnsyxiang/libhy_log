@@ -51,6 +51,7 @@ _sources_com    += \
                    dynamic_array.c \
                    format_cb.c \
                    log_fifo.c \
+                   net.c \
                    thread_specific.c
 
 _cppflags_com   += \

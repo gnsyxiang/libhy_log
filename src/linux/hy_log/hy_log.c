@@ -29,22 +29,23 @@
 #include "thread_specific.h"
 #include "log_fifo.h"
 #include "uart.h"
+#include "net.h"
 
 #include "hy_log.h"
 
 #define _DYNAMIC_ARRAY_MIN_LEN  (4 * 1024)
 #define _DYNAMIC_ARRAY_MAX_LEN  (10 * 1024)
 
-#define _LOG_WRITER_NUM         (4)
+#define _LOGER_NUM              (4)
 
 #define _LOG_THREAD_NAME        "hy_log_loop"
 
 typedef enum {
-    LOG_WRITER_UART,
-    LOG_WRITER_NET,
+    LOGER_UART,
+    LOGER_NET,
 
-    LOG_WRITER_MAX,
-} _log_writer_e; 
+    LOGER_MAX,
+} _loger_e; 
 
 typedef struct {
     HyLogSaveConfig_s   save_c;
@@ -59,7 +60,7 @@ typedef struct {
     pthread_mutex_t     mutex;
     pthread_cond_t      cond;
 
-    void                *writer_h[LOG_WRITER_MAX];
+    void                *loger_h[LOGER_MAX];
 } _log_context_s;
 
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
@@ -95,8 +96,8 @@ static void *_log_loop_cb(void *args)
         void *handle;
         hy_s32_t (*write)(void *handle, char *buf, hy_u32_t len);
     } loger_write_arr[] = {
-        {LOG_WRITER_UART, handle->writer_h[LOG_WRITER_UART], uart_write},
-        {LOG_WRITER_NET,  NULL, NULL},
+        {LOGER_UART,    handle->loger_h[LOGER_UART],    uart_write},
+        {LOGER_NET,     handle->loger_h[LOGER_NET],     net_write},
     };
 
     pthread_setname_np(handle->id, _LOG_THREAD_NAME);
@@ -209,8 +210,8 @@ void HyLogDeInit(void)
         void *handle;
         void (*destroy)(void **handle_pp);
     } loger_destroy_arr[] = {
-        {LOG_WRITER_UART, handle.writer_h[LOG_WRITER_UART], uart_destroy},
-        {LOG_WRITER_NET,  NULL, NULL},
+        {LOGER_UART,    handle.loger_h[LOGER_UART], uart_destroy},
+        {LOGER_NET,     handle.loger_h[LOGER_NET],  net_destroy},
     };
     for (hy_u32_t i = 0; i < LOG_ARRAY_CNT(loger_destroy_arr); i++) {
         if (loger_destroy_arr[i].destroy) {
@@ -263,9 +264,19 @@ hy_s32_t HyLogInit(HyLogConfig_s *log_c)
 
         uart_config_s uart_c;
         memset(&uart_c, 0, sizeof(uart_config_s));
-        handle.writer_h[LOG_WRITER_UART] = uart_create(&uart_c);
-        if (!handle.writer_h[LOG_WRITER_UART]) {
+        handle.loger_h[LOGER_UART] = uart_create(&uart_c);
+        if (!handle.loger_h[LOGER_UART]) {
             log_e("uart_create failed \n");
+            break;
+        }
+
+        net_config_s net_c;
+        memset(&net_c, 0, sizeof(net_config_s));
+        net_c.ip = NULL;
+        net_c.port = 50000;
+        handle.loger_h[LOGER_NET] = net_create(&net_c);
+        if (!handle.loger_h[LOGER_NET]) {
+            log_e("net_create failed \n");
             break;
         }
 

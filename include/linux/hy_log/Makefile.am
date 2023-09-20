@@ -34,6 +34,7 @@ _no_install_headers_com += \
                            format_cb.h \
                            log.h \
                            log_fifo.h \
+                           net.h \
                            thread_specific.h \
                            uart.h
 
