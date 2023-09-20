@@ -74,3 +74,15 @@ libhy_loger_la_CXXFLAGS     = $(_cxxflags_com)
 libhy_loger_la_LDFLAGS      = $(_ldflags_com)
 libhy_loger_la_LIBADD       = $(_ldadd_com)
 
+# ------------------
+# make install files
+# ------------------
+pkgconfig_DATA      = @project_name@.pc
+
+# ---------------
+# make dist files
+# ---------------
+_dist_files_com     = @project_name@.pc.in
+EXTRA_DIST          = $(_dist_files_com)
+
+DISTCLEANFILES      = @project_name@.pc

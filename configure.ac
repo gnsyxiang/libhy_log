@@ -72,7 +72,8 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([atexit gettimeofday localtime_r memset strerror strrchr])
 
 AC_CONFIG_FILES([Makefile
-                 $project_name.pc
+                 src/linux/hy_log/$project_name.pc
+                 src/linux/zlog/$project_name.pc
                  build-script/Makefile
                  build-script/arterytek/Makefile
                  build-script/arterytek/at32f4xx/Makefile
