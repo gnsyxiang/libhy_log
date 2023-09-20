@@ -77,6 +77,7 @@ static void *_listen_loop_cb(void *args)
             new_fd = accept(handle->listen_fd, (struct sockaddr *)&client_addr, &addr_len);
             if (-1 == new_fd) {
                 log_e("unix accept failed \n");
+                break;
             }
 
             if (handle->client_fd_cnt == _CLIENT_FD_MAX) {
@@ -130,7 +131,7 @@ static hy_s32_t _listen_fd_create(net_s *handle, net_config_s *net_c)
         }
 
         ret = setsockopt(handle->listen_fd, SOL_SOCKET, SO_REUSEADDR, &flag,sizeof(flag));
-        if (ret == -1){
+        if (ret == -1) {
             log_e("setsockopt failed \n");
             break;
         }
@@ -151,7 +152,7 @@ static hy_s32_t _listen_fd_create(net_s *handle, net_config_s *net_c)
             break;
         }
 
-        log_i("listen_fd: %d \n", handle.listen_fd);
+        log_i("listen_fd: %d \n", handle->listen_fd);
         return 0;
     } while(0);
 

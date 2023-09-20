@@ -132,7 +132,7 @@ static void *_log_loop_cb(void *args)
         pthread_mutex_unlock(&handle->mutex);
 
         for (hy_u32_t i = 0; i < LOG_ARRAY_CNT(loger_write_arr); i++) {
-            if (loger_write_arr[i].write) {
+            if (loger_write_arr[i].handle && loger_write_arr[i].write) {
                 loger_write_arr[i].write(loger_write_arr[i].handle, buf, ret);
             }
         }
@@ -214,7 +214,7 @@ void HyLogDeInit(void)
         {LOGER_NET,     handle.loger_h[LOGER_NET],  net_destroy},
     };
     for (hy_u32_t i = 0; i < LOG_ARRAY_CNT(loger_destroy_arr); i++) {
-        if (loger_destroy_arr[i].destroy) {
+        if (loger_destroy_arr[i].handle && loger_destroy_arr[i].destroy) {
             loger_destroy_arr[i].destroy(&loger_destroy_arr[i].handle);
         }
     }
@@ -270,13 +270,15 @@ hy_s32_t HyLogInit(HyLogConfig_s *log_c)
             break;
         }
 
-        net_config_s net_c;
-        memset(&net_c, 0, sizeof(net_config_s));
-        net_c.port = log_c->port;
-        handle.loger_h[LOGER_NET] = net_create(&net_c);
-        if (!handle.loger_h[LOGER_NET]) {
-            log_e("net_create failed \n");
-            break;
+        if (log_c->port) {
+            net_config_s net_c;
+            memset(&net_c, 0, sizeof(net_config_s));
+            net_c.port = log_c->port;
+            handle.loger_h[LOGER_NET] = net_create(&net_c);
+            if (!handle.loger_h[LOGER_NET]) {
+                log_e("net_create failed \n");
+                break;
+            }
         }
 
         if (0 != pthread_mutex_init(&handle.mutex, NULL)) {

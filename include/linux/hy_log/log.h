@@ -48,25 +48,26 @@ extern "C" {
           tm.tm_hour, tm.tm_min, tm.tm_sec, (hy_u32_t)tv.tv_usec / 1000);   \
  })
 
-#define log_e(fmt, ...)                                                     \
-do {                                                                        \
-    char _buf[32] = {0};                                                    \
-    log_time(_buf, sizeof(_buf));                                           \
-    printf("%s[%s:%d](errno: %d, errstr: %s)",                              \
-           _buf, __func__, __LINE__, errno, strerror(errno));               \
-    printf(fmt, ##__VA_ARGS__);                                             \
-} while (0)
-
 #ifdef HY_LOG_DEBUG
 #define log_i(fmt, ...)                                                     \
 do {                                                                        \
     char _buf[32] = {0};                                                    \
     log_time(_buf, sizeof(_buf));                                           \
-    printf("%s[%s:%d]", _buf, __func__, __LINE__);                          \
+    printf("%s[%s:%d] ", _buf, __func__, __LINE__);                         \
+    printf(fmt, ##__VA_ARGS__);                                             \
+} while (0)
+
+#define log_e(fmt, ...)                                                     \
+do {                                                                        \
+    char _buf[32] = {0};                                                    \
+    log_time(_buf, sizeof(_buf));                                           \
+    printf("%s[%s:%d](errno: %d, errstr: %s) ",                             \
+           _buf, __func__, __LINE__, errno, strerror(errno));               \
     printf(fmt, ##__VA_ARGS__);                                             \
 } while (0)
 #else
 #define log_i(fmt, ...)
+#define log_e(fmt, ...)
 #endif
 
 #ifdef __cplusplus
