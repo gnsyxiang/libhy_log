@@ -138,6 +138,7 @@ typedef struct {
 
     hy_u32_t            fifo_len;           ///< fifo大小，异步方式用于保存log
     const char          *config_file;       ///< 配置文件路径
+    hy_u16_t            port;               ///< 配置服务器端口号，等于0不开启网络服务
 } HyLogConfig_s;
 
 /**
@@ -146,6 +147,8 @@ typedef struct {
  * @param log_c 配置参数，详见HyLogConfig_s
  *
  * @return 成功返回0，失败返回-1
+ *
+ * @note 使用该模块时，需要在上层忽略SIGPIPE信号，否则程序会退出
  */
 hy_s32_t HyLogInit(HyLogConfig_s *log_c);
 
@@ -156,18 +159,20 @@ hy_s32_t HyLogInit(HyLogConfig_s *log_c);
  * @param _level 等级
  * @param _output_format log输出格式
  * @param _config_file 配置文件
+ * @param _port 配置服务端端口号
  *
  * @return 成功返回0，失败返回-1
  */
-#define HyLogInit_m(_fifo_len, _level, _output_format, _config_file)    \
-({                                                                      \
-    HyLogConfig_s log_c;                                                \
-    memset(&log_c, '\0', sizeof(log_c));                                \
-    log_c.fifo_len                  = _fifo_len;                        \
-    log_c.config_file               = _config_file;                     \
-    log_c.save_c.level              = _level;                           \
-    log_c.save_c.output_format      = _output_format;                   \
-    HyLogInit(&log_c);                                                  \
+#define HyLogInit_m(_fifo_len, _level, _output_format, _config_file, _port)     \
+({                                                                              \
+    HyLogConfig_s _log_c;                                                       \
+    memset(&_log_c, '\0', sizeof(_log_c));                                      \
+    _log_c.fifo_len             = _fifo_len;                                    \
+    _log_c.config_file          = _config_file;                                 \
+    _log_c.save_c.level         = _level;                                       \
+    _log_c.save_c.output_format = _output_format;                               \
+    _log_c.port                 = _port;                                        \
+    HyLogInit(&_log_c);                                                         \
 })
 
 /**

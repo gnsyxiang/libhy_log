@@ -136,14 +136,9 @@ static hy_s32_t _listen_fd_create(net_s *handle, net_config_s *net_c)
         }
 
         memset(&addr, 0, sizeof(addr));
-        addr.sin_family = AF_INET;
-        addr.sin_port = htons(net_c->port);
-        if (net_c->ip) {
-            addr.sin_addr.s_addr = inet_addr(net_c->ip);
-        } else {
-            addr.sin_addr.s_addr = INADDR_ANY;
-        }
-
+        addr.sin_family         = AF_INET;
+        addr.sin_port           = htons(net_c->port);
+        addr.sin_addr.s_addr    = INADDR_ANY;
         ret = bind(handle->listen_fd, (struct sockaddr *)&addr, sizeof(addr));
         if (ret < 0) {
             log_e("bind failed \n");

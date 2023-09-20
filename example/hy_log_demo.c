@@ -19,17 +19,22 @@
  */
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
+#include <signal.h>
 
 #include "hy_log.h"
 
 int main(int argc, char const* argv[])
 {
+    signal(SIGPIPE, SIG_IGN);
+
     HyLogConfig_s log_c;
     memset(&log_c, 0, sizeof(log_c));
     log_c.fifo_len                  = 10 * 1024;
     log_c.save_c.level              = HY_LOG_LEVEL_TRACE;
     log_c.save_c.output_format      = HY_LOG_OUTFORMAT_ALL_NO_PID_ID;
     log_c.config_file               = "../res/hy_log/zlog.conf";
+    log_c.port                      = 50000;
 
     if (0 != HyLogInit(&log_c)) {
         printf("HyLogInit error \n");
@@ -42,6 +47,11 @@ int main(int argc, char const* argv[])
     LOGW("-4-hello log \n");
     LOGE("-5-hello log \n");
     LOGES("-6-hello log \n");
+
+    while (1) {
+        LOGW("-4-hello log \n");
+        sleep(1);
+    }
 
     HyLogDeInit();
 

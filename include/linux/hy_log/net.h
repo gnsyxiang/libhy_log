@@ -27,13 +27,13 @@ extern "C" {
 #include "hy_type.h"
 
 typedef struct {
+    hy_s32_t            reserve;
 } net_save_config_s;
 
 typedef struct {
-    net_save_config_s save_c;
+    net_save_config_s   save_c;
 
-    const char *ip;
-    hy_u16_t port;
+    hy_u16_t            port;
 } net_config_s;
 
 void *net_create(net_config_s *net_c);

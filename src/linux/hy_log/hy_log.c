@@ -272,8 +272,7 @@ hy_s32_t HyLogInit(HyLogConfig_s *log_c)
 
         net_config_s net_c;
         memset(&net_c, 0, sizeof(net_config_s));
-        net_c.ip = NULL;
-        net_c.port = 50000;
+        net_c.port = log_c->port;
         handle.loger_h[LOGER_NET] = net_create(&net_c);
         if (!handle.loger_h[LOGER_NET]) {
             log_e("net_create failed \n");
