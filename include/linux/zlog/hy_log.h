@@ -2,7 +2,7 @@
  *
  * Release under GPLv-3.0.
  * 
- * @file    hy_zlog.h
+ * @file    hy_log.h
  * @brief   
  * @author  gnsyxiang <gnsyxiang@163.com>
  * @date    28/04 2023 15:13
@@ -17,8 +17,8 @@
  * 
  *     last modified: 28/04 2023 15:13
  */
-#ifndef __LIBHY_LOG_INCLUDE_HY_ZLOG_H_
-#define __LIBHY_LOG_INCLUDE_HY_ZLOG_H_
+#ifndef __LIBHY_LOG_INCLUDE_HY_LOG_H_
+#define __LIBHY_LOG_INCLUDE_HY_LOG_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -27,6 +27,8 @@ extern "C" {
 #include <stdint.h>
 
 #include <zlog.h>
+
+#include "hy_type.h"
 
 extern zlog_category_t *HyGMyCategory;
 
@@ -50,15 +52,13 @@ typedef enum {
  * @brief 配置log输出的格式
  */
 typedef enum {
-    HY_LOG_OUTPUT_FORMAT_COLOR          = (0x1 << 0),   ///< 颜色输出
-    HY_LOG_OUTPUT_FORMAT_LEVEL_INFO     = (0x1 << 1),   ///< 等级提示字母
-    HY_LOG_OUTPUT_FORMAT_TIME           = (0x1 << 2),   ///< 时间输出
-    HY_LOG_OUTPUT_FORMAT_PID_ID         = (0x1 << 3),   ///< 进程线程id输出
-    HY_LOG_OUTPUT_FORMAT_FUNC_LINE      = (0x1 << 4),   ///< 函数行号输出
-    HY_LOG_OUTPUT_FORMAT_USR_MSG        = (0x1 << 5),   ///< 函数行号输出
-    HY_LOG_OUTPUT_FORMAT_COLOR_RESET    = (0x1 << 6),   ///< 颜色输出恢复
-
-    HY_LOG_OUTPUT_FORMAT_MAX            = 0xffffffff,
+    HY_LOG_OUTPUT_FORMAT_COLOR          = (0x1U << 0),  ///< 颜色输出
+    HY_LOG_OUTPUT_FORMAT_LEVEL_INFO     = (0x1U << 1),  ///< 等级提示字母
+    HY_LOG_OUTPUT_FORMAT_TIME           = (0x1U << 2),  ///< 时间输出
+    HY_LOG_OUTPUT_FORMAT_PID_ID         = (0x1U << 3),  ///< 进程线程id输出
+    HY_LOG_OUTPUT_FORMAT_FUNC_LINE      = (0x1U << 4),  ///< 函数行号输出
+    HY_LOG_OUTPUT_FORMAT_USR_MSG        = (0x1U << 5),  ///< 用户数据输出
+    HY_LOG_OUTPUT_FORMAT_COLOR_RESET    = (0x1U << 6),  ///< 颜色输出恢复
 } HyLogOutputFormat_e;
 
 /**
@@ -111,27 +111,30 @@ typedef enum {
 typedef struct {
     HyLogLevel_e        level;              ///< 打印等级
 
-    uint32_t            output_format;      ///< log输出格式
+    hy_u32_t            output_format;      ///< log输出格式
 } HyLogSaveConfig_s;
 
 /**
  * @brief 配置参数
  */
 typedef struct {
-    HyLogSaveConfig_s   save_c;             ///< 配置参数
+    HyLogSaveConfig_s   save_c;             ///< 配置参数，详见HyLogSaveConfig_s
 
-    uint32_t            fifo_len;           ///< fifo大小，异步方式用于保存log
+    hy_u32_t            fifo_len;           ///< fifo大小，异步方式用于保存log
     const char          *config_file;       ///< 配置文件路径
+    hy_u16_t            port;               ///< 配置服务器端口号，等于0不开启网络服务
 } HyLogConfig_s;
 
 /**
  * @brief 初始化log模块
  *
- * @param log_c 配置参数
+ * @param log_c 配置参数，详见HyLogConfig_s
  *
  * @return 成功返回0，失败返回-1
+ *
+ * @note 使用该模块时，需要在上层忽略SIGPIPE信号，否则程序会退出
  */
-int32_t HyLogInit(HyLogConfig_s *log_c);
+hy_s32_t HyLogInit(HyLogConfig_s *log_c);
 
 /**
  * @brief 初始化log模块宏
@@ -140,18 +143,20 @@ int32_t HyLogInit(HyLogConfig_s *log_c);
  * @param _level 等级
  * @param _output_format log输出格式
  * @param _config_file 配置文件
+ * @param _port 配置服务端端口号
  *
  * @return 成功返回0，失败返回-1
  */
-#define HyLogInit_m(_fifo_len, _level, _output_format, _config_file)    \
-({                                                                      \
-    HyLogConfig_s log_c;                                                \
-    memset(&log_c, '\0', sizeof(log_c));                                \
-    log_c.fifo_len                  = _fifo_len;                        \
-    log_c.config_file               = _config_file;                     \
-    log_c.save_c.level              = _level;                           \
-    log_c.save_c.output_format      = _output_format;                   \
-    HyLogInit(&log_c);                                                  \
+#define HyLogInit_m(_fifo_len, _level, _output_format, _config_file, _port)     \
+({                                                                              \
+    HyLogConfig_s _log_c;                                                       \
+    memset(&_log_c, '\0', sizeof(_log_c));                                      \
+    _log_c.fifo_len             = _fifo_len;                                    \
+    _log_c.config_file          = _config_file;                                 \
+    _log_c.save_c.level         = _level;                                       \
+    _log_c.save_c.output_format = _output_format;                               \
+    _log_c.port                 = _port;                                        \
+    HyLogInit(&_log_c);                                                         \
 })
 
 /**
