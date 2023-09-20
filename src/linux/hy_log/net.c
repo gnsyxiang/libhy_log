@@ -199,6 +199,8 @@ void net_destroy(void **handle_pp)
     close(handle->pfd[1]);
     close(handle->pfd[0]);
 
+    pthread_join(handle->id, NULL);
+
     _listen_fd_destroy(handle);
 
     log_i("net destroy, handle: %p \n", handle);
