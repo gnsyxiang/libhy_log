@@ -46,13 +46,13 @@ _include_com    += \
                    -I$(top_srcdir)/include
 
 _sources_com    += \
-                   uart.c \
-                   hy_log.c \
                    dynamic_array.c \
                    format_cb.c \
+                   hy_log.c \
                    log_fifo.c \
                    net.c \
-                   thread_specific.c
+                   thread_specific.c \
+                   uart.c
 
 _cppflags_com   += \
                    $(_no_error_com) \

@@ -32,7 +32,7 @@ install_includedir      = $(includedir)/@project_name@
 # add necessary content
 # ---------------------
 _no_install_headers_com += \
-                           hy_printf.h
+                           printf_my.h
 
 _install_headers_com    += \
                            hy_type.h

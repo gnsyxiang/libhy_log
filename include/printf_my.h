@@ -2,7 +2,7 @@
  *
  * Release under GPLv-3.0.
  * 
- * @file    hy_printf.h
+ * @file    printf_my.h
  * @brief   
  * @author  gnsyxiang <gnsyxiang@163.com>
  * @date    08/01 2022 11:28
@@ -17,8 +17,8 @@
  * 
  *     last modified: 08/01 2022 11:28
  */
-#ifndef __LIBHY_LOG_INCLUDE_HY_PRINTF_H_
-#define __LIBHY_LOG_INCLUDE_HY_PRINTF_H_
+#ifndef __LIBHY_LOG_INCLUDE_PRINTF_MY_H_
+#define __LIBHY_LOG_INCLUDE_PRINTF_MY_H_
 
 #ifdef __cplusplus
 extern "C" {

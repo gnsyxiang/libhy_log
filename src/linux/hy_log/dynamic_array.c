@@ -22,7 +22,7 @@
 #include <stdlib.h>
 
 #include "log.h"
-#include "hy_printf.h"
+#include "printf_my.h"
 
 #include "dynamic_array.h"
 
