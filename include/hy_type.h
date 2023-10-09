@@ -5,7 +5,7 @@
  * @file    hy_type.h
  * @brief   
  * @author  gnsyxiang <gnsyxiang@163.com>
- * @date    17/08 2023 14:00
+ * @date    25/10 2021 19:58
  * @version v0.0.1
  * 
  * @since    note
@@ -13,9 +13,9 @@
  * 
  *     change log:
  *     NO.     Author              Date            Modified
- *     00      zhenquan.qiu        17/08 2023      create the file
+ *     00      zhenquan.qiu        25/10 2021      create the file
  * 
- *     last modified: 17/08 2023 14:00
+ *     last modified: 25/10 2021 19:58
  */
 #ifndef __LIBHY_LOG_INCLUDE_HY_TYPE_H_
 #define __LIBHY_LOG_INCLUDE_HY_TYPE_H_
@@ -41,6 +41,24 @@ typedef unsigned char       hy_bool_t;
 typedef char                hy_char_t;
 typedef double              hy_double_t;
 typedef float               hy_float_t;
+
+#ifndef NULL
+#define NULL (void *)0
+#endif
+
+typedef enum HyTypeFlag_e {
+    HY_TYPE_FLAG_DISABLE,
+    HY_TYPE_FLAG_OFF = HY_TYPE_FLAG_DISABLE,
+
+    HY_TYPE_FLAG_ENABLE,
+    HY_TYPE_FLAG_ON = HY_TYPE_FLAG_ENABLE,
+} HyTypeFlag_e;
+
+typedef enum HyTypeErr_e {
+    HY_TYPE_ERR_OK,
+
+    HY_TYPE_ERR_FAILD,
+} HyTypeErr_e;
 
 #ifdef __cplusplus
 }
