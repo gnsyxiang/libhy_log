@@ -22,6 +22,8 @@
 #include <unistd.h>
 #include <signal.h>
 
+#include "config.h"
+
 #include "hy_log.h"
 
 int main(int argc, char const* argv[])
@@ -48,10 +50,12 @@ int main(int argc, char const* argv[])
     LOGE("-5-hello log \n");
     LOGES("-6-hello log \n");
 
+#ifdef HAVE_SELECT_OS_LINUX
     while (1) {
         LOGW("-4-hello log \n");
         sleep(1);
     }
+#endif
 
     HyLogDeInit();
 
