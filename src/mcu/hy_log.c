@@ -21,7 +21,8 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include "hy_printf.h"
+#include "printf_my.h"
+
 #include "hy_log.h"
 
 typedef struct {
