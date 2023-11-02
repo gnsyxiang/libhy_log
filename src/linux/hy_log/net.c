@@ -59,7 +59,7 @@ static void *_listen_loop_cb(void *args)
     socklen_t addr_len = sizeof(struct sockaddr_un);
     fd_set read_fs;
     hy_u32_t cnt;
-    hy_u8_t buf;
+    hy_u8_t buf = 0;
 
     pthread_setname_np(handle->id, _LISTEN_THREAD_NAME);
 
