@@ -52,7 +52,7 @@ CHECK_ZLOG
 AC_CHECK_LIB([pthread], [pthread_create])
 
 # Checks for header files.
-AC_CHECK_HEADERS([inttypes.h stdint.h stdlib.h string.h sys/time.h unistd.h])
+AC_CHECK_HEADERS([arpa/inet.h inttypes.h stdint.h stdlib.h string.h sys/socket.h sys/time.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
@@ -65,7 +65,7 @@ AC_TYPE_UINT8_T
 
 # Checks for library functions.
 AC_FUNC_REALLOC
-AC_CHECK_FUNCS([atexit gettimeofday localtime_r memset strerror strrchr])
+AC_CHECK_FUNCS([atexit gettimeofday localtime_r memset select socket strerror strrchr])
 
 AC_CONFIG_FILES([Makefile
                  src/linux/hy_log/$project_name.pc
@@ -82,7 +82,8 @@ AC_CONFIG_FILES([Makefile
                  build-script/nxp/Makefile
                  build-script/nxp/mx6ull/Makefile
                  build-script/pc/Makefile
-                 build-script/pc/pc-chip/Makefile
+                 build-script/pc/ubuntu-pc/Makefile
+                 build-script/pc/windows-pc/Makefile
                  build-script/rock-chips/Makefile
                  build-script/rock-chips/rk3568/Makefile
                  build-script/stm32/Makefile
