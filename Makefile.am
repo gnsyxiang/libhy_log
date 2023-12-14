@@ -21,11 +21,11 @@
 include res/doxygen.am
 
 SUBDIRS = \
-          include       \
-          src           \
-          doc           \
-          example       \
-          res           \
+          include \
+          src \
+          doc \
+          example \
+          res \
           build-script
 
 if COMPILE_LIBCUNIT

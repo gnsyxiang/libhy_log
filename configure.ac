@@ -19,6 +19,12 @@ LT_INIT
 PKG_PROG_PKG_CONFIG([0.24])
 PKG_INSTALLDIR
 
+SELECT_VENDER
+SELECT_CHIP
+# SELECT_PRODUCT
+# SELECT_LANGUAGE
+SELECT_LOG_TYPE
+
 # check m4 macro
 CHECK_PROJECT_INFO
 CHECK_VERSION_INFO
@@ -26,12 +32,6 @@ CHECK_DOXYGEN
 CHECK_DEBUG_RELEASE
 # CHECK_JAVA
 CHECK_PTHREAD
-
-SELECT_VENDER
-SELECT_CHIP
-# SELECT_PRODUCT
-# SELECT_LANGUAGE
-SELECT_LOG_TYPE
 
 # Checks for programs.
 AC_PROG_CXX
@@ -70,6 +70,7 @@ AC_CHECK_FUNCS([atexit gettimeofday localtime_r memset select socket strerror st
 AC_CONFIG_FILES([Makefile
                  src/linux/hy_log/$project_name.pc
                  src/linux/zlog/$project_name.pc
+                 src/windows/$project_name.pc
                  build-script/Makefile
                  build-script/arterytek/Makefile
                  build-script/arterytek/at32f4xx/Makefile
@@ -90,12 +91,16 @@ AC_CONFIG_FILES([Makefile
                  build-script/stm32/stm32h7xx/Makefile
                  doc/Makefile
                  example/Makefile
+                 example/linux/Makefile
+                 example/mcu/Makefile
+                 example/windows/Makefile
                  include/Makefile
                  include/linux/Makefile
                  include/linux/hy_log/Makefile
                  include/linux/log4cplus/Makefile
                  include/linux/zlog/Makefile
                  include/mcu/Makefile
+                 include/windows/Makefile
                  res/Makefile
                  res/voice/Makefile
                  res/voice/cn/Makefile
@@ -106,6 +111,7 @@ AC_CONFIG_FILES([Makefile
                  src/linux/log4cplus/Makefile
                  src/linux/zlog/Makefile
                  src/mcu/Makefile
+                 src/windows/Makefile
                  test/Makefile])
 AC_OUTPUT
 
