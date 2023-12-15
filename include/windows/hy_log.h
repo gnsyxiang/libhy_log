@@ -30,7 +30,6 @@ extern "C" {
 #include <string.h>
 #include <stdarg.h>
 #include <unistd.h>
-#include <sys/syscall.h>      /* Definition of SYS_* constants */
 
 #include "hy_type.h"
 
@@ -58,7 +57,6 @@ typedef struct {
     const char          *func;              ///< 函数名
     hy_u32_t            line;               ///< 行号
     pthread_t           tid;                ///< 线程id
-    long                pid;                ///< 进程id
 
     const char          *fmt;               ///< 用户格式
     va_list             *str_args;          ///< 用户信息
@@ -71,28 +69,15 @@ typedef enum {
     HY_LOG_OUTPUT_FORMAT_COLOR          = (0x1U << 0),  ///< 颜色输出
     HY_LOG_OUTPUT_FORMAT_LEVEL_INFO     = (0x1U << 1),  ///< 等级提示字母
     HY_LOG_OUTPUT_FORMAT_TIME           = (0x1U << 2),  ///< 时间输出
-    HY_LOG_OUTPUT_FORMAT_PID_ID         = (0x1U << 3),  ///< 进程线程id输出
-    HY_LOG_OUTPUT_FORMAT_FUNC_LINE      = (0x1U << 4),  ///< 函数行号输出
-    HY_LOG_OUTPUT_FORMAT_USR_MSG        = (0x1U << 5),  ///< 用户数据输出
-    HY_LOG_OUTPUT_FORMAT_COLOR_RESET    = (0x1U << 6),  ///< 颜色输出恢复
+    HY_LOG_OUTPUT_FORMAT_FUNC_LINE      = (0x1U << 3),  ///< 函数行号输出
+    HY_LOG_OUTPUT_FORMAT_USR_MSG        = (0x1U << 4),  ///< 用户数据输出
+    HY_LOG_OUTPUT_FORMAT_COLOR_RESET    = (0x1U << 5),  ///< 颜色输出恢复
 } HyLogOutputFormat_e;
 
 /**
  * @brief 默认配置，输出所有格式
  */
 #define HY_LOG_OUTFORMAT_ALL                    \
-(HY_LOG_OUTPUT_FORMAT_COLOR                     \
-    | HY_LOG_OUTPUT_FORMAT_LEVEL_INFO           \
-    | HY_LOG_OUTPUT_FORMAT_TIME                 \
-    | HY_LOG_OUTPUT_FORMAT_PID_ID               \
-    | HY_LOG_OUTPUT_FORMAT_FUNC_LINE            \
-    | HY_LOG_OUTPUT_FORMAT_USR_MSG              \
-    | HY_LOG_OUTPUT_FORMAT_COLOR_RESET)
-
-/**
- * @brief 默认配置去除线程进程id格式
- */
-#define HY_LOG_OUTFORMAT_ALL_NO_PID_ID          \
 (HY_LOG_OUTPUT_FORMAT_COLOR                     \
     | HY_LOG_OUTPUT_FORMAT_LEVEL_INFO           \
     | HY_LOG_OUTPUT_FORMAT_TIME                 \
@@ -109,17 +94,6 @@ typedef enum {
     | HY_LOG_OUTPUT_FORMAT_PID_ID               \
     | HY_LOG_OUTPUT_FORMAT_FUNC_LINE            \
     | HY_LOG_OUTPUT_FORMAT_USR_MSG)
-
-/**
- * @brief 默认配置中去除颜色和线程进程id格式
- */
-#define HY_LOG_OUTFORMAT_ALL_NO_COLOR_PID_ID    \
-(HY_LOG_OUTPUT_FORMAT_COLOR                     \
-    | HY_LOG_OUTPUT_FORMAT_LEVEL_INFO           \
-    | HY_LOG_OUTPUT_FORMAT_TIME                 \
-    | HY_LOG_OUTPUT_FORMAT_FUNC_LINE            \
-    | HY_LOG_OUTPUT_FORMAT_USR_MSG              \
-    | HY_LOG_OUTPUT_FORMAT_COLOR_RESET)
 
 /**
  * @brief 配置参数
@@ -232,7 +206,6 @@ do {                                                        \
         addi_info.func      = __func__;                     \
         addi_info.line      = __LINE__;                     \
         addi_info.tid       = pthread_self();               \
-        addi_info.pid       = syscall(SYS_gettid);          \
         HyLogWrite(&addi_info, _fmt, ##__VA_ARGS__);        \
     }                                                       \
 } while (0)

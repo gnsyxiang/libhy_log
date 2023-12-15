@@ -18,7 +18,7 @@
 #     last modified: 26/04 2023 14:16
 # ===============================================================
 
-noinst_LTLIBRARIES = libhy_loger.la
+noinst_LTLIBRARIES = lib@project_name@_@run_os@.la
 
 # ------------------
 # defining variables
@@ -67,12 +67,12 @@ _ldflags_com    +=
 
 _ldadd_com      += $(ldadd_com)
 
-libhy_loger_la_SOURCES      = $(_sources_com)
-libhy_loger_la_CPPFLAGS     = $(_cppflags_com)
-libhy_loger_la_CFLAGS       = $(_cflags_com)
-libhy_loger_la_CXXFLAGS     = $(_cxxflags_com)
-libhy_loger_la_LDFLAGS      = $(_ldflags_com)
-libhy_loger_la_LIBADD       = $(_ldadd_com)
+lib@project_name@_@run_os@_la_SOURCES    = $(_sources_com)
+lib@project_name@_@run_os@_la_CPPFLAGS   = $(_cppflags_com)
+lib@project_name@_@run_os@_la_CFLAGS     = $(_cflags_com)
+lib@project_name@_@run_os@_la_CXXFLAGS   = $(_cxxflags_com)
+lib@project_name@_@run_os@_la_LDFLAGS    = $(_ldflags_com)
+lib@project_name@_@run_os@_la_LIBADD     = $(_ldadd_com)
 
 # ------------------
 # make install files

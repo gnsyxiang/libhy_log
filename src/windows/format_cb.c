@@ -58,18 +58,6 @@ static hy_s32_t _format_time_cb(dynamic_array_s *dynamic_array, HyLogAddiInfo_s 
     return dynamic_array_write(dynamic_array, buf, ret);
 }
 
-static hy_s32_t _format_pid_id_cb(dynamic_array_s *dynamic_array, HyLogAddiInfo_s *addi_info)
-{
-    hy_s32_t ret = 0;
-    char name[16] = {0};
-    char buf[64] = {0};
-
-    pthread_getname_np(addi_info->tid, name, sizeof(name));
-    ret = snprintf(buf, sizeof(buf), "[%ld-0x%lx(%s)]", addi_info->pid, addi_info->tid, name);
-
-    return dynamic_array_write(dynamic_array, buf, ret);
-}
-
 static hy_s32_t _format_func_line_cb(dynamic_array_s *dynamic_array, HyLogAddiInfo_s *addi_info)
 {
     char buf[128] = {0};
@@ -111,7 +99,6 @@ void format_cb_register(format_cb_t **format_cb_pp, hy_u32_t *format_cb_cnt, hy_
         {HY_LOG_OUTPUT_FORMAT_COLOR,            _format_color_cb},
         {HY_LOG_OUTPUT_FORMAT_LEVEL_INFO,       _format_level_str_cb},
         {HY_LOG_OUTPUT_FORMAT_TIME,             _format_time_cb},
-        {HY_LOG_OUTPUT_FORMAT_PID_ID,           _format_pid_id_cb},
         {HY_LOG_OUTPUT_FORMAT_FUNC_LINE,        _format_func_line_cb},
         {HY_LOG_OUTPUT_FORMAT_USR_MSG,          _format_usr_msg_cb},
         {HY_LOG_OUTPUT_FORMAT_COLOR_RESET,      _format_color_reset_cb},
