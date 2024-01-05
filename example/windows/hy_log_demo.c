@@ -36,7 +36,7 @@ int main(int argc, char const* argv[])
     log_c.save_c.level              = HY_LOG_LEVEL_TRACE;
     log_c.save_c.output_format      = HY_LOG_OUTFORMAT_ALL;
     log_c.config_file               = "../res/hy_log/zlog.conf";
-    log_c.port                      = 50000;
+    log_c.port                      = 9999;
 
     if (0 != HyLogInit(&log_c)) {
         printf("HyLogInit error \n");
