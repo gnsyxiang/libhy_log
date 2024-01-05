@@ -22,6 +22,7 @@
 #include <pthread.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "log.h"
 #include "format_cb.h"
@@ -112,6 +113,12 @@ static void *_log_loop_cb(void *args)
         memset(buf, '\0', _DYNAMIC_ARRAY_MIN_LEN);
 
         pthread_mutex_lock(&handle->mutex);
+
+        if (0 == access(HY_LOG_OPEN_DEBUG_PATH, F_OK)) {
+            HyLogLevelSet(HY_LOG_LEVEL_DEBUG);
+        } else {
+            HyLogLevelSet(HY_LOG_LEVEL_INFO);
+        }
 
         while (LOG_FIFO_IS_EMPTY(handle->fifo)) {
 

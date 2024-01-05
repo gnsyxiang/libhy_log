@@ -34,6 +34,8 @@ extern "C" {
 
 #include "hy_type.h"
 
+#define HY_LOG_OPEN_DEBUG_PATH  "/tmp/debug.log"    ///< 创建文件即可打开调试输出模式
+
 /**
  * @brief 打印等级定义
  *
