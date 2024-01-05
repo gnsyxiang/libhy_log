@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <signal.h>
 
 #include "config.h"
 
@@ -28,8 +27,6 @@
 
 int main(int argc, char const* argv[])
 {
-    signal(SIGPIPE, SIG_IGN);
-
     HyLogConfig_s log_c;
     memset(&log_c, 0, sizeof(log_c));
     log_c.fifo_len                  = 10 * 1024;
