@@ -11,7 +11,7 @@ cross_gcc_path=/opt/toolchains/esp32/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-e
 
 configure_param=
 
-cppflag=
+cppflag=-mlongcalls
 cflag=
 cxxflag=
 ldflag=
