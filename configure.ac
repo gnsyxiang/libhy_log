@@ -70,6 +70,7 @@ AC_CHECK_FUNCS([atexit gettimeofday localtime_r memset select socket strerror st
 AC_CONFIG_FILES([Makefile
                  src/linux/hy_log/$project_name.pc
                  src/linux/zlog/$project_name.pc
+                 src/mcu/$project_name.pc
                  src/windows/$project_name.pc
                  build-script/Makefile
                  build-script/arterytek/Makefile

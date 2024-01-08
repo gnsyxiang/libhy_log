@@ -64,3 +64,16 @@ lib@project_name@_@run_os@_la_CFLAGS     = $(_cflags_com)
 lib@project_name@_@run_os@_la_CXXFLAGS   = $(_cxxflags_com)
 lib@project_name@_@run_os@_la_LDFLAGS    = $(_ldflags_com)
 lib@project_name@_@run_os@_la_LIBADD     = $(_ldadd_com)
+
+# ------------------
+# make install files
+# ------------------
+pkgconfig_DATA      = @project_name@.pc
+
+# ---------------
+# make dist files
+# ---------------
+_dist_files_com     = @project_name@.pc.in
+EXTRA_DIST          = $(_dist_files_com)
+
+DISTCLEANFILES      = @project_name@.pc
