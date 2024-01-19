@@ -5,7 +5,7 @@
 # @file    Makefile.am
 # @brief   
 # @author  gnsyxiang <gnsyxiang@163.com>
-# @date    15/12 2023 16:38
+# @date    14/12 2023 16:47
 # @version v0.0.1
 # 
 # @since    note
@@ -13,9 +13,9 @@
 # 
 #     change log:
 #     NO.     Author              Date            Modified
-#     00      zhenquan.qiu        15/12 2023      create the file
+#     00      zhenquan.qiu        14/12 2023      create the file
 # 
-#     last modified: 15/12 2023 16:38
+#     last modified: 14/12 2023 16:47
 # ===============================================================
 
 # ------------------
@@ -59,7 +59,7 @@ _sources_com    +=
 
 _cppflags_com   += \
                    $(_no_error_com) \
-                   $(_include_com)  \
+                   $(_include_com) \
                    $(_define_com)
 
 _cflags_com     +=

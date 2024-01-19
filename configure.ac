@@ -43,13 +43,12 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 # AC_PROG_RANLIB
 
+# Checks for libraries.
+AC_CHECK_LIB([pthread], [pthread_create])
+
 CHECK_LIBCUNIT
 CHECK_LIBLOG4CPLUS
 CHECK_ZLOG
-
-# Checks for libraries.
-# FIXME: Replace `main' with a function in `-lpthread':
-AC_CHECK_LIB([pthread], [pthread_create])
 
 # Checks for header files.
 AC_CHECK_HEADERS([arpa/inet.h inttypes.h stdint.h stdlib.h string.h sys/socket.h sys/time.h unistd.h])
@@ -73,23 +72,11 @@ AC_CONFIG_FILES([Makefile
                  src/mcu/$project_name.pc
                  src/windows/$project_name.pc
                  build-script/Makefile
-                 build-script/arterytek/Makefile
-                 build-script/arterytek/at32f4xx/Makefile
-                 build-script/eeasytech/Makefile
-                 build-script/eeasytech/SV823/Makefile
-                 build-script/esp32/Makefile
-                 build-script/esp32/esp32/Makefile
-                 build-script/fullhan/MC6810E/Makefile
-                 build-script/fullhan/Makefile
-                 build-script/nxp/Makefile
-                 build-script/nxp/mx6ull/Makefile
                  build-script/pc/Makefile
-                 build-script/pc/ubuntu-pc/Makefile
-                 build-script/pc/windows-pc/Makefile
+                 build-script/pc/ubuntu/Makefile
+                 build-script/pc/windows/Makefile
                  build-script/rock-chips/Makefile
                  build-script/rock-chips/rk3568/Makefile
-                 build-script/stm32/Makefile
-                 build-script/stm32/stm32h7xx/Makefile
                  doc/Makefile
                  example/Makefile
                  example/linux/Makefile

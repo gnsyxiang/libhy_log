@@ -5,7 +5,7 @@
 # @file    Makefile.am
 # @brief   
 # @author  gnsyxiang <gnsyxiang@163.com>
-# @date    26/04 2023 14:16
+# @date    14/12 2023 16:50
 # @version v0.0.1
 # 
 # @since    note
@@ -13,9 +13,9 @@
 # 
 #     change log:
 #     NO.     Author              Date            Modified
-#     00      zhenquan.qiu        26/04 2023      create the file
+#     00      zhenquan.qiu        14/12 2023      create the file
 # 
-#     last modified: 26/04 2023 14:16
+#     last modified: 14/12 2023 16:50
 # ===============================================================
 
 noinst_LTLIBRARIES = lib@project_name@_@run_os@.la
@@ -25,7 +25,7 @@ noinst_LTLIBRARIES = lib@project_name@_@run_os@.la
 # ------------------
 _no_error_com   =
 _define_com     =
-_include_com    = $(INCLUDE_COM)
+_include_com    = $(include_com)
 _sources_com    =
 _cppflags_com   =
 _cflags_com     =
@@ -56,7 +56,7 @@ _sources_com    += \
 
 _cppflags_com   += \
                    $(_no_error_com) \
-                   $(_include_com)  \
+                   $(_include_com) \
                    $(_define_com)
 
 _cflags_com     +=
