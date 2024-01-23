@@ -22,8 +22,6 @@ PKG_INSTALLDIR
 SELECT_VENDER
 SELECT_CHIP
 # SELECT_PRODUCT
-# SELECT_LANGUAGE
-SELECT_LOG_TYPE
 
 # check m4 macro
 CHECK_PROJECT_INFO
@@ -47,8 +45,6 @@ AC_PROG_MAKE_SET
 AC_CHECK_LIB([pthread], [pthread_create])
 
 CHECK_LIBCUNIT
-CHECK_LIBLOG4CPLUS
-CHECK_ZLOG
 
 # Checks for header files.
 AC_CHECK_HEADERS([arpa/inet.h inttypes.h stdint.h stdlib.h string.h sys/socket.h sys/time.h unistd.h])
@@ -80,9 +76,6 @@ AC_CONFIG_FILES([Makefile
                  include/mcu/Makefile
                  include/windows/Makefile
                  res/Makefile
-                 res/voice/Makefile
-                 res/voice/cn/Makefile
-                 res/voice/en/Makefile
                  src/Makefile
                  src/linux/Makefile
                  src/mcu/Makefile

@@ -18,9 +18,6 @@
 #     last modified: 08/03 2021 08:16
 # ===============================================================
 
-SUBDIRS = \
-          voice
-
 # ------------------
 # defining variables
 # ------------------
@@ -32,10 +29,6 @@ res_DATA        =
 # make install files
 # ------------------
 res_DATA        +=
-
-if COMPILE_SELECT_LOG_TYPE_ZLOG
-res_DATA        += zlog.conf
-endif
 
 # ---------------
 # make dist files
