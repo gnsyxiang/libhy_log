@@ -46,8 +46,6 @@ dist-hook:
 		sed -i '/project_name.pc/a test/Makefile' $(top_distdir)/configure.ac; \
 		\
 		sed -i '/res/d' $(top_distdir)/configure.ac; \
-		sed -i '/project_name.pc/a res/voice/$(language)/Makefile' $(top_distdir)/configure.ac; \
-		sed -i '/project_name.pc/a res/voice/Makefile' $(top_distdir)/configure.ac; \
 		sed -i '/project_name.pc/a res/Makefile' $(top_distdir)/configure.ac; \
 		\
 		sed -i '/src/d' $(top_distdir)/configure.ac; \
