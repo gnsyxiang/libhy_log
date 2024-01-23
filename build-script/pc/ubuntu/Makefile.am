@@ -45,9 +45,10 @@ dist-hook:
 		sed -i '/project_name.pc/a test/$(run_os)/Makefile' $(top_distdir)/configure.ac; \
 		sed -i '/project_name.pc/a test/Makefile' $(top_distdir)/configure.ac; \
 		\
-		sed -i '/res\/voice/d' $(top_distdir)/configure.ac; \
-		sed -i '/project_name.pc/a res/voice/Makefile' $(top_distdir)/configure.ac; \
+		sed -i '/res/d' $(top_distdir)/configure.ac; \
 		sed -i '/project_name.pc/a res/voice/$(language)/Makefile' $(top_distdir)/configure.ac; \
+		sed -i '/project_name.pc/a res/voice/Makefile' $(top_distdir)/configure.ac; \
+		sed -i '/project_name.pc/a res/Makefile' $(top_distdir)/configure.ac; \
 		\
 		sed -i '/src/d' $(top_distdir)/configure.ac; \
 		sed -i '/project_name.pc/a src/$(run_os)/Makefile' $(top_distdir)/configure.ac; \
@@ -64,4 +65,8 @@ dist-hook:
 		sed -i '/build-script/d' $(top_distdir)/configure.ac; \
 		sed -i '/project_name.pc/a build-script/$(vender)/$(chip)/Makefile' $(top_distdir)/configure.ac; \
 		sed -i '/project_name.pc/a build-script/$(vender)/Makefile' $(top_distdir)/configure.ac; \
-		sed -i '/project_name.pc/a build-script/Makefile' $(top_distdir)/configure.ac
+		sed -i '/project_name.pc/a build-script/Makefile' $(top_distdir)/configure.ac; \
+		\
+		sed -i 's/doc\/Makefile/doc\/Makefile])/g' $(top_distdir)/configure.ac; \
+		\
+		sed -i '/AC_INIT/i m4_include([m4/check_project_info.m4])' $(top_distdir)/configure.ac

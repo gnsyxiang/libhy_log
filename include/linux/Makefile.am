@@ -18,20 +18,6 @@
 #     last modified: 14/12 2023 16:45
 # ===============================================================
 
-SUBDIRS =
-
-if COMPILE_SELECT_LOG_TYPE_HY_LOG
-SUBDIRS += hy_log
-endif
-
-if COMPILE_SELECT_LOG_TYPE_LOG4CPLUS
-SUBDIRS += log4cplus
-endif
-
-if COMPILE_SELECT_LOG_TYPE_ZLOG
-SUBDIRS += zlog
-endif
-
 # ------------------
 # defining variables
 # ------------------
@@ -43,9 +29,17 @@ install_includedir      = $(includedir)/@project_name@
 # ---------------------
 # add necessary content
 # ---------------------
-_no_install_headers_com +=
+_no_install_headers_com += \
+                           dynamic_array.h \
+                           format_cb.h \
+                           log.h \
+                           log_fifo.h \
+                           net.h \
+                           thread_specific.h \
+                           uart.h
 
-_install_headers_com    +=
+_install_headers_com    += \
+                           hy_log.h
 
 # ------------------
 # make install files

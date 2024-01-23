@@ -54,23 +54,16 @@ CHECK_ZLOG
 AC_CHECK_HEADERS([arpa/inet.h inttypes.h stdint.h stdlib.h string.h sys/socket.h sys/time.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
-AC_CHECK_HEADER_STDBOOL
 AC_C_INLINE
-AC_TYPE_INT32_T
-AC_TYPE_INT8_T
 AC_TYPE_SIZE_T
 AC_TYPE_UINT32_T
-AC_TYPE_UINT8_T
 
 # Checks for library functions.
 AC_FUNC_REALLOC
 AC_CHECK_FUNCS([atexit gettimeofday localtime_r memset select socket strerror strrchr])
 
 AC_CONFIG_FILES([Makefile
-                 src/linux/hy_log/$project_name.pc
-                 src/linux/zlog/$project_name.pc
-                 src/mcu/$project_name.pc
-                 src/windows/$project_name.pc
+                 $project_name.pc
                  build-script/Makefile
                  build-script/pc/Makefile
                  build-script/pc/ubuntu/Makefile
@@ -84,9 +77,6 @@ AC_CONFIG_FILES([Makefile
                  example/windows/Makefile
                  include/Makefile
                  include/linux/Makefile
-                 include/linux/hy_log/Makefile
-                 include/linux/log4cplus/Makefile
-                 include/linux/zlog/Makefile
                  include/mcu/Makefile
                  include/windows/Makefile
                  res/Makefile
@@ -95,12 +85,11 @@ AC_CONFIG_FILES([Makefile
                  res/voice/en/Makefile
                  src/Makefile
                  src/linux/Makefile
-                 src/linux/hy_log/Makefile
-                 src/linux/log4cplus/Makefile
-                 src/linux/zlog/Makefile
                  src/mcu/Makefile
                  src/windows/Makefile
-                 test/Makefile])
+                 test/Makefile
+                 test/linux/Makefile
+                 test/windows/Makefile])
 AC_OUTPUT
 
 AC_MSG_RESULT([

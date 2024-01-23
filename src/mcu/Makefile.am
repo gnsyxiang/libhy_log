@@ -18,7 +18,7 @@
 #     last modified: 17/08 2023 13:52
 # ===============================================================
 
-noinst_LTLIBRARIES = lib@project_name@_@run_os@.la
+lib_LTLIBRARIES = lib@project_name@.la
 
 # ------------------
 # defining variables
@@ -56,24 +56,17 @@ _cflags_com     +=
 
 _cxxflags_com   +=
 
+_ldflags_com    += -version-info @current@:@revision@:@age@
+
+if !COMPILE_DEBUG_INFO
+_ldflags_com    += -export-symbols-regex 'Hy*'
+endif
+
 _ldadd_com      += $(ldadd_com)
 
-lib@project_name@_@run_os@_la_SOURCES    = $(_sources_com)
-lib@project_name@_@run_os@_la_CPPFLAGS   = $(_cppflags_com)
-lib@project_name@_@run_os@_la_CFLAGS     = $(_cflags_com)
-lib@project_name@_@run_os@_la_CXXFLAGS   = $(_cxxflags_com)
-lib@project_name@_@run_os@_la_LDFLAGS    = $(_ldflags_com)
-lib@project_name@_@run_os@_la_LIBADD     = $(_ldadd_com)
-
-# ------------------
-# make install files
-# ------------------
-pkgconfig_DATA      = @project_name@.pc
-
-# ---------------
-# make dist files
-# ---------------
-_dist_files_com     = @project_name@.pc.in
-EXTRA_DIST          = $(_dist_files_com)
-
-DISTCLEANFILES      = @project_name@.pc
+lib@project_name@_la_SOURCES    = $(_sources_com)
+lib@project_name@_la_CPPFLAGS   = $(_cppflags_com)
+lib@project_name@_la_CFLAGS     = $(_cflags_com)
+lib@project_name@_la_CXXFLAGS   = $(_cxxflags_com)
+lib@project_name@_la_LDFLAGS    = $(_ldflags_com)
+lib@project_name@_la_LIBADD     = $(_ldadd_com)
