@@ -26,7 +26,7 @@ extern "C" {
 
 #include <pthread.h>
 
-#include "hy_type.h"
+#include "hy_log.h"
 
 typedef struct {
     pthread_key_t   thread_key;

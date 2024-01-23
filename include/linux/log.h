@@ -29,7 +29,7 @@ extern "C" {
 #include <time.h>
 #include <sys/time.h>
 
-#include "hy_type.h"
+#include "hy_log.h"
 
 // #define HY_LOG_DEBUG
 

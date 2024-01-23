@@ -32,7 +32,24 @@ extern "C" {
 #include <unistd.h>
 #include <sys/syscall.h>      /* Definition of SYS_* constants */
 
-#include "hy_type.h"
+typedef signed char         hy_s8_t;
+typedef signed short        hy_s16_t;
+typedef signed int          hy_s32_t;
+typedef signed long long    hy_s64_t;
+
+typedef unsigned char       hy_u8_t;
+typedef unsigned short      hy_u16_t;
+typedef unsigned int        hy_u32_t;
+typedef unsigned long long  hy_u64_t;
+
+typedef unsigned char       hy_bool_t;
+typedef char                hy_char_t;
+typedef double              hy_double_t;
+typedef float               hy_float_t;
+
+#ifndef NULL
+#define NULL (void *)0
+#endif
 
 #define HY_LOG_OPEN_DEBUG_PATH  "/tmp/debug.log"    ///< 创建文件即可打开调试输出模式
 

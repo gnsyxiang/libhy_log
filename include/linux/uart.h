@@ -24,7 +24,7 @@
 extern "C" {
 #endif
 
-#include "hy_type.h"
+#include "hy_log.h"
 
 typedef struct {
     hy_s32_t            reserve;
