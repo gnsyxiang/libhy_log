@@ -45,6 +45,7 @@ AC_PROG_MAKE_SET
 AC_CHECK_LIB([pthread], [pthread_create])
 
 CHECK_LIBCUNIT
+CHECK_LIBHY_OS_TYPE
 
 # Checks for header files.
 AC_CHECK_HEADERS([arpa/inet.h inttypes.h stdint.h stdlib.h string.h sys/socket.h sys/time.h unistd.h])

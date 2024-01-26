@@ -60,6 +60,10 @@ _ldadd_com      += \
                    $(top_builddir)/src/$(run_os)/lib@project_name@.la \
                    $(ldadd_com)
 
+if COMPILE_LIBHY_OS_TYPE
+_ldadd_com      += $(HY_OS_TYPE_LIBS)
+endif
+
 bin_PROGRAMS            += hy_log_demo
 hy_log_demo_SOURCES     = $(_sources_com) hy_log_demo.c
 hy_log_demo_CPPFLAGS    = $(_cppflags_com)
