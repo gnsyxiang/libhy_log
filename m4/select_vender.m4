@@ -27,8 +27,8 @@ AC_DEFUN([SELECT_VENDER],
         vender=""
 
         AC_ARG_WITH([vender],
-                    [AS_HELP_STRING([--with-vender=@<:@pc@:>@],
-                                    [select vender about @<:@pc@:>@ @<:@default=pc@:>@])],
+                    [AS_HELP_STRING([--with-vender=@<:@pc|rock-chips@:>@],
+                                    [select vender about @<:@pc|rock-chips@:>@ @<:@default=pc@:>@])],
                     [],
                     [with_vender=pc])
 
@@ -37,12 +37,17 @@ AC_DEFUN([SELECT_VENDER],
                 AC_DEFINE(HAVE_SELECT_VENDER_PC,  1, [select pc vender])
                 vender="pc"
             ;;
+            rock-chips)
+                AC_DEFINE(HAVE_SELECT_VENDER_ROCK_CHIPS,  1, [select rock-chips vender])
+                vender="rock-chips"
+            ;;
             *)
-                AC_MSG_ERROR([bad value ${with_vender} for --with-vender=@<:@pc@:>@])
+                AC_MSG_ERROR([bad value ${with_vender} for --with-vender=@<:@pc|rock-chips@:>@])
             ;;
         esac
 
         AC_SUBST(vender)
 
         AM_CONDITIONAL([COMPILE_SELECT_VENDER_PC],          [test "x$with_vender" = "xpc"])
+        AM_CONDITIONAL([COMPILE_SELECT_VENDER_ROCK_CHIPS],  [test "x$with_vender" = "xpc"])
     ])

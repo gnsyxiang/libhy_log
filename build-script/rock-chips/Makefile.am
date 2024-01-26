@@ -5,7 +5,7 @@
 # @file    Makefile.am
 # @brief   
 # @author  gnsyxiang <gnsyxiang@163.com>
-# @date    19/04 2023 09:13
+# @date    26/01 2024 17:10
 # @version v0.0.1
 # 
 # @since    note
@@ -13,9 +13,9 @@
 # 
 #     change log:
 #     NO.     Author              Date            Modified
-#     00      zhenquan.qiu        19/04 2023      create the file
+#     00      zhenquan.qiu        26/01 2024      create the file
 # 
-#     last modified: 19/04 2023 09:13
+#     last modified: 26/01 2024 17:10
 # ===============================================================
 
 SUBDIRS = $(chip)

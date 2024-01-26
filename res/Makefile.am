@@ -22,13 +22,6 @@
 # defining variables
 # ------------------
 _dist_file_com  =
-resdir          = $(prefix)/res/@project_name@
-res_DATA        =
-
-# ------------------
-# make install files
-# ------------------
-res_DATA        +=
 
 # ---------------
 # make dist files
