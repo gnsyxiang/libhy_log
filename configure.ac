@@ -62,6 +62,8 @@ AC_CHECK_FUNCS([atexit gettimeofday localtime_r memset select socket strerror st
 AC_CONFIG_FILES([Makefile
                  $project_name.pc
                  build-script/Makefile
+                 build-script/esp32/Makefile
+                 build-script/esp32/esp32/Makefile
                  build-script/pc/Makefile
                  build-script/pc/ubuntu/Makefile
                  build-script/pc/windows/Makefile
@@ -69,21 +71,22 @@ AC_CONFIG_FILES([Makefile
                  build-script/rock-chips/rk3568/Makefile
                  doc/Makefile
                  example/Makefile
+                 example/freertos/Makefile
                  example/linux/Makefile
                  example/mcu/Makefile
                  example/windows/Makefile
                  include/Makefile
+                 include/freertos/Makefile
                  include/linux/Makefile
                  include/mcu/Makefile
                  include/windows/Makefile
                  res/Makefile
                  src/Makefile
+                 src/freertos/Makefile
                  src/linux/Makefile
                  src/mcu/Makefile
                  src/windows/Makefile
-                 test/Makefile
-                 test/linux/Makefile
-                 test/windows/Makefile])
+                 test/Makefile])
 AC_OUTPUT
 
 AC_MSG_RESULT([

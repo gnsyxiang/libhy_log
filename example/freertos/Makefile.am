@@ -5,7 +5,7 @@
 # @file    Makefile.am
 # @brief   
 # @author  gnsyxiang <gnsyxiang@163.com>
-# @date    14/12 2023 16:52
+# @date    01/02 2024 10:29
 # @version v0.0.1
 # 
 # @since    note
@@ -13,9 +13,9 @@
 # 
 #     change log:
 #     NO.     Author              Date            Modified
-#     00      zhenquan.qiu        14/12 2023      create the file
+#     00      zhenquan.qiu        01/02 2024      create the file
 # 
-#     last modified: 14/12 2023 16:52
+#     last modified: 01/02 2024 10:29
 # ===============================================================
 
 # ------------------
@@ -43,9 +43,7 @@ _include_com    += \
                    -I$(top_srcdir)/include/$(run_os) \
                    -I$(top_srcdir)/include
 
-_sources_com    += \
-                   hy_calc_test.c \
-                   hy_module_test.c
+_sources_com    +=
 
 _cppflags_com   += \
                    $(_no_error_com) \
