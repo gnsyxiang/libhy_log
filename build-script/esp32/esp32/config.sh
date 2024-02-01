@@ -11,12 +11,12 @@ cross_gcc_path=/opt/toolchains/esp32/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-e
 
 configure_param=
 
-cppflag=-fstack-protector-all
+cppflag=-mlongcalls -Wno-frame-address -fdiagnostics-color=always
 cflag=
 cxxflag=
 ldflag=-rdynamic
 lib=
-debug=-g -O0
+debug=-ggdb -g -O0 -fstack-protector-all
 release=-O2 -DNDEBUG
 
 install_path=/mnt/nfs/esp32/esp32
