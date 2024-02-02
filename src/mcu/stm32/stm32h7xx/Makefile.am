@@ -5,7 +5,7 @@
 # @file    Makefile.am
 # @brief   
 # @author  gnsyxiang <gnsyxiang@163.com>
-# @date    02/02 2024 11:25
+# @date    02/02 2024 11:23
 # @version v0.0.1
 # 
 # @since    note
@@ -15,12 +15,10 @@
 #     NO.     Author              Date            Modified
 #     00      zhenquan.qiu        02/02 2024      create the file
 # 
-#     last modified: 02/02 2024 11:25
+#     last modified: 02/02 2024 11:23
 # ===============================================================
 
-SUBDIRS = $(vender)
-
-noinst_LTLIBRARIES = lib@project_name@_@run_os@.la
+noinst_LTLIBRARIES = lib@vender@_@chip@.la
 
 # ------------------
 # defining variables
@@ -43,10 +41,12 @@ _no_error_com   +=
 _define_com     +=
 
 _include_com    += \
+                   -I$(top_srcdir)/include/$(run_os)/$(vender)/$(chip) \
                    -I$(top_srcdir)/include/$(run_os) \
                    -I$(top_srcdir)/include
 
-_sources_com    +=
+_sources_com    += \
+                   hy_log.c
 
 _cppflags_com   += \
                    $(_no_error_com) \
@@ -57,13 +57,11 @@ _cflags_com     +=
 
 _cxxflags_com   +=
 
-_ldadd_com      += $(top_builddir)/src/$(run_os)/$(vender)/$(chip)/lib$(vender)_$(chip).la
-
 _ldadd_com      += $(ldadd_com)
 
-lib@project_name@_@run_os@_la_SOURCES    = $(_sources_com)
-lib@project_name@_@run_os@_la_CPPFLAGS   = $(_cppflags_com)
-lib@project_name@_@run_os@_la_CFLAGS     = $(_cflags_com)
-lib@project_name@_@run_os@_la_CXXFLAGS   = $(_cxxflags_com)
-lib@project_name@_@run_os@_la_LDFLAGS    = $(_ldflags_com)
-lib@project_name@_@run_os@_la_LIBADD     = $(_ldadd_com)
+lib@vender@_@chip@_la_SOURCES   = $(_sources_com)
+lib@vender@_@chip@_la_CPPFLAGS  = $(_cppflags_com)
+lib@vender@_@chip@_la_CFLAGS    = $(_cflags_com)
+lib@vender@_@chip@_la_CXXFLAGS  = $(_cxxflags_com)
+lib@vender@_@chip@_la_LDFLAGS   = $(_ldflags_com)
+lib@vender@_@chip@_la_LIBADD    = $(_ldadd_com)

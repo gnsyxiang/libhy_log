@@ -5,7 +5,7 @@
 # @file    Makefile.am
 # @brief   
 # @author  gnsyxiang <gnsyxiang@163.com>
-# @date    02/02 2024 11:25
+# @date    02/02 2024 11:19
 # @version v0.0.1
 # 
 # @since    note
@@ -15,12 +15,8 @@
 #     NO.     Author              Date            Modified
 #     00      zhenquan.qiu        02/02 2024      create the file
 # 
-#     last modified: 02/02 2024 11:25
+#     last modified: 02/02 2024 11:19
 # ===============================================================
-
-SUBDIRS = $(vender)
-
-noinst_LTLIBRARIES = lib@project_name@_@run_os@.la
 
 # ------------------
 # defining variables
@@ -34,6 +30,7 @@ _cflags_com     =
 _cxxflags_com   =
 _ldflags_com    =
 _ldadd_com      =
+bin_PROGRAMS    =
 
 # ---------------------
 # add necessary content
@@ -57,13 +54,8 @@ _cflags_com     +=
 
 _cxxflags_com   +=
 
-_ldadd_com      += $(top_builddir)/src/$(run_os)/$(vender)/$(chip)/lib$(vender)_$(chip).la
+_ldflags_com    +=
 
-_ldadd_com      += $(ldadd_com)
-
-lib@project_name@_@run_os@_la_SOURCES    = $(_sources_com)
-lib@project_name@_@run_os@_la_CPPFLAGS   = $(_cppflags_com)
-lib@project_name@_@run_os@_la_CFLAGS     = $(_cflags_com)
-lib@project_name@_@run_os@_la_CXXFLAGS   = $(_cxxflags_com)
-lib@project_name@_@run_os@_la_LDFLAGS    = $(_ldflags_com)
-lib@project_name@_@run_os@_la_LIBADD     = $(_ldadd_com)
+_ldadd_com      += \
+                   $(top_builddir)/src/lib$(project_name).la \
+                   $(ldadd_com)

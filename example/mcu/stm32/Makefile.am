@@ -5,7 +5,7 @@
 # @file    Makefile.am
 # @brief   
 # @author  gnsyxiang <gnsyxiang@163.com>
-# @date    02/02 2024 11:20
+# @date    02/02 2024 11:19
 # @version v0.0.1
 # 
 # @since    note
@@ -15,7 +15,7 @@
 #     NO.     Author              Date            Modified
 #     00      zhenquan.qiu        02/02 2024      create the file
 # 
-#     last modified: 02/02 2024 11:20
+#     last modified: 02/02 2024 11:19
 # ===============================================================
 
-SUBDIRS = $(vender)
+SUBDIRS = $(chip)
