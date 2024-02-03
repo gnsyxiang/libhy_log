@@ -51,22 +51,6 @@ typedef enum {
 } HyLogLevel_e;
 
 /**
- * @brief log相关信息
- */
-typedef struct {
-    HyLogLevel_e        level;              ///< 打印等级
-    char                *err_str;           ///< 错误信息，由strerror(errno)提供
-    const char          *file;              ///< 文件名，去掉了路径
-    const char          *func;              ///< 函数名
-    hy_u32_t            line;               ///< 行号
-    pthread_t           tid;                ///< 线程id
-    long                pid;                ///< 进程id
-
-    const char          *fmt;               ///< 用户格式
-    va_list             *str_args;          ///< 用户信息
-} HyLogAddiInfo_s;
-
-/**
  * @brief 配置log输出的格式
  */
 typedef enum {
@@ -195,6 +179,22 @@ HyLogLevel_e HyLogLevelGet(void);
  * @param level 新的打印等级
  */
 void HyLogLevelSet(HyLogLevel_e level);
+
+/**
+ * @brief log附件信息(addition)
+ */
+typedef struct {
+    HyLogLevel_e        level;              ///< 打印等级
+    char                *err_str;           ///< 错误信息，由strerror(errno)提供
+    const char          *file;              ///< 文件名，去掉了路径
+    const char          *func;              ///< 函数名
+    hy_u32_t            line;               ///< 行号
+    pthread_t           tid;                ///< 线程id
+    long                pid;                ///< 进程id
+
+    const char          *fmt;               ///< 用户格式
+    va_list             *str_args;          ///< 用户信息
+} HyLogAddiInfo_s;
 
 /**
  * @brief log函数

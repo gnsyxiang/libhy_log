@@ -30,7 +30,7 @@ extern "C" {
 #include "dynamic_array.h"
 
 typedef hy_s32_t (*format_cb_t)(dynamic_array_s *dynamic_array,
-                               HyLogAddiInfo_s *addi_info);
+                                HyLogAddiInfo_s *addi_info);
 
 typedef struct log_write_info_tag {
     format_cb_t         *format_cb;
