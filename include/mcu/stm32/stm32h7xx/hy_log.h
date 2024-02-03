@@ -68,17 +68,6 @@ typedef enum {
     | HY_LOG_OUTPUT_FORMAT_COLOR_RESET)
 
 /**
- * @brief 默认配置去除线程进程id格式
- */
-#define HY_LOG_OUTFORMAT_ALL_NO_PID_ID          \
-(HY_LOG_OUTPUT_FORMAT_COLOR                     \
-    | HY_LOG_OUTPUT_FORMAT_LEVEL_INFO           \
-    | HY_LOG_OUTPUT_FORMAT_TIME                 \
-    | HY_LOG_OUTPUT_FORMAT_FUNC_LINE            \
-    | HY_LOG_OUTPUT_FORMAT_USR_MSG              \
-    | HY_LOG_OUTPUT_FORMAT_COLOR_RESET)
-
-/**
  * @brief 默认配置中去除颜色格式
  */
 #define HY_LOG_OUTFORMAT_ALL_NO_COLOR           \
@@ -87,17 +76,6 @@ typedef enum {
     | HY_LOG_OUTPUT_FORMAT_PID_ID               \
     | HY_LOG_OUTPUT_FORMAT_FUNC_LINE            \
     | HY_LOG_OUTPUT_FORMAT_USR_MSG)
-
-/**
- * @brief 默认配置中去除颜色和线程进程id格式
- */
-#define HY_LOG_OUTFORMAT_ALL_NO_COLOR_PID_ID    \
-(HY_LOG_OUTPUT_FORMAT_COLOR                     \
-    | HY_LOG_OUTPUT_FORMAT_LEVEL_INFO           \
-    | HY_LOG_OUTPUT_FORMAT_TIME                 \
-    | HY_LOG_OUTPUT_FORMAT_FUNC_LINE            \
-    | HY_LOG_OUTPUT_FORMAT_USR_MSG              \
-    | HY_LOG_OUTPUT_FORMAT_COLOR_RESET)
 
 /**
  * @brief 配置参数
@@ -171,6 +149,19 @@ HyLogLevel_e HyLogLevelGet(void);
 void HyLogLevelSet(HyLogLevel_e level);
 
 /**
+ * @brief log附件信息(addition)
+ */
+typedef struct {
+    HyLogLevel_e    level;          ///< 打印等级
+    const char      *file;          ///< 文件名，去掉路径
+    const char      *func;          ///< 函数名
+    hy_u32_t        line;           ///< 行号
+
+    const char      *fmt;           ///< 用户格式
+    va_list         *str_args;      ///< 用户信息
+} HyLogAddiInfo_s;
+
+/**
  * @brief 输出log信息
  *
  * @param level 打印等级
@@ -179,32 +170,46 @@ void HyLogLevelSet(HyLogLevel_e level);
  * @param line 所在的行号
  * @param fmt 用户日志
  */
-void HyLogWrite(HyLogLevel_e level, const char *file,
-                const char *func, hy_u32_t line, char *fmt, ...);
+void HyLogWrite(HyLogAddiInfo_s *addi_info, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
+
+/*
+ * 1，去掉文件路径，只获取文件名
+ *  1.1，使用strrchr函数，包含头文件#include <string.h>
+ *      #define HY_STRRCHR_FILE (strrchr(__FILE__, '/'))
+ *      #define HY_FILENAME     (HY_STRRCHR_FILE ? (HY_STRRCHR_FILE + 1) : __FILE__)
+ *  1.2，使用basename函数，包含头文件#include <libgen.h>
+ *      basename(__FILE__)
+ */
+#define HY_STRRCHR_FILE (strrchr(__FILE__, '/'))
+#define HY_FILENAME     (HY_STRRCHR_FILE ? (HY_STRRCHR_FILE + 1) : __FILE__)
 
 /**
  * @brief 输出log宏转义
  *
  * note: 宏为内部用，最好不要在外面使用
  */
-#define LOG(_level, _fmt, ...)                                  \
-do {                                                            \
-    if (HyLogLevelGet() >= _level) {                            \
-        HyLogWrite(_level, __FILE__, __func__,                  \
-                   __LINE__, (char *)_fmt, ##__VA_ARGS__);      \
-    }                                                           \
+#define LOG(_level, _fmt, ...)                              \
+do {                                                        \
+    if (HyLogLevelGet() >= _level) {                        \
+        HyLogAddiInfo_s addi_info;                          \
+        addi_info.level     = _level;                       \
+        addi_info.file      = HY_FILENAME;                  \
+        addi_info.func      = __func__;                     \
+        addi_info.line      = __LINE__;                     \
+        HyLogWrite(&addi_info, _fmt, ##__VA_ARGS__);        \
+    }                                                       \
 } while (0)
 
 /**
  * @brief 输出对应的log等级函数
  */
-#define LOGF(fmt, ...) LOG(HY_LOG_LEVEL_FATAL, fmt, ##__VA_ARGS__)
-#define LOGE(fmt, ...) LOG(HY_LOG_LEVEL_ERROR, fmt, ##__VA_ARGS__)
+#define LOGF(fmt, ...)  LOG(HY_LOG_LEVEL_FATAL, fmt, ##__VA_ARGS__)
+#define LOGE(fmt, ...)  LOG(HY_LOG_LEVEL_ERROR, fmt, ##__VA_ARGS__)
 #define LOGES(fmt, ...) LOG(HY_LOG_LEVEL_ERROR, fmt, ##__VA_ARGS__)
-#define LOGW(fmt, ...) LOG(HY_LOG_LEVEL_WARN,  fmt, ##__VA_ARGS__)
-#define LOGI(fmt, ...) LOG(HY_LOG_LEVEL_INFO,  fmt, ##__VA_ARGS__)
-#define LOGD(fmt, ...) LOG(HY_LOG_LEVEL_DEBUG, fmt, ##__VA_ARGS__)
-#define LOGT(fmt, ...) LOG(HY_LOG_LEVEL_TRACE, fmt, ##__VA_ARGS__)
+#define LOGW(fmt, ...)  LOG(HY_LOG_LEVEL_WARN,  fmt, ##__VA_ARGS__)
+#define LOGI(fmt, ...)  LOG(HY_LOG_LEVEL_INFO,  fmt, ##__VA_ARGS__)
+#define LOGD(fmt, ...)  LOG(HY_LOG_LEVEL_DEBUG, fmt, ##__VA_ARGS__)
+#define LOGT(fmt, ...)  LOG(HY_LOG_LEVEL_TRACE, fmt, ##__VA_ARGS__)
 
 #ifdef __cplusplus
 }

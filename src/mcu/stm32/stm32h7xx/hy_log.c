@@ -53,20 +53,17 @@ static inline void _output_set_color(HyLogLevel_e level, hy_s32_t *ret)
         {"T", PRINT_FONT_PUR},
     };
 
-    *ret += snprintf(context.buf + *ret, sizeof(context.buf) - *ret,
-                     "%s[%s]", color[level][1], color[level][0]);
+    *ret += snprintf(context.buf + *ret, sizeof(context.buf) - *ret, "%s[%s]", color[level][1], color[level][0]);
 }
 
 static inline void _output_reset_color(HyLogLevel_e level, hy_s32_t *ret)
 {
-    *ret += snprintf(context.buf + *ret, sizeof(context.buf) - *ret,
-                     "%s", PRINT_ATTR_RESET);
+    *ret += snprintf(context.buf + *ret, sizeof(context.buf) - *ret, "%s", PRINT_ATTR_RESET);
 }
 
-void HyLogWrite(HyLogLevel_e level, const char *file, const char *func,
-                hy_u32_t line, char *fmt, ...)
+void HyLogWrite(HyLogAddiInfo_s *addi_info, const char *fmt, ...)
 {
-    if (context.save_c.level < level) {
+    if (context.save_c.level < addi_info->level) {
         return;
     }
 
@@ -74,17 +71,10 @@ void HyLogWrite(HyLogLevel_e level, const char *file, const char *func,
 
     memset(context.buf, '\0', sizeof(context.buf));
 
-    _output_set_color(level, &ret);
+    _output_set_color(addi_info->level, &ret);
 
-    char *short_file = strrchr(file, '/');
-
-    if (short_file) {
-        ret += snprintf(context.buf + ret, sizeof(context.buf) - ret,
-                        "[%s:%d][%s] ", short_file + 1, line, func); 
-    } else {
-        ret += snprintf(context.buf + ret, sizeof(context.buf) - ret,
-                        "[%s:%d][%s] ", file, line, func); 
-    }
+    ret += snprintf(context.buf + ret, sizeof(context.buf) - ret,
+                    "[%s:%d][%s] ", addi_info->file, addi_info->line, addi_info->func); 
 
     va_list args;
     va_start(args, fmt);
@@ -93,7 +83,7 @@ void HyLogWrite(HyLogLevel_e level, const char *file, const char *func,
 
     ret += snprintf(context.buf + ret, sizeof(context.buf) - ret, "\r"); 
 
-    _output_reset_color(level, &ret);
+    _output_reset_color(addi_info->level, &ret);
 
     printf("%s", (char *)context.buf);
 }
