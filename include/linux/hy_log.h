@@ -257,6 +257,8 @@ do {                                                        \
 #   define LOGT(fmt, args...)  LOG(HY_LOG_LEVEL_TRACE, NULL,            fmt, ##args)
 #endif
 
+#define LOG_QSTRING(_qstr) (_qstr).toStdString().c_str()
+
 #ifdef __cplusplus
 }
 #endif
