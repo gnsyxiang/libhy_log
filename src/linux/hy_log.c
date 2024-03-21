@@ -116,8 +116,6 @@ static void *_log_loop_cb(void *args)
 
         if (0 == access(HY_LOG_OPEN_DEBUG_PATH, F_OK)) {
             HyLogLevelSet(HY_LOG_LEVEL_DEBUG);
-        } else {
-            HyLogLevelSet(HY_LOG_LEVEL_INFO);
         }
 
         while (LOG_FIFO_IS_EMPTY(handle->fifo)) {
