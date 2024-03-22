@@ -23,7 +23,6 @@ SELECT_VENDER
 SELECT_CHIP
 # SELECT_PRODUCT
 # SELECT_LANGUAGE
-SELECT_LOG_TYPE
 
 # check m4 macro
 CHECK_PROJECT_INFO
@@ -47,58 +46,54 @@ AC_PROG_MAKE_SET
 AC_CHECK_LIB([pthread], [pthread_create])
 
 CHECK_LIBCUNIT
-CHECK_LIBLOG4CPLUS
-CHECK_ZLOG
+CHECK_LIBHY_OS_TYPE
 
 # Checks for header files.
 AC_CHECK_HEADERS([arpa/inet.h inttypes.h stdint.h stdlib.h string.h sys/socket.h sys/time.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
-AC_CHECK_HEADER_STDBOOL
 AC_C_INLINE
-AC_TYPE_INT32_T
-AC_TYPE_INT8_T
 AC_TYPE_SIZE_T
 AC_TYPE_UINT32_T
-AC_TYPE_UINT8_T
 
 # Checks for library functions.
 AC_FUNC_REALLOC
 AC_CHECK_FUNCS([atexit gettimeofday localtime_r memset select socket strerror strrchr])
 
 AC_CONFIG_FILES([Makefile
-                 src/linux/hy_log/$project_name.pc
-                 src/linux/zlog/$project_name.pc
-                 src/mcu/$project_name.pc
-                 src/windows/$project_name.pc
+                 $project_name.pc
                  build-script/Makefile
+                 build-script/esp32/Makefile
+                 build-script/esp32/esp32/Makefile
                  build-script/pc/Makefile
                  build-script/pc/ubuntu/Makefile
                  build-script/pc/windows/Makefile
                  build-script/rock-chips/Makefile
                  build-script/rock-chips/rk3568/Makefile
+                 build-script/stm32/Makefile
+                 build-script/stm32/stm32h7xx/Makefile
                  doc/Makefile
                  example/Makefile
+                 example/freertos/Makefile
                  example/linux/Makefile
                  example/mcu/Makefile
+                 example/mcu/stm32/Makefile
+                 example/mcu/stm32/stm32h7xx/Makefile
                  example/windows/Makefile
                  include/Makefile
+                 include/freertos/Makefile
                  include/linux/Makefile
-                 include/linux/hy_log/Makefile
-                 include/linux/log4cplus/Makefile
-                 include/linux/zlog/Makefile
                  include/mcu/Makefile
+                 include/mcu/stm32/Makefile
+                 include/mcu/stm32/stm32h7xx/Makefile
                  include/windows/Makefile
                  res/Makefile
-                 res/voice/Makefile
-                 res/voice/cn/Makefile
-                 res/voice/en/Makefile
                  src/Makefile
+                 src/freertos/Makefile
                  src/linux/Makefile
-                 src/linux/hy_log/Makefile
-                 src/linux/log4cplus/Makefile
-                 src/linux/zlog/Makefile
                  src/mcu/Makefile
+                 src/mcu/stm32/Makefile
+                 src/mcu/stm32/stm32h7xx/Makefile
                  src/windows/Makefile
                  test/Makefile])
 AC_OUTPUT

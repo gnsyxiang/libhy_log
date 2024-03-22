@@ -38,10 +38,9 @@ _ldadd_com      =
 # ---------------------
 _no_error_com   +=
 
-_define_com     += -D_GNU_SOURCE
+_define_com     +=
 
 _include_com    += \
-                   -I$(top_srcdir)/include/$(run_os)/hy_log \
                    -I$(top_srcdir)/include/$(run_os) \
                    -I$(top_srcdir)/include
 
@@ -63,8 +62,6 @@ _cflags_com     +=
 
 _cxxflags_com   +=
 
-_ldflags_com    +=
-
 _ldadd_com      += $(ldadd_com)
 
 lib@project_name@_@run_os@_la_SOURCES    = $(_sources_com)
@@ -73,16 +70,3 @@ lib@project_name@_@run_os@_la_CFLAGS     = $(_cflags_com)
 lib@project_name@_@run_os@_la_CXXFLAGS   = $(_cxxflags_com)
 lib@project_name@_@run_os@_la_LDFLAGS    = $(_ldflags_com)
 lib@project_name@_@run_os@_la_LIBADD     = $(_ldadd_com)
-
-# ------------------
-# make install files
-# ------------------
-pkgconfig_DATA      = @project_name@.pc
-
-# ---------------
-# make dist files
-# ---------------
-_dist_files_com     = @project_name@.pc.in
-EXTRA_DIST          = $(_dist_files_com)
-
-DISTCLEANFILES      = @project_name@.pc

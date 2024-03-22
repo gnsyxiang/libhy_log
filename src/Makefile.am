@@ -40,7 +40,7 @@ _ldadd_com      =
 # ---------------------
 _no_error_com   +=
 
-_define_com     += -D_GNU_SOURCE
+_define_com     +=
 
 _include_com    += -I$(top_srcdir)/include
 
@@ -48,7 +48,7 @@ _sources_com    +=
 
 _cppflags_com   += \
                    $(_no_error_com) \
-                   $(_include_com)  \
+                   $(_include_com) \
                    $(_define_com)
 
 _cflags_com     +=
@@ -61,9 +61,9 @@ if !COMPILE_DEBUG_INFO
 _ldflags_com    += -export-symbols-regex 'Hy*'
 endif
 
-_ldadd_com      += $(ldadd_com)
+_ldadd_com      += $(top_builddir)/src/$(run_os)/lib$(project_name)_$(run_os).la
 
-_ldadd_com      += $(top_builddir)/src/$(run_os)/libhy_log_$(run_os).la
+_ldadd_com      += $(ldadd_com)
 
 lib@project_name@_la_SOURCES    = $(_sources_com)
 lib@project_name@_la_CPPFLAGS   = $(_cppflags_com)

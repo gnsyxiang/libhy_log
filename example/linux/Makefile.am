@@ -43,18 +43,6 @@ _include_com    += \
                    -I$(top_srcdir)/include/$(run_os) \
                    -I$(top_srcdir)/include
 
-if COMPILE_SELECT_LOG_TYPE_HY_LOG
-_include_com    += -I$(top_srcdir)/include/$(run_os)/hy_log
-endif
-
-if COMPILE_SELECT_LOG_TYPE_LOG4CPLUS
-_include_com    += -I$(top_srcdir)/include/$(run_os)/log4cplus
-endif
-
-if COMPILE_SELECT_LOG_TYPE_ZLOG
-_include_com    += -I$(top_srcdir)/include/$(run_os)/zlog
-endif
-
 _sources_com    +=
 
 _cppflags_com   += \
@@ -69,8 +57,12 @@ _cxxflags_com   +=
 _ldflags_com    +=
 
 _ldadd_com      += \
-                   $(top_builddir)/src/lib@project_name@.la \
+                   $(top_builddir)/src/lib$(project_name).la \
                    $(ldadd_com)
+
+if COMPILE_LIBHY_OS_TYPE
+_ldadd_com      += $(HY_OS_TYPE_LIBS)
+endif
 
 bin_PROGRAMS            += hy_log_demo
 hy_log_demo_SOURCES     = $(_sources_com) hy_log_demo.c

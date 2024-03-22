@@ -58,11 +58,15 @@ _install_files_com  += \
                        LICENSE \
                        README.md
 dist_doc_DATA       = $(_install_files_com)
+pkgconfig_DATA      = $(project_name).pc
 
 # ---------------
 # make dist files
 # ---------------
 _dist_files_com     += \
                        autogen.sh \
-                       build.sh
+                       build.sh \
+                       $(project_name).pc.in
 EXTRA_DIST          = $(_dist_files_com)
+
+DISTCLEANFILES = $(project_name).pc

@@ -18,21 +18,7 @@
 #     last modified: 14/12 2023 16:49
 # ===============================================================
 
-SUBDIRS =
-
 noinst_LTLIBRARIES = lib@project_name@_@run_os@.la
-
-if COMPILE_SELECT_LOG_TYPE_HY_LOG
-SUBDIRS += hy_log
-endif
-
-if COMPILE_SELECT_LOG_TYPE_LOG4CPLUS
-SUBDIRS += log4cplus
-endif
-
-if COMPILE_SELECT_LOG_TYPE_ZLOG
-SUBDIRS += zlog
-endif
 
 # ------------------
 # defining variables
@@ -52,13 +38,20 @@ _ldadd_com      =
 # ---------------------
 _no_error_com   +=
 
-_define_com     += -D_GNU_SOURCE
+_define_com     +=
 
 _include_com    += \
                    -I$(top_srcdir)/include/$(run_os) \
                    -I$(top_srcdir)/include
 
-_sources_com    +=
+_sources_com    += \
+                   dynamic_array.c \
+                   format_cb.c \
+                   hy_log.c \
+                   log_fifo.c \
+                   net.c \
+                   thread_specific.c \
+                   uart.c
 
 _cppflags_com   += \
                    $(_no_error_com) \
@@ -70,18 +63,6 @@ _cflags_com     +=
 _cxxflags_com   +=
 
 _ldadd_com      += $(ldadd_com)
-
-if COMPILE_SELECT_LOG_TYPE_HY_LOG
-_ldadd_com      += $(top_builddir)/src/$(run_os)/hy_log/libhy_loger.la
-endif
-
-if COMPILE_SELECT_LOG_TYPE_LOG4CPLUS
-_ldadd_com      += $(top_builddir)/src/$(run_os)/log4cplus/libhy_log4cplus.la
-endif
-
-if COMPILE_SELECT_LOG_TYPE_ZLOG
-_ldadd_com      += $(top_builddir)/src/$(run_os)/zlog/libhy_zlog.la
-endif
 
 lib@project_name@_@run_os@_la_SOURCES    = $(_sources_com)
 lib@project_name@_@run_os@_la_CPPFLAGS   = $(_cppflags_com)
